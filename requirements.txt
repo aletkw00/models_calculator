@@ -1,0 +1,7 @@
+ipaddress
+Flask
+paho-mqtt
+pandas
+numpy
+statsmodels
+stepwise-regression
