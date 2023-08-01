@@ -1,15 +1,13 @@
 import ipaddress
 import shutil
-from flask import Flask, render_template, request, jsonify
-import subprocess
-import os
-from werkzeug.utils import secure_filename
-from const import *
 import json
+from flask import jsonify, request, render_template
+from werkzeug.utils import secure_filename
+from . import app
+import os
+from utils import *
+import subprocess
 
-app = Flask(__name__, static_folder='templates/static')
-app.config['UPLOAD_DIRECTORY'] = CSV_DIR
-app.config['ALLOWED_EXTENSIONS'] = ['.csv']
 user_path = os.path.join(MODEL_DIR, 'Padova')
 
 def move_file(source_path, destination_path):
@@ -182,7 +180,3 @@ def saving_function():
                       os.path.join(model_dir, file))
     
     return json_response('success', 'All correct')
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
