@@ -33,3 +33,12 @@ parser.add_argument('-i', '--window', type=int,
 args = parser.parse_args()
 
 main(args.input, args.window)
+
+
+
+"""
+passo un file csv e opzionalmente un file output su cui butto i risultati (opzionale) altrimenti butto su terminale passa una path al modello singolo
+prendo il inpu formattato secondo regole, leggo riga per riga faccio la predict e butta su file o terminale.
+poi creo un altra predict_mqtt in cui invece da leggere da file leggo dal broker. Passo path modello singolo e i dati del broker.
+fare una documentazione.
+"""

@@ -1,0 +1,102 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel} 
+\usepackage{amsmath} 
+\usepackage{amssymb} 
+\usepackage{dirtree}
+
+\begin{document}
+
+\title{Documentazione applicazione}
+\author{Alessio Bonizzato}
+\date{}
+\maketitle %creazione e scrittura del titolo nel documento 
+
+\section{Introduzione}
+L'applicazione creata ha come scopo, poter permettere ad un utente di potersi creare dei modelli di previsione su dei sensori. 
+
+\subsection{Installazione}
+Per installare il programma, seguire i passaggi seguenti:
+
+\begin{enumerate}
+  \item Scaricare la repository dal repository di GitHub.
+  \item Assicurarsi di avere pip installato nel sistema.
+  \item Rendere il file \texttt{install.sh} eseguibile utilizzando il comando \texttt{chmod +x install.sh} da terminale, se si sta utilizzando Linux.
+  \item Eseguire lo script \texttt{install.sh} per avviare il processo di installazione.
+\end{enumerate}
+
+Lo script \texttt{install.sh} si occuperà di installare automaticamente tutte le dipendenze necessarie specificate nel file \texttt{requirements.txt}.
+
+\subsection{Struttura}
+La struttura della repository si presenta nel seguente modo:
+
+\dirtree{%
+.1 / (models\_directory).
+.2 dir\_of\_models/.
+.3 Utente/.
+.4 .tmp\_models\_dir/.
+.4 topic/.
+.5 model.json.
+.2 flaskr/.
+.3 static/.
+.4 index.js.
+.4 models\_creator.js.
+.3 templates/.
+.4 index.html.
+.3 \_\_init\_\_.py.
+.3 views.py.
+.2 uploads/.
+.2 ca-root-cert.crt.
+.2 const.py.
+.2 install.sh.
+.2 models\_creator.py.
+.2 README.md.
+.2 reg\_class.py.
+.2 reg.py.
+.2 requirements.txt.
+.2 run.py.
+.2 subscriber.py.
+.2 utils.py.
+}
+
+
+All'interno della directory 'dir\_of\_models' troviamo una directory per ogni utente. Ogni utente avrà quindi una directory nascosta '.tmp\_models\_dir' nella quale andranno messi i modelli creati non ancora salvati o scartati (quindi saranno temporanei), e avrà anche 0 o più directory che rappresentano i topic dei sensori, dentro le quali ci saranno i vari modelli.
+
+Dentro la directory 'flaskr' troviamo tutta la struttura dell'applicazione Flask. La directory 'static' contiene eventuali file .css e gli script JavaScript, mentre la directory 'templates' contiene i file HTML. I file '\_\_init\_\_.py' e 'views.py' rappresentano il cuore del server Flask.
+
+La directory 'uploads' conterrà in modo temporaneo i file CSV che gli utenti caricano quando lanciano gli script. 
+
+Al di fuori troviamo tutti gli script per la creazione dei modelli.
+
+
+
+\subsection{Esecuzione}
+Per eseguire il server, è possibile seguire due metodi:
+
+\begin{enumerate}
+  \item Utilizzando il comando \texttt{python3 run.py}.
+  \item Impostando una variabile d'ambiente con il comando \texttt{export FLASK\_APP=flaskr} e successivamente eseguendo il comando \texttt{python3 -m flask run}.
+\end{enumerate}
+
+Il secondo metodo consente di evitare di dover specificare esplicitamente il nome del file dell'applicazione Flask ogni volta che si avvia il server.
+
+\subsection{Funzionamento}
+L'applicazione offre agli utenti la possibilità di creare modelli per i loro sensori collegandosi al server Flask tramite indirizzo IP. Per creare un modello, l'utente deve fornire diversi parametri attraverso la pagina web del server.
+
+I parametri richiesti includono:
+\begin{itemize}
+  \item Un file di input (dati dei sensori).
+  \item Uno o più file di output (risultati del modello).
+  \item Il valore 'window', un numero intero che specifica quanti istanti precedenti ogni timestamp devono essere considerati nella creazione del modello.
+  \item Un nome per il modello (in caso di più file di output, sarà aggiunto un numero progressivo al nome).
+  \item La decisione di effettuare o meno il test del modello. In caso affermativo, i dati di input verranno divisi in 80\% per il train e 20\% per il test.
+\end{itemize}
+
+Una volta completata la creazione del modello, verranno mostrate alcune costanti ottenute dal modello per indicare la bontà delle previsioni. L'utente potrà quindi decidere di salvare il modello nella directory dei sensori o scartarlo.
+
+Se l'utente decide di salvare il modello e ha fornito i dati relativi al broker, verrà creato un ulteriore file JSON nella directory del sensore per salvare i dati necessari per connettersi al broker.
+
+
+\end{document}

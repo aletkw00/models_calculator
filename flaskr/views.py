@@ -5,8 +5,8 @@ from flask import jsonify, request, render_template
 from werkzeug.utils import secure_filename
 from . import app
 import os
-from utils import *
 import subprocess
+from const import *
 
 user_path = os.path.join(MODEL_DIR, 'Padova')
 

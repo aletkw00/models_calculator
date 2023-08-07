@@ -1,5 +1,5 @@
 from flask import Flask
-from utils import *
+from const import CSV_DIR
 
 app = Flask(__name__, static_folder='static')
 app.config['UPLOAD_DIRECTORY'] = CSV_DIR
