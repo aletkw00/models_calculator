@@ -62,11 +62,11 @@ La struttura della repository si presenta nel seguente modo:
 }
 
 
-All'interno della directory 'dir\_of\_models' troviamo una directory per ogni utente. Ogni utente avrà quindi una directory nascosta '.tmp\_models\_dir' nella quale andranno messi i modelli creati non ancora salvati o scartati (quindi saranno temporanei), e avrà anche 0 o più directory che rappresentano i topic dei sensori, dentro le quali ci saranno i vari modelli.
+All'interno della directory `dir\_of\_models' troviamo una directory per ogni utente. Ogni utente avrà quindi una directory nascosta `.tmp\_models\_dir' nella quale andranno messi i modelli creati non ancora salvati o scartati (quindi saranno temporanei), e avrà anche 0 o più directory che rappresentano i topic dei sensori, dentro le quali ci saranno i vari modelli.
 
-Dentro la directory 'flaskr' troviamo tutta la struttura dell'applicazione Flask. La directory 'static' contiene eventuali file .css e gli script JavaScript, mentre la directory 'templates' contiene i file HTML. I file '\_\_init\_\_.py' e 'views.py' rappresentano il cuore del server Flask.
+Dentro la directory `flaskr' troviamo tutta la struttura dell'applicazione Flask. La directory `static' contiene eventuali file `css' e gli script `JavaScript', mentre la directory 'templates' contiene i file HTML. I file '\_\_init\_\_.py' e 'views.py' rappresentano il cuore del server Flask.
 
-La directory 'uploads' conterrà in modo temporaneo i file CSV che gli utenti caricano quando lanciano gli script. 
+La directory `uploads' conterrà in modo temporaneo i file CSV che gli utenti caricano quando lanciano gli script. 
 
 Al di fuori troviamo tutti gli script per la creazione dei modelli.
 
@@ -89,7 +89,7 @@ I parametri richiesti includono:
 \begin{itemize}
   \item Un file di input (dati dei sensori).
   \item Uno o più file di output (risultati del modello).
-  \item Il valore 'window', un numero intero che specifica quanti istanti precedenti ogni timestamp devono essere considerati nella creazione del modello.
+  \item Il valore `window', un numero intero che specifica quanti istanti precedenti ogni timestamp devono essere considerati nella creazione del modello.
   \item Un nome per il modello (in caso di più file di output, sarà aggiunto un numero progressivo al nome).
   \item La decisione di effettuare o meno il test del modello. In caso affermativo, i dati di input verranno divisi in 80\% per il train e 20\% per il test.
 \end{itemize}
@@ -97,6 +97,8 @@ I parametri richiesti includono:
 Una volta completata la creazione del modello, verranno mostrate alcune costanti ottenute dal modello per indicare la bontà delle previsioni. L'utente potrà quindi decidere di salvare il modello nella directory dei sensori o scartarlo.
 
 Se l'utente decide di salvare il modello e ha fornito i dati relativi al broker, verrà creato un ulteriore file JSON nella directory del sensore per salvare i dati necessari per connettersi al broker.
+
+\section{come comunica il tutto}
 
 
 \end{document}
