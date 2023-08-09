@@ -42,7 +42,7 @@ def modal(host_name, password, Ip, topic, path):
     }
 
     # Save the data to a new JSON file
-    with open(os.path.join(path, 'nome_da_cambiare.json'), 'w') as file:
+    with open(os.path.join(path, 'config.json'), 'w') as file:
         json.dump(data, file)
 
     return json_response('success', 'Data saved successfully.')

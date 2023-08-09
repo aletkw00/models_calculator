@@ -4,8 +4,8 @@ import numpy as np
 import statsmodels.api as sm
 from utils import get_time
 
-class Regression:
-    """collect all the attributes
+class RegressionModel:
+    """collect all the model attributes
 
     Attributes:
         B (str): This is where we store arg,
@@ -13,19 +13,19 @@ class Regression:
         calib_input_stdev (Series): standard dev of each column of the input DataFrame
         calib_output_media (float): mean of the output values
         calib_output_stdev (float): standard deviation of output values
-        empty_timestamp (list): list of columns not used in the model
+        unselected_columns (list): list of columns not used in the model
         window (int): the number of previous timestamps to consider
     """
 
     def __init__(self, B, calib_input_media, calib_input_stdev, \
-                 calib_output_media, calib_output_stdev, empty_timestamp, \
+                 calib_output_media, calib_output_stdev, unselected_columns, \
                     window):
         self.B = B
         self.calib_inp_media = calib_input_media
         self.calib_inp_stdev = calib_input_stdev
         self.calib_out_media = calib_output_media
         self.calib_out_stdev = calib_output_stdev
-        self.empty_timestamp = empty_timestamp
+        self.unselected_columns = unselected_columns
         self.window = window
 
     def __str__(self): 
@@ -35,7 +35,7 @@ class Regression:
              \n\ndeviazione standard X:\n{self.calib_inp_stdev}\
              \n\nmedia di Y:\n{self.calib_out_media:.4f}\
              \n\ndeviazione standard Y:\n{self.calib_out_stdev:.4f}\
-             \n\ncolonne dei timestamp senza valori:\n{self.empty_timestamp}\
+             \n\ncolonne non selezionate:\n{self.unselected_columns}\
              \n\nwindow:\n{self.window}"
 
     
@@ -51,7 +51,7 @@ class Regression:
             'calib_input_stdev': self.calib_inp_stdev.to_dict(),
             'calib_output_media': float(self.calib_out_media),
             'calib_output_stdev': float(self.calib_out_stdev),
-            'empty_columns': self.empty_timestamp,
+            'unselected_columns': self.unselected_columns,
             'window': self.window
         }
         
@@ -109,7 +109,7 @@ class Regression:
 
         """
         data = json.load(open(name))
-        Model = Regression(pd.Series(data[list(data.keys())[0]]), \
+        Model = Model(pd.Series(data[list(data.keys())[0]]), \
                           pd.Series(data[list(data.keys())[1]]), \
                           pd.Series(data[list(data.keys())[2]]), \
                           data[list(data.keys())[3]], \

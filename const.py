@@ -10,7 +10,7 @@ COLONNE_MESI = ['1m', '2m', '3m', '4m', '5m', '6m', '7m', '8m', '9m', '10m', \
                 '11m', '12m']
 INPUT_FILE = 'input.csv'
 OUTPUT_FILE = 'output.csv'
-CSV_DIR = 'uploads/'
+CSV_DIR = 'flaskr/uploads/'
 MODEL_DIR = 'dir_of_models'
 DEFAULT_MODEL_NAME = 'final'
 TMP_MODELS_DIRECTORY = '.tmp_models_dir'

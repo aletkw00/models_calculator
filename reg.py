@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 from stepwise_regression import step_reg
-from reg_class import Regression
+from reg_class import RegressionModel
 import math
 from const import *
 from utils import get_time
@@ -67,17 +67,17 @@ def make_regression(X_train, Y_train, window: int, test: bool=True):
     
     # Get the list of columns which would return NaN during normalization 
     # and then drop those columns
-    empty_columns = list()
+    unselected_columns = list()
     for idx, j in calib_inp_stdev.items():
         #if the value of the idx items of list is equal to 0
         if j==0:
-            empty_columns.append(idx)
+            unselected_columns.append(idx)
             input_calibrazione = input_calibrazione.drop(idx, axis=1)
             #set the value of the item from 0 to 1
             calib_inp_stdev.at[idx] = 1
-    if empty_columns:
+    if unselected_columns:
         print('\n\nMissing values in: ')
-        print(empty_columns)
+        print(unselected_columns)
 
     # Save the mean and standard deviation of output_calibrazione
     calib_output_media = output_calibrazione.mean()
@@ -121,8 +121,8 @@ def make_regression(X_train, Y_train, window: int, test: bool=True):
     #
     #
     #adding to the list the column not selceted
-    [empty_columns.append(col) for col in X_train.columns \
-     if col not in empty_columns and col not in norm_calib_inp]
+    [unselected_columns.append(col) for col in X_train.columns \
+     if col not in unselected_columns and col not in norm_calib_inp]
     
     #MODEL CREATION
 
@@ -197,6 +197,7 @@ def make_regression(X_train, Y_train, window: int, test: bool=True):
         print('\nAdjR2_test:', AdjR2_test, '\nR2:', (1-(TSS_test / RSS_test)), '\nMAPE:', MAPE)
         
     B_f.index = ['const'] + X_train.columns.to_list()
-    return Regression(B_f, calib_inp_media, calib_inp_stdev, \
-                      calib_output_media, calib_output_stdev, empty_columns, \
+
+    return RegressionModel(B_f, calib_inp_media, calib_inp_stdev, \
+                      calib_output_media, calib_output_stdev, unselected_columns, \
                       window)

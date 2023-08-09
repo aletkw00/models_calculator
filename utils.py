@@ -4,6 +4,14 @@ from const import *
 import datetime
 
 def process_dataframe(df):
+    """Take a DataFrame, then remove columns that have 
+    non-numeric values, except for the timestamps column. 
+    Drop rows that have at least one NaN value. 
+    Lastly, remove any duplicate rows from the DataFrame.
+
+    Args:
+        df (DataFrame)
+    """
     df.rename(columns={df.columns[0]: "timestamps"}, inplace=True)
     
     df[df.columns[0]] = pd.to_datetime(df[df.columns[0]], infer_datetime_format=True, errors='coerce')
@@ -18,10 +26,7 @@ def process_dataframe(df):
 
 def csv_read(inp):
     """
-    Take a CSV file and convert it into a DataFrame. Remove columns that have 
-    non-numeric values, except for the timestamps column. 
-    Drop rows that have at least one NaN value. 
-    Lastly, remove any duplicate rows from the DataFrame.
+    Take a CSV file and convert it into a DataFrame. 
 
     Args:
         inp (str or list): Name of the file or list of file names.

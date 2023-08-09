@@ -1,7 +1,7 @@
 import json
 import paho.mqtt.client as mqtt
 import ssl
-from reg_class import Regression
+from reg_class import RegressionModel
 from utils import *
 from const import *
 import os
@@ -59,7 +59,7 @@ def subscriber_mqtt(par: dict):
         
         
         for name in os.listdir(path):
-            Regr = Regression.json_read(path + name)
+            Regr = RegressionModel.json_read(path + name)
             if max_window < Regr.window:
                 max_window = Regr.window
             if Regr.window < num_mex:
