@@ -33,7 +33,7 @@ def get_models(csvDir, finalModelsDir, test=False, window=0, name=DEFAULT_MODEL_
         name (string): The names under which to save the created models.
     """
     inp = csv_read(csvDir + INPUT_FILE)
-    for index in range(1, sum(1 for f in os.scandir(csvDir) if f.is_file())):
+    for index in range(1, sum(1 for f in os.scandir(csvDir) if f.is_file() and f.name != '.gitkeep')):
         out = csv_read(f"{csvDir}st{index}_{OUTPUT_FILE}")   
         Model = model_calc(inp, out, window, test)
         path = os.path.join(finalModelsDir, f"{name}_{str(index)}.json")

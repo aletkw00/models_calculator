@@ -125,7 +125,7 @@ def run_models_creation():
     finally:
         for filename in os.listdir(app.config['UPLOAD_DIRECTORY']):
             file_path = os.path.join(app.config['UPLOAD_DIRECTORY'], filename)
-            if os.path.isfile(file_path):
+            if os.path.isfile(file_path) and filename != '.gitkeep':
                 os.remove(file_path)
 
     return jsonify({'message': generated_string})
