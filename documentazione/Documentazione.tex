@@ -7,6 +7,7 @@
 \usepackage{amssymb} 
 \usepackage{dirtree}
 \usepackage{float}
+\newcommand{\rootDirectory}{models\_creator}
 
 \begin{document}
 
@@ -30,9 +31,10 @@ Per installare l'applicazione, è necessario seguire attentamente i passaggi rip
 \subsubsection*{Installazione}
 \begin{enumerate}
   \item Scaricare l'intera repository dal repository GitHub ufficiale dell'applicazione. 
-  È possibile farlo tramite il comando `git clone' oppure scaricando l'archivio ZIP direttamente dal sito.
-  \item Prima di procedere con l'installazione, è fondamentale verificare di avere `pip' installato nel sistema. 
-  `pip' è il gestore dei pacchetti di Python e viene utilizzato per installare le dipendenze dell'applicazione.
+  È possibile farlo tramite il comando \texttt{git clone} oppure scaricando l'archivio ZIP direttamente dal sito.
+  \item Spostarsi da terminale all'interno della directory scaricata. Su Linux è possibile farlo col comando \texttt{cd \rootDirectory}
+  \item Prima di procedere con l'installazione, è fondamentale verificare di avere \texttt{pip} installato nel sistema. 
+  \texttt{pip} è il gestore dei pacchetti di Python e viene utilizzato per installare le dipendenze dell'applicazione.
   \item Nel caso in cui si stia utilizzando un sistema operativo Linux, è necessario rendere il file \texttt{install.sh} eseguibile. 
   Questo può essere fatto tramite il seguente comando da terminale: \texttt{chmod +x install.sh}
   \item Eseguire il seguente comando da terminale: \texttt{./install.sh}. L'uso di questo script semplifica il processo di installazione, 
@@ -62,20 +64,20 @@ Il secondo metodo consente di evitare di dover specificare esplicitamente il nom
   
   \item \textbf{Fornitura dei Parametri}: Per creare un modello, è necessario fornire i seguenti parametri tramite la pagina web del server:
   \begin{itemize}
-    \item Seleziona o inserisci un nuovo sensore al quale verranno associati i modelli che si andranno a creare
-    \item Carica il file di input contenente i dati dei sensori.
-    \item Carica uno o più file di output rappresentanti la variabile di risposta che vuoi prevedere.
-    \item Imposta il valore `window', un numero intero che determina quanti istanti temporali precedenti verranno considerati nella creazione del modello.
-    \item Assegna un nome al modello. Se stai creando più file di output, il nome verrà affiancato da un numero intero che incrementerà in modo progressivo.
-    \item Decidi se eseguire o meno il test del modello. In caso positivo, i dati di input verranno divisi in un rapporto 80\% addestramento (ovvero i dati utilizzati
-    la creazione del modello) e 20\% test (ovvero i dati che verranno utilizzati per verificare che il modello sia oppure no preciso).
+    \item Scegliere tra le opzioni disponibili o introdurre un nuovo nominativo per un sensore, al quale verranno connessi i modelli oggetto della creazione imminente.
+    \item Carica il file di input contenente i dati relativi ai sensori.
+    \item Carica uno o più file di output che rappresentino la variabile di risposta da prevedere.
+    \item Imposta il valore `window', espresso come numero intero, che stabilirà quanti istanti temporali precedenti verranno considerati durante della creazione del modello.
+    \item Assegna un nome al modello. Se stai caricando più file di output, il nome verrà affiancato da un numero intero che incrementerà in modo progressivo.
+    \item Decidi se eseguire o meno il test del modello. In caso positivo, i dati di input verranno divisi in un rapporto dell'80\% per l'addestramento 
+    (ovvero i dati utilizzati la creazione del modello) e del 20\% per il test (ovvero i dati che verranno utilizzati per verificare che il modello sia oppure no preciso).
   \end{itemize}
   
-  \item \textbf{Visualizzazione dei Risultati:} Una volta completata la creazione del modello, l'applicazione mostrerà alcuni indicatori derivanti dal modello stesso. 
-  Questi valori daranno un'idea della qualità delle previsioni e dell'adeguatezza del modello rispetto ai dati.
+  \item \textbf{Visualizzazione dei Risultati:} Una volta completata la fase di creazione del modello, l'applicazione fornirà alcuni indicatori derivanti dal modello stesso. 
+  Tali indicatori offriranno un'idea riguardo alla qualità delle previsioni e all'adeguatezza del modello in relazione ai dati forniti.
 
   \item \textbf{Decisione di Salvare o Scartare:} A questo punto, si ha la possibilità di prendere una decisione. 
-  È possibile scegliere di salvare il modello nella directory dei sensori o scartarlo completamente.
+  È possibile scegliere di salvare il modello nella directory dei sensori precedentemente indicata o scartarlo completamente.
   
   \item \textbf{Salvataggio con Dati Broker (opzionale):} Nel caso si decida di salvare il modello, sarà possibile creare un file di configigurazione 
   per il broker che verrà automaticamente salvato nella directory del sensore.  I parametri di configurazione del broker sono i seguenti:
@@ -121,21 +123,22 @@ La struttura della repository si presenta nel seguente modo:
 }
 
 \subsection{Gestione modelli e utenti}
-La direcotry `dir\_of\_models' rappresenta la gestione degli utenti con i loro vari modelli.
-All'interno della directory, troviamo una directory per ogni utente al quale viene associata una directory nascosta 
-`.tmp\_models\_dir' in cui andranno messi i modelli creati non ancora salvati o scartati (quindi saranno temporanei).
-Ogni utente avrà anche 0 o più directory che rappresentano i sensori, dentro le quali vi saranno i vari modelli precedentemente salvati.
-
+La direcotry \texttt{dir\_of\_models} rappresenta la gestione degli utenti con i loro vari modelli.
+All'interno di questa directory, si individuano sottodirectory specifiche per ciascun utente, 
+a ciascuna delle quali è associata una directory occulta denominata \texttt{.tmp\_models\_dir}. In tale cartella sono collocati i modelli creati
+non ancora salvati o scartati, sottolineando quindi la loro natura temporanea.
+In aggiunta, per ciascun utente potrebbe esistere un numero variabile di ulteriori directory, che delineano le configurazioni dei sensori. 
+All'interno di queste ultime directory, saranno archiviati i differenti modelli precedentemente conservati, conformemente alle scelte operative effettuate.
 
 \subsection{Struttura Flask}
-Dentro la directory `flaskr' troviamo tutta la struttura dell'applicazione Flask.
+All'interno della directory \texttt{flaskr} troviamo l'intera struttura dell'applicazione Flask.
 \begin{itemize}
-  \item \textbf{static}: directory che contiene eventuali file `css' e gli script `JavaScript' che interagiscono dinamicamente con le pagine web.
+  \item \textbf{static}: directory che contiene eventuali file CSS e gli script `JavaScript' che interagiscono dinamicamente con le pagine web.
   \item \textbf{templates}: directory che contiene i file HTML che vengono renderizzati sul browser.
-  \item \textbf{uploads}: directory che conterrà in modo temporaneo i file CSV che gli utenti caricano quando calcolano i modelli.
-  \item \textbf{\_\_init\_\_.py}: file di inizializzazione che rende una cartella un `package' Python valido. Contiene codice di configurazione, 
-  inizializzazione delle estensioni Flask e altre impostazioni globali dell'app.
-  \item \textbf{views.py} file che definisce il comportamento dell'app quando un utente iteragisce con la pagina web.
+  \item \textbf{uploads}: directory destinata a contenere temporaneamente i file CSV che gli utenti caricano al momento del calcolo dei modelli.
+  \item \textbf{\_\_init\_\_.py}: file di inizializzazione che conferisce validità di `package' Python alla directory. 
+  Esso incorpora il codice di configurazione, l'inizializzazione delle estensioni Flask e altre impostazioni globali dell'applicazione.
+  \item \textbf{views.py} file che definisce il comportamento dell'app in risposta alle interazioni degli utenti con la pagina web.
 \end{itemize}
 
 \subsection{Creazione dei modelli}
@@ -148,6 +151,13 @@ Dentro la directory `flaskr' troviamo tutta la struttura dell'applicazione Flask
   \item \textbf{const.py}: file che contiene delle costanti utili per l'applicazione
 \end{itemize}
 
+\subsection{Iterazione col Broker}
+Il file \texttt{subscriber.py} si occuperà di stabilire una connessione con un intermediario (broker) attraverso le credenziali specificate in 
+un file posizionato all'interno di una directory dedicata al sensore dell'utente. Dopo aver stabilito con successo questa connessione, il programma riceverà 
+dati provenienti dal broker al quale è stato collegato. Tali dati saranno sfruttati per effettuare previsioni di valori tramite l'utilizzo di modelli già preesistenti. 
+Le previsioni risultanti saranno poi inviate al topic indicato nel file di configurazione.
+
+\clearpage
 
 \section{Dettagli implementativi}
 
@@ -155,7 +165,7 @@ Dentro la directory `flaskr' troviamo tutta la struttura dell'applicazione Flask
 
 I dati in formato CSV devono essere strutturati seguendo un formato preciso e conforme alle specifiche richieste. 
 La prima riga dei file deve rappresentare l'intestazione, delineando i contenuti delle colonne, mentre la prima colonna è riservata ai timestamps, 
-che devono essere opportunamente disposti in conformità con le indicazioni fornite.
+i quali devono essere accuratamente organizzati in linea con le indicazioni fornite.
 \begin{enumerate} 
   \item \textbf{Formato data e ora separati da spazio:}
   \begin{itemize}
@@ -169,12 +179,16 @@ che devono essere opportunamente disposti in conformità con le indicazioni forn
   \end{itemize} 
 \end{enumerate}
 
+(Nota: è possibile tralasciare i secondi, se necessario)
 
 \subsection{Matrice MxDxH}
 
-La matrice in questione è una matrice creata ad hoc per poter rappresentare tutti i giorni dell'anno e tutte le ore con valolri di 0 e 1.
-Questa è composta da 12 colonne dedicati ai mesi dell'anno, 31 dedicati ai giorni in un mese, e 24 dedicate alle ore.
-Ogni timestamp verrà convertito e rappresentato con 0 e 1 all'interno din una riga della matrice create. Vedi esempio:
+La matrice in esame è stata concepita ad hoc al fine di offrire una rappresentazione esaustiva dell'intero arco 
+temporale annuale congiuntamente a tutte le suddivisioni orarie, mediante l'utilizzo di valori discreti espressi in forma binaria. 
+La struttura matriciale è costituita da un totale di 12 colonne corrispondenti ai dodici mesi dell'anno, 31 colonne assegnate 
+ai giorni rilevanti in ciascun mese e ulteriori 24 colonne riservate alla denotazione delle differenti fasce orarie. 
+Ciascun istante temporale sarà sottoposto a un processo di trasposizione nella forma di una sequenza binaria, specificamente `0' e `1', 
+la quale troverà collocazione all'interno di una singola riga all'interno della struttura matriciale così concepita. Vedi esempio:
  
 \begin{table}[h]\centering
   \begin{tabular}{|*{14}{c|}}
@@ -192,9 +206,20 @@ Ogni timestamp verrà convertito e rappresentato con 0 e 1 all'interno din una r
 
 \subsection{Parametro window}
 
-Il parametro window dato un valore intero positivo `i' modificherà le righe dei vari timestamps. Ad ogni riga verranno concatenati i valori degli `i' timestamp precedenti.
-Se un timestamp non ha abbastanza valori precedenti viene eliminato dai dati finali.
-Vedi esempio
+Il parametro `window', denotato da un valore intero positivo `i', assume una funzione di rilievo nell'ambito della temporizzazione dei dati, 
+contribuendo a determinare l'articolazione e l'interconnessione degli istanti temporali all'interno di un contesto sequenziale.
+
+Nel caso in cui il parametro `window' sia settato a 0, ciascun istante temporale è trattato come un'entità isolata, distinta dalle altre in termini 
+di rappresentazione e di relazioni temporali. In questa prospettiva, le informazioni ad esso associate sono espresse senza coinvolgimento di 
+istanti successivi o precedenti.
+
+Contrariamente, quando il parametro `window' è definito con un valore positivo `i', esso condiziona una dinamica di aggregazione temporale. 
+Ogni istante temporale, oltre a presentare i propri dati distintivi, incorpora anche i dati relativi agli `i' istanti temporali precedenti. 
+Questa configurazione crea una catena sequenziale di istanti collegati, consentendo l'analisi delle tendenze temporali su un intervallo di `i' istanti. 
+È da rilevare che, in situazioni in cui il numero di istanti temporali precedenti sia inferiore a `i', 
+l'istante corrente potrebbe non essere incluso nell'analisi aggregata.
+
+
 
 \begin{table}[h]
   \begin{tabular}{|*{3}{c|}}
@@ -232,7 +257,7 @@ Vedi esempio
 \end{table}
 
 
-\begin{table}[H]
+\begin{table}[h]
   \begin{tabular}{|*{7}{c|}}
   \hline
   timestamps & Temp & Umi & Temp-1 & Umi-1 & Temp-2 & Umi-2\\
@@ -247,13 +272,21 @@ Vedi esempio
 
 
 \subsection{Manipolazione dati}
-Per poter lavorare con dei file CSV, verrà utilizzata la libreria \texttt{pandas}, infatti li convertiremo in DataFrame 
-mediante la funzione \texttt{csv\_read(path: string)}. Oltre alla conversione si prenderanno degli accorgimenti utili, come l'eliminazione di colonne
-che non sono di tipo numerico o adirittura non definite e l'eliminazione di eventuali righe ripetute. Per evitare imprevisti o che il modello 
-non risulti ben calibrato verranno eliminate inoltre, tutte le righe che avranno almeno un valore impostato `null' così che 
-i dati che andremo ad utilizzare siano completi.
+Nel processo di manipolazione di dati espressi attraverso file CSV, sarà impiegata la libreria  \texttt{pandas}. L'operazione preliminare 
+consisterà nella conversione di questi file in strutture dati di tipo DataFrame mediante l'utilizzo della funzione  \texttt{csv\_read()}. 
+Tuttavia, è di fondamentale importanza porre attenzione a un insieme di strategie utili atte a garantire la qualità e l'integrità dei dati, 
+nonché a fornire una base solida per le analisi successive.
 
-Essendo che per calcolare il modello finale dobbiamo usare 2 DataFrame, faremo si, con l'utilizzo di \texttt{alligned()}, che questi possiedano solo timestamps comuni.
+Tra queste strategie figura l'adozione di accorgimenti che mirano a eliminare le colonne prive di attributi numerici o, potenzialmente, 
+prive di definizione, con l'obiettivo di assicurare che solo le informazioni rilevanti siano conservate all'interno dei DataFrame. 
+Parallelamente, si compirà l'azione di rimozione delle righe duplicate, allo scopo di evitare duplicazioni superflue e garantire la coerenza dei dati. 
+Un ulteriore passo sarà rappresentato dall'eliminazione delle righe contenenti valori non definiti, in modo da garantire l'integrità e la completezza 
+dei dati destinati all'analisi.
+
+Risulta, inoltre, essenziale considerare che l'analisi richiede l'utilizzo di due DataFrame distinti per il calcolo del modello finale. 
+Al fine di garantire la congruità tra questi due elementi, sarà impiegata la funzione \texttt{alligned()}. Questa misura mira a sincronizzare 
+gli istanti temporali all'interno dei due DataFrame, assicurando che solo istanti comuni siano inclusi nei dati sottoposti all'analisi. 
+Ciò contribuirà a evitare conflitti temporali e a ottimizzare l'omogeneità nell'analisi stessa.
 
 \subsection{Missing values}
 
@@ -264,30 +297,33 @@ all'utente. Successivamente, questa colonna viene esclusa dai dati utilizzati ne
 
 \subsection{Maschera dei valori}
 
-Al termine del processo di calcolo di un modello, il Dataframe risultante potrebbe avere una dimensione inferiore rispetto a quello iniziale, 
-poiché alcune colonne vengono selezionate o deselezionate durante le fasi di step-forward e step-backward. Questo potrebbe complicare l'adattamento 
-di tutti i dati futuri al modello stesso.
+Al completamento del procedimento di calcolo di un modello, è possibile che il DataFrame risultante si presenti con una dimensione inferiore rispetto
+a quella originale. Questa riduzione dimensionale deriva dal fatto che durante le fasi di selezione step-forward e step-backward, alcune colonne vengono 
+scelte o escluse dal modello stesso. Questa dinamica introduce la complessità di adattare i dati futuri al modello stesso.
 
 Per affrontare questa situazione, è stata introdotta una soluzione: l'implementazione di una maschera per i coefficienti. 
-Questa maschera conterrà i valori dei coefficienti associati a ogni colonna del Dataframe originale. 
-Pertanto, le colonne non presenti nel Dataframe finale avranno un valore di coefficiente pari a zero, mentre le colonne selezionate conserveranno 
-il loro valore di coefficiente precedentemente calcolato. Questo approccio garantisce la coerenza dei dati futuri con il modello, 
-anche quando le dimensioni del Dataframe variano.
+Questa maschera costituirà una mappatura dei valori dei coefficienti associati a ciascuna colonna del DataFrame originale. 
+Pertanto, le colonne che non risultano presenti nel DataFrame finale verranno assegnate un valore di coefficiente pari a zero. Al contrario, le colonne 
+selezionate, che preservano il loro valore di coefficiente precedentemente calcolato, sono riconosciute come significative nel contesto del modello. 
+Questa metodologia di mascheramento dei coefficienti si traduce in un vantaggio determinante per l'adattamento dei dati futuri al modello, 
+persino in presenza di variazioni dimensionali nel DataFrame.
 
 \section{Come funziona il tutto}
 
 \subsection{Iterazione Server e Creazione dei modelli}
 
-Il server Flask utilizza lo script \texttt{models\_creator.py} per creare i modelli di regressione lineare. L'interfaccia web di Flask consente
-di impostare vari parametri per il corretto funzionamento di quest'ultimo.
-I file caricati tramite l'interfaccia verranno rinominati come `input.csv' e `st1\_output.csv' (il valore aumenterà progressivamente in base al numero dei file di output)
-e verranno temporaneamente salvati nella directory \texttt{uploads}.
+Il server Flask implementa il processo di creazione dei modelli di regressione lineare mediante l'utilizzo dello script \texttt{models\_creator.py}. 
+L'interfaccia web di Flask agevola la configurazione dei parametri essenziali volti a garantire il corretto funzionamento di tale script. 
+I file caricati caricate attraverso questa interfaccia, verranno rinominati come `input.csv' e `st1\_output.csv' (il valore aumenterà progressivamente in base al numero dei file di output)
+e verranno temporaneamente salvati all'interno della directory \texttt{uploads}.
 Lo script interagirà con questa directory, dalla quale estrarrà i file di input necessari per la creazione del modello.
-Alla fine dell'esecuzione, lo script salva i modelli creati in una sottodirectory dell'utente chiamata `.tmp\_models\_dir'.
+Al termine dell'esecuzione, lo script salva i modelli creati in una sottodirectory dell'utente chiamata \texttt{.tmp\_models\_dir}.
 
 \subsection{Calcolo del modello}
-verrà calcolato il modello secondo la funzione \texttt{make\_regression} del file \texttt{reg.py} passando i 2 DataFrame ottenuti seguendo le precedenti operazioni.
-In questa funzione è possibile notare un parametro `test' che, se impostato a True, permette di dividere i dati in 80\% train e 20\% test. Il calcolo dei modelli
+Il processo di computazione del modello si configura mediante l'invocazione della funzione \texttt{make\_regression} contenuta nel file \texttt{reg.py}. 
+Questa procedura riceve in ingresso i due DataFrame derivanti dalle fasi di trattamento dati precedentemente delineate. 
+In tale funzione, è osservabile la presenza di un parametro denominato `test', che se configurato a `True', 
+consente la suddivisione dei dati in un set di addestramento (train) costituente l'80\% e un set di test del 20\%.  Il calcolo dei modelli
 avviene secondo un accurata scelta delle colonne seguendo i metodi della step-wise regression. 
 Successivamente reintroduciamo tutte le colonne della matrice MxDxH non selezionate dalla regressione, e creiamo il modello. 
 Fatto ciò è possibile tramite il parametro `test' verificare che le predizioni siano accettabili. Infine ritorniamo un oggetto RegressionModel definito 

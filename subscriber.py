@@ -9,7 +9,10 @@ import pandas as pd
 
 df = pd.DataFrame()
 num_mex = 0
-path = MODEL_DIR + 'Utente/models/'
+Utente = 'Padova'
+topic = 'serra_1'
+broker_config = 'config.json'
+path = os.path.join(MODEL_DIR, Utente, topic, broker_config)
 
 def elaborazione(messaggio: dict):
 
@@ -141,7 +144,7 @@ def configurazione_esterna_login_tls(json_data):
 
 
 if __name__ == "__main__":
-    path = 'config_files/my_file.json'
+    path = os.path.join(MODEL_DIR, Utente, topic, broker_config)
     with open(path) as file:
         json_data = json.load(file)
 
