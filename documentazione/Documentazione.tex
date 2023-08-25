@@ -7,6 +7,7 @@
 \usepackage{amssymb} 
 \usepackage{dirtree}
 \usepackage{float}
+\usepackage{hyperref}
 \newcommand{\rootDirectory}{models\_creator}
 
 \begin{document}
@@ -17,7 +18,8 @@
 \maketitle %creazione e scrittura del titolo nel documento 
 
 \newpage
-
+\tableofcontents
+\newpage
 \section{Introduzione}
 L'obiettivo dell'applicazione è di analizzare dati ambientali e sviluppare modelli di regressione predittiva basati su dati storici. 
 Attraverso questo processo, l'applicazione mira a creare modelli che possano stimare una variabile di interesse in base alle variabili ambientali disponibili. 
@@ -308,7 +310,7 @@ selezionate, che preservano il loro valore di coefficiente precedentemente calco
 Questa metodologia di mascheramento dei coefficienti si traduce in un vantaggio determinante per l'adattamento dei dati futuri al modello, 
 persino in presenza di variazioni dimensionali nel DataFrame.
 
-\section{Come funziona il tutto}
+\section{Funzionamento}
 
 \subsection{Iterazione Server e Creazione dei modelli}
 
