@@ -1,14 +1,17 @@
 import ipaddress
 import shutil
 import json
-from flask import jsonify, request, render_template
+from flask import jsonify, request, render_template, flash, redirect, url_for
 from werkzeug.utils import secure_filename
-from . import app
+from flaskr import app, db, bcrypt
+from flask_login import login_user, logout_user
 import os
 import subprocess
 from const import *
+from flaskr.models import User
+from flaskr.login import RegistrationForm, LoginForm
 
-user_path = os.path.join(MODEL_DIR, 'Padova')
+user_path = ''
 
 def move_file(source_path, destination_path):
     shutil.move(source_path, destination_path)
@@ -49,9 +52,7 @@ def modal(host_name, password, Ip, topic, path):
 
 @app.route('/')
 def index():
-    visible_directory = get_visible_directory(user_path)
-    return render_template('index.html', model_dirs=visible_directory)
-
+    return redirect(url_for('login'))
 
 @app.route('/models_creator', methods=['GET','POST'])
 def run_models_creation():
@@ -180,3 +181,46 @@ def saving_function():
                       os.path.join(model_dir, file))
     
     return json_response('success', 'All correct')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+
+        create_path_user = os.path.join(MODEL_DIR, form.username.data)
+        os.makedirs(create_path_user)
+        create_tmp_path = os.path.join(create_path_user, TMP_MODELS_DIRECTORY)
+        os.makedirs(create_tmp_path)
+        with open(os.path.join(create_tmp_path, '.gitkeep'), 'w') as file:
+            pass
+        flash(f'Account created! Now you are able to log in', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html', title = 'Register', form = form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            global user_path
+            user_path = os.path.join(MODEL_DIR, form.username.data)
+
+            visible_directory = get_visible_directory(user_path)
+            return render_template('index.html', model_dirs=visible_directory)
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))

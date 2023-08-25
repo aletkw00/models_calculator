@@ -12,6 +12,15 @@
 <body>
     <div class="app" align="center">
         <div class="form-section">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    </div>
+                {% endfor %}
+                {% endif %}
+            {% endwith %}
             <h1>Models Calculator</h1>
             <form id="uploadForm" action="/models_creator" method="post" enctype="multipart/form-data">
                 <button type="button" name="age" id="age" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning">Broker Config</button>
@@ -84,6 +93,7 @@
                 <button type="button" id="actionButton" onclick="handleAction('delete')">Delete</button>
             </div>
         </div>
+        <a href="{{ url_for('logout') }}">Logout</a>
     </div>
     <script src="../static/index.js" type="text/javascript"></script>
     <script src="../static/models_creator.js" type="text/javascript"></script>
