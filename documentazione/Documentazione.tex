@@ -63,7 +63,11 @@ Il secondo metodo consente di evitare di dover specificare esplicitamente il nom
 \begin{enumerate}
   \item \textbf{Accedi al Server:} Utilizza il tuo browser per accedere alle funzionalità di creazione dei modelli, 
   collegandoti utilizzando l'indirizzo IP del server Flask.
-  
+
+  \item \textbf{Login:} Per poter accedere all'applicazione è necessario effetturare l'autenticazione, fornendo username e passsword. In caso non si sia già in possesso
+  di un account sarà necessario crearne uno attraverso l'apposita pagina di registrazione. Questo permette di creare una gerarchia e mantenere i modelli 
+  in modo più organizzato senza che si creino conflitti tra i vari modelli di diversi utenti.
+
   \item \textbf{Fornitura dei Parametri}: Per creare un modello, è necessario fornire i seguenti parametri tramite la pagina web del server:
   \begin{itemize}
     \item Scegliere tra le opzioni disponibili o introdurre un nuovo nominativo per un sensore, al quale verranno connessi i modelli oggetto della creazione imminente.
@@ -108,10 +112,15 @@ La struttura della repository si presenta nel seguente modo:
 .4 models\_creator.js.
 .3 templates/.
 .4 index.html.
+.4 login.html.
+.4 register.html.
 .3 \_\_init\_\_.py.
 .3 views.py.
+.3 login.py.
+.3 models.py.
 .3 uploads/.
-.2 ca-root-cert.crt.
+.2 instance.
+.3 site.db
 .2 const.py.
 .2 install.sh.
 .2 models\_creator.py.
@@ -124,13 +133,14 @@ La struttura della repository si presenta nel seguente modo:
 .2 utils.py.
 }
 
-\subsection{Gestione modelli e utenti}
-La direcotry \texttt{dir\_of\_models} rappresenta la gestione degli utenti con i loro vari modelli.
-All'interno di questa directory, si individuano sottodirectory specifiche per ciascun utente, 
-a ciascuna delle quali è associata una directory occulta denominata \texttt{.tmp\_models\_dir}. In tale cartella sono collocati i modelli creati
-non ancora salvati o scartati, sottolineando quindi la loro natura temporanea.
-In aggiunta, per ciascun utente potrebbe esistere un numero variabile di ulteriori directory, che delineano le configurazioni dei sensori. 
-All'interno di queste ultime directory, saranno archiviati i differenti modelli precedentemente conservati, conformemente alle scelte operative effettuate.
+\subsection{Gestione modelli}
+Il percorso di \texttt{dir\_of\_models} ospita una gerarchia di directory che riflette l'organizzazione dei modelli generati da ciascun utente. 
+Ogni utente è rappresentato da una propria sottodirectory all'interno della quale si trovano i modelli da essi creati. 
+È rilevabile che all'interno di queste sottodirectory utente, vi sono ulteriori suddivisioni in sotto-cartelle. È presente per ogni utente
+una directory denominata \texttt{.tmp\_models\_dir}, la quale contiene modelli che ancora non sono ancora stati ne salvati ne scartati, illustrando chiaramente
+la loro connotazione temporanea. Per ciascun utente potrebbero esistere ulteriori sottodirectory il cui numero può variare.
+Queste ulteriori directory sono finalizzate a contenere i modelli creati per ogni sensore (la directory rappresenta il sensore).
+Tale suddivisione consente una gestione ordinata dei vari modelli che l'utente crea nel tempo.
 
 \subsection{Struttura Flask}
 All'interno della directory \texttt{flaskr} troviamo l'intera struttura dell'applicazione Flask.
@@ -141,7 +151,13 @@ All'interno della directory \texttt{flaskr} troviamo l'intera struttura dell'app
   \item \textbf{\_\_init\_\_.py}: file di inizializzazione che conferisce validità di `package' Python alla directory. 
   Esso incorpora il codice di configurazione, l'inizializzazione delle estensioni Flask e altre impostazioni globali dell'applicazione.
   \item \textbf{views.py} file che definisce il comportamento dell'app in risposta alle interazioni degli utenti con la pagina web.
+  \item \textbf{login.py} file che definisce due classi di form per un'applicazione web Flask: una per la registrazione dell'utente e l'altra per l'accesso.
+  \item \textbf{models.py} file che definisce come vengono rappresentati gli utenti nel database dell'applicazione
 \end{itemize}
+
+\subsection{Gestione Utenti}
+All'interno della directory \texttt{instance} troviamo il database nel quale vengono memorizzati i vari utenti. Ongi utente è caratterrizzato
+da una coppia di parametri ovvero `username' e `password'. 
 
 \subsection{Creazione dei modelli}
 \begin{itemize}
@@ -159,7 +175,6 @@ un file posizionato all'interno di una directory dedicata al sensore dell'utente
 dati provenienti dal broker al quale è stato collegato. Tali dati saranno sfruttati per effettuare previsioni di valori tramite l'utilizzo di modelli già preesistenti. 
 Le previsioni risultanti saranno poi inviate al topic indicato nel file di configurazione.
 
-\clearpage
 
 \section{Dettagli implementativi}
 
@@ -312,11 +327,19 @@ persino in presenza di variazioni dimensionali nel DataFrame.
 
 \section{Funzionamento}
 
+\subsection{Registrazione ed autenticazione}
+Per poter interagire con l'applicazione, è necessario essere in possesso di un account. Qualora l'utente non disponga di un account, 
+sarà possibile procedere con la registrazione, la quale richiederà un `username' e una `password' (con la necessità di confermare quest'ultima). 
+Una volta forniti username e password, si procederà con l'esecuzione di una ricerca all'interno del database.
+Se le credenziali fornite risultano essere corrette, sarà possibile instaurare interazioni con l'applicativo. 
+Tuttavia, nel caso in cui non emerga alcuna corrispondenza nel database in relazione alle informazioni fornite, 
+l'utente verrà invitato a reinserire le proprie credenziali. 
+
 \subsection{Iterazione Server e Creazione dei modelli}
 
 Il server Flask implementa il processo di creazione dei modelli di regressione lineare mediante l'utilizzo dello script \texttt{models\_creator.py}. 
 L'interfaccia web di Flask agevola la configurazione dei parametri essenziali volti a garantire il corretto funzionamento di tale script. 
-I file caricati caricate attraverso questa interfaccia, verranno rinominati come `input.csv' e `st1\_output.csv' (il valore aumenterà progressivamente in base al numero dei file di output)
+I file caricati attraverso questa interfaccia, verranno rinominati come `input.csv' e `st1\_output.csv' (il valore aumenterà progressivamente in base al numero dei file di output)
 e verranno temporaneamente salvati all'interno della directory \texttt{uploads}.
 Lo script interagirà con questa directory, dalla quale estrarrà i file di input necessari per la creazione del modello.
 Al termine dell'esecuzione, lo script salva i modelli creati in una sottodirectory dell'utente chiamata \texttt{.tmp\_models\_dir}.

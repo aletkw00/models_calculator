@@ -4,7 +4,7 @@ import json
 from flask import jsonify, request, render_template, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 from flaskr import app, db, bcrypt
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 import os
 import subprocess
 from const import *
@@ -30,6 +30,8 @@ def json_response(status, message):
     return jsonify(response_data)
 
 def modal(host_name, password, Ip, topic, path):
+    """Creates the configuration file for the broker if the input values are valid.    
+    """
     try:
         Ip = str(ipaddress.ip_address(Ip))
     except ValueError:
@@ -55,21 +57,22 @@ def index():
     return redirect(url_for('login'))
 
 @app.route('/models_creator', methods=['GET','POST'])
+@login_required
 def run_models_creation():
-    #get the name of the directory of the model
+    # Get the name of the directory of the model
     model_dir = secure_filename(request.form.get('model_dir'))
     model_dir = os.path.join(user_path, model_dir)
 
-    #check if directory alredady exists, if not create
+    # Check if directory alredady exists, if not create
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
 
-    #get the 2 file
+    # Get the files
     file1 = request.files['file1']
     files = request.files.getlist("file2")
 
 
-    #checking extensions of files
+    # Checking extensions of files
     extension1 = os.path.splitext(file1.filename)[1]
     if extension1 not in app.config['ALLOWED_EXTENSIONS']:
         return jsonify({'message': 'Input non è un file .csv'})
@@ -97,6 +100,7 @@ def run_models_creation():
 
     path_tmp_models_dir = os.path.join(user_path, TMP_MODELS_DIRECTORY)
 
+    # Command to execute as command line
     command = [
         'python3', 
         'models_creator.py', 
@@ -104,6 +108,7 @@ def run_models_creation():
         path_tmp_models_dir
     ]
 
+    # Adding flags to the command
     if window != '':
         window = '-i' + window
         command.append(window)
@@ -112,7 +117,7 @@ def run_models_creation():
         command.append(filename)
     if test != '':
         command.append(test)
-    #run the script
+    # Run the script
     try:
         result = subprocess.run(command, capture_output=True, text=True)
 
@@ -143,11 +148,13 @@ def delete_function():
         
     model_dir = os.path.join(user_path, model_dir)
     tmp_model_dir_path = os.path.join(user_path, TMP_MODELS_DIRECTORY)
+
+    # Remove models from tmp user directory
     for file in os.listdir(tmp_model_dir_path):
         if file.startswith(filename):
             os.remove(os.path.join(tmp_model_dir_path, file))
 
-    # Se la cartella dove l'utente voleva salvare i modelli è vuota eliminala
+    # Check if the directory previously created is empty. Eventually delete it
     if os.path.exists(model_dir) and os.path.isdir(model_dir):
         if not os.listdir(model_dir):
             os.rmdir(model_dir)
@@ -156,6 +163,7 @@ def delete_function():
 
 @app.route('/saving', methods=['POST'])
 def saving_function():
+
     data = request.get_json()
     model_dir = secure_filename(data.get('model_dir'))
     filename = secure_filename(data.get('filename'))
@@ -169,11 +177,13 @@ def saving_function():
 
     model_dir = os.path.join(user_path, model_dir)
 
+    # Create if possible the broker config file
     if all([host_name, password, Ip, topic]):
         response = modal(host_name, password, Ip, topic, model_dir)
         if response.json['status'] == 'failure':
             return response
     
+    # Move models from tmp directory to the choosen one
     tmp_model_dir_path = os.path.join(user_path, TMP_MODELS_DIRECTORY)
     for file in os.listdir(tmp_model_dir_path):
         if file.startswith(filename):
@@ -185,6 +195,8 @@ def saving_function():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """ Create an user account and then create his folder in 'dir_of_models'
+    """
     form = RegistrationForm()
     if form.validate_on_submit():
 
@@ -206,6 +218,8 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """ Check the if user exist and then redirect them to the application page 
+    """
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()

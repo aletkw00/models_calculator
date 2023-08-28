@@ -5,22 +5,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
     <title>Login</title>
 </head>
 
 <body>
-    <h1>Login Page</h1>
-
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+            {{ message }}
+            </div>
+        {% endfor %}
+        {% endif %}
+    {% endwith %}
     <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        {{ form.username.label }}
-        {{ form.username }}
-        {{ form.password.label }}
-        {{ form.password }}
-        {{ form.submit }}
+        <div class="modal-dialog"> 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Login</h4>
+                </div>
+                {{ form.hidden_tag() }}
+                <div class="modal-body" align="left">
+                    <label>Username</label>
+                    {{ form.username }}
+                    <br />
+                    <label>Password</label>
+                    {{ form.password }}
+                    <br />
+                    
+                </div>
+                <div class="modal-footer">
+                    Need An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up Now</a>
+                    {{ form.submit }}
+                </div>
+            </div>
+        </div>
+
+        
     </form>
 
-    <a href="{{ url_for('register') }}">Don't have an account? Sign Up</a>
+    
 </body>
 
 </html>

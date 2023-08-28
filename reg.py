@@ -14,12 +14,13 @@ def get_normalize(df):
 
 
 def make_regression(X_train, Y_train, window: int, test: bool=True):
-    """Calculate a linear regression model starting with 2 DataFrames using
-        first a stepwise regression method.
+    """Calculate a linear regression model starting with 2 DataFrames.
+    The models are computed through step-wise regression procedures.
 
     Args:
         X_train (DataFrame)
         Y_train (DataFrame)
+        window (int)
         test (bool): if True divides the data in 80% train and 20% test. 
             
     Returns:
@@ -30,6 +31,7 @@ def make_regression(X_train, Y_train, window: int, test: bool=True):
             float: out_train mean
             float: out_train standard deviation
             list: the list of columns not used
+            window: the number of previous timestamps to consider
 
     """
     if test:

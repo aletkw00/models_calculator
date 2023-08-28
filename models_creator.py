@@ -4,14 +4,12 @@ import os
 import argparse
 
 def model_calc(inp, out, window, test=False):
-    """Calculate the model and save it in a json file format.
+    """Calculate the model.
 
     Args:
         inp (DataFrame): input DataFrame
         out (DataFrame): output Dataframe
-        i (int): counter to save json files
         window (int): window of the previous timestamps
-        name (str): name to save the json file
         test (bool): devide data into 80% train and 20% test
     """
     inp, out = alligned(inp, out, window)
@@ -22,15 +20,16 @@ def model_calc(inp, out, window, test=False):
 def get_models(csvDir, finalModelsDir, test=False, window=0, name=DEFAULT_MODEL_NAME):
     """Given the path of csv directory and a path to save the models, 
     optionally the other flags, call the function 'model_calc' to 
-    calculate a model of the input  files with every output. 
-    (The csv direcotry must have one and oly one file as input)
+    calculate a model based on the input files. This function iterate on output files
+    then call that function for each one passing always the same input file.
+    (The csv direcotry must have one and only one file as input)
 
     Args:
         csvDir (string): path to a directory of csv files
         finalModelsDir (string): path to save the models created
         test (bool): split the data in 80 then do the test.
         window (int): size of the window. Defaults to 0.
-        name (string): The names under which to save the created models.
+        name (string): The names under which the created models are to be saved.
     """
     inp = csv_read(csvDir + INPUT_FILE)
     for index in range(1, sum(1 for f in os.scandir(csvDir) if f.is_file() and f.name != '.gitkeep')):

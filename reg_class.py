@@ -8,10 +8,10 @@ class RegressionModel:
     """collect all the model attributes
 
     Attributes:
-        B (str): This is where we store arg,
+        B (float): coefficents for each column of the input DataFrame,
         calib_input_media (Series): mean of each column of the input DataFrame
         calib_input_stdev (Series): standard dev of each column of the input DataFrame
-        calib_output_media (float): mean of the output values
+        calib_output_media (float): mean of output values
         calib_output_stdev (float): standard deviation of output values
         unselected_columns (list): list of columns not used in the model
         window (int): the number of previous timestamps to consider

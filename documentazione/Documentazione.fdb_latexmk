@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1692954588 "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.tex" "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.pdf" "Documentazione" 1692954588
+["pdflatex"] 1693220919 "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.tex" "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.pdf" "Documentazione" 1693220919
   "/etc/texmf/web2c/texmf.cnf" 1647858937 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.aux" 1692954588 3761 dc20572abfa2af266ff86de0e2bae927 ""
-  "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.tex" 1692954587 19814 58fd574af8a41764a7cca9d584abfb65 ""
+  "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.aux" 1693220919 4013 06af5a31f46930fafbc736ee16c16973 ""
+  "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.tex" 1693220918 21702 7279de29fbf5d65e85aa5d64f4a95c4a ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1000.tfm" 1136768653 3584 2d666ecf6d466d8b007246bc2f94d9da ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1136768653 3584 402da0b29eafbad07963b1224b222f18 ""
@@ -95,15 +95,15 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1647858978 4770781 1ed1abab22da9c3e2cc82e4db562318b ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1685454030 8256157 be5de53c31267096c1f5f8ad1f307306 ""
-  "Documentazione.aux" 1692954588 3761 dc20572abfa2af266ff86de0e2bae927 "pdflatex"
-  "Documentazione.out" 1692954588 1327 651ef93837a224656a4a4a3bc22c5ee1 "pdflatex"
-  "Documentazione.tex" 1692954587 19814 58fd574af8a41764a7cca9d584abfb65 ""
-  "Documentazione.toc" 1692954588 1729 cddc6e7b491191e93c4adcc170fa55a0 "pdflatex"
+  "Documentazione.aux" 1693220919 4013 06af5a31f46930fafbc736ee16c16973 "pdflatex"
+  "Documentazione.out" 1693220919 1464 51e684deb5d672ecabc49595631ed30e "pdflatex"
+  "Documentazione.tex" 1693220918 21702 7279de29fbf5d65e85aa5d64f4a95c4a ""
+  "Documentazione.toc" 1693220919 1899 44302271cb364d5a9b1b1824b799e068 "pdflatex"
   (generated)
   "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.log"
   "Documentazione.out"
+  "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.pdf"
   "Documentazione.pdf"
+  "Documentazione.log"
   "Documentazione.toc"
   "Documentazione.aux"
-  "/home/alessio/Scrivania/tirocinio2.1/documentazione/Documentazione.pdf"
-  "Documentazione.log"
