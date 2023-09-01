@@ -1,0 +1,13 @@
+[Unit]
+Description=Demone client mqtt
+After = network.target
+
+[Service]
+Type = simple
+WorkingDirectory = /home/user/my_daemon
+ExecStart = /usr/bin/python3 /home/user/my_daemon/client.py
+User = user
+TimeoutStartSec=120
+
+[Install]
+WantedBy=multi-user.target
