@@ -9,10 +9,10 @@ import pandas as pd
 
 df = pd.DataFrame()
 num_mex = 0
-Utente = 'Padova'
-topic = 'serra_1'
+Utente = 'alessio'
+topic = 'serra'
 broker_config = 'config.json'
-path = os.path.join(MODEL_DIR, Utente, topic, broker_config)
+path = os.path.join(MODEL_DIR, Utente, topic)
 
 def elaborazione(messaggio: dict):
 
@@ -35,7 +35,7 @@ def subscriber_mqtt(par: dict):
         pass
 
     def on_message(client, userdata, msg):
-        print('messaggio ricevuto\n')
+        print(msg.payload.decode())
         global num_mex
         global df
         model_dict = {}
@@ -62,7 +62,7 @@ def subscriber_mqtt(par: dict):
         
         
         for name in os.listdir(path):
-            Regr = RegressionModel.json_read(path + name)
+            Regr = RegressionModel.json_read(os.path.join(path ,name))
             if max_window < Regr.window:
                 max_window = Regr.window
             if Regr.window < num_mex:
