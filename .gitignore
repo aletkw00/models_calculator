@@ -1,5 +1,4 @@
 testing/
 __pycache__/
 flaskr/__pycache__/
-ca-root-cert.crt
 csv_files/
