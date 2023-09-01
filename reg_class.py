@@ -109,7 +109,7 @@ class RegressionModel:
 
         """
         data = json.load(open(name))
-        Model = Model(pd.Series(data[list(data.keys())[0]]), \
+        Model = RegressionModel(pd.Series(data[list(data.keys())[0]]), \
                           pd.Series(data[list(data.keys())[1]]), \
                           pd.Series(data[list(data.keys())[2]]), \
                           data[list(data.keys())[3]], \

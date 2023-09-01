@@ -27,7 +27,7 @@ L'obiettivo finale è fornire agli utenti uno strumento che consenta di fare pre
 e ottimizzate in vari contesti. I modelli generati dall'applicazione possono essere utilizzati per anticipare le tendenze, 
 ottimizzare le risorse e prendere decisioni strategiche basate su analisi dati approfondite.
 
-\section{Installazione e Configurazione}
+\section{Installazione ed esecuzione}
 Per installare l'applicazione, è necessario seguire attentamente i passaggi riportati di seguito:
 
 \subsubsection*{Installazione}
@@ -43,21 +43,11 @@ Per installare l'applicazione, è necessario seguire attentamente i passaggi rip
   in quanto gestirà automaticamente l'installazione di tutte le dipendenze necessarie. Le dipendenze sono specificate nel file \texttt{requirements.txt}
 \end{enumerate}
 
-\subsubsection*{Configurazione}
-Per eseguire il server, è possibile seguire due metodi:
+\subsubsection*{Esecuzione}
+Per eseguire il server è necessario aprire da su terminale la directory dell'applicazione ed
+il seguente comando: \texttt{python3 -m flask run}.
 
-\begin{itemize}
-  \item Utilizzando il comando \texttt{python3 run.py}.
-  \item Impostando una variabile d'ambiente seguendo quanto segue:
-  \begin{enumerate}
-    \item Imposti la variabile d'ambiente eseguendo il comando:\\
-    \texttt{export FLASK\_APP=flaskr}
-    \item Eseguire il seguente comando da terminale per avviare il server \\
-    \texttt{python3 -m flask run}.
-  \end{enumerate}
-\end{itemize}
 
-Il secondo metodo consente di evitare di dover specificare esplicitamente il nome del file dell'applicazione Flask ogni volta che si avvia il server.
 
 \section{Guida all'Utilizzo}
 \begin{enumerate}
