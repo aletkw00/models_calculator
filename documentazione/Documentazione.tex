@@ -8,35 +8,36 @@
 \usepackage{dirtree}
 \usepackage{float}
 \usepackage{hyperref}
+\usepackage{datetime2}
 \newcommand{\rootDirectory}{models\_creator}
 
 \begin{document}
 
-\title{Documentazione applicazione}
+\title{Documentazione libreria}
 \author{Alessio Bonizzato}
 \date{}
-\maketitle %creazione e scrittura del titolo nel documento 
+\maketitle
 
 \newpage
 \tableofcontents
 \newpage
 \section{Introduzione}
-L'obiettivo dell'applicazione è di analizzare dati ambientali e sviluppare modelli di regressione predittiva basati su dati storici. 
-Attraverso questo processo, l'applicazione mira a creare modelli che possano stimare una variabile di interesse in base alle variabili ambientali disponibili. 
+L'obiettivo della libreria è di analizzare dati ambientali e sviluppare modelli di regressione predittiva basati su dati storici. 
+Attraverso questo processo, la libreria mira a creare modelli che possano stimare una variabile di interesse in base alle variabili ambientali disponibili. 
 L'obiettivo finale è fornire agli utenti uno strumento che consenta di fare previsioni basate su dati raccolti, contribuendo così a guidare decisioni informate 
-e ottimizzate in vari contesti. I modelli generati dall'applicazione possono essere utilizzati per anticipare le tendenze, 
-ottimizzare le risorse e prendere decisioni strategiche basate su analisi dati approfondite.
+e ottimizzate in vari contesti. I modelli generati dalla libreria possono essere utilizzati per ottimizzare le risorse e prendere decisioni 
+strategiche basate su analisi dati approfondite.
 
 \section{Installazione ed esecuzione}
-Per installare l'applicazione, è necessario seguire attentamente i passaggi riportati di seguito:
+Per installare la libreria, è necessario seguire attentamente i passaggi riportati di seguito:
 
 \subsubsection*{Installazione}
 \begin{enumerate}
-  \item Scaricare l'intera repository dal repository GitHub ufficiale dell'applicazione. 
+  \item Scaricare l'intera repository dal repository GitHub ufficiale della libreria. 
   È possibile farlo tramite il comando \texttt{git clone} oppure scaricando l'archivio ZIP direttamente dal sito.
   \item Spostarsi da terminale all'interno della directory scaricata. Su Linux è possibile farlo col comando \texttt{cd \rootDirectory}
   \item Prima di procedere con l'installazione, è fondamentale verificare di avere \texttt{pip} installato nel sistema. 
-  \texttt{pip} è il gestore dei pacchetti di Python e viene utilizzato per installare le dipendenze dell'applicazione.
+  \texttt{pip} è il gestore dei pacchetti di Python e viene utilizzato per installare le dipendenze della libreria.
   \item Nel caso in cui si stia utilizzando un sistema operativo Linux, è necessario rendere il file \texttt{install.sh} eseguibile. 
   Questo può essere fatto tramite il seguente comando da terminale: \texttt{chmod +x install.sh}
   \item Eseguire il seguente comando da terminale: \texttt{./install.sh}. L'uso di questo script semplifica il processo di installazione, 
@@ -44,8 +45,8 @@ Per installare l'applicazione, è necessario seguire attentamente i passaggi rip
 \end{enumerate}
 
 \subsubsection*{Esecuzione}
-Per eseguire il server è necessario aprire da su terminale la directory dell'applicazione ed
-il seguente comando: \texttt{python3 -m flask run}.
+Per eseguire il server è necessario aprire da su terminale la directory della libreria ed eseguire
+il seguente comando: \texttt{python3 run.py}.
 
 
 
@@ -54,7 +55,7 @@ il seguente comando: \texttt{python3 -m flask run}.
   \item \textbf{Accedi al Server:} Utilizza il tuo browser per accedere alle funzionalità di creazione dei modelli, 
   collegandoti utilizzando l'indirizzo IP del server Flask.
 
-  \item \textbf{Login:} Per poter accedere all'applicazione è necessario effetturare l'autenticazione, fornendo username e passsword. In caso non si sia già in possesso
+  \item \textbf{Login:} Per poter utilizzare la libreria è necessario effetturare l'autenticazione, fornendo username e passsword. In caso non si sia già in possesso
   di un account sarà necessario crearne uno attraverso l'apposita pagina di registrazione. Questo permette di creare una gerarchia e mantenere i modelli 
   in modo più organizzato senza che si creino conflitti tra i vari modelli di diversi utenti.
 
@@ -66,10 +67,10 @@ il seguente comando: \texttt{python3 -m flask run}.
     \item Imposta il valore `window', espresso come numero intero, che stabilirà quanti istanti temporali precedenti verranno considerati durante della creazione del modello.
     \item Assegna un nome al modello. Se stai caricando più file di output, il nome verrà affiancato da un numero intero che incrementerà in modo progressivo.
     \item Decidi se eseguire o meno il test del modello. In caso positivo, i dati di input verranno divisi in un rapporto dell'80\% per l'addestramento 
-    (ovvero i dati utilizzati la creazione del modello) e del 20\% per il test (ovvero i dati che verranno utilizzati per verificare che il modello sia oppure no preciso).
+    (utilizzati per la creazione del modello) e del 20\% per il test (utilizzati per verificare che il modello sia oppure no preciso).
   \end{itemize}
   
-  \item \textbf{Visualizzazione dei Risultati:} Una volta completata la fase di creazione del modello, l'applicazione fornirà alcuni indicatori derivanti dal modello stesso. 
+  \item \textbf{Visualizzazione dei Risultati:} Una volta completata la fase di creazione del modello, la libreria fornirà alcuni indicatori derivanti dal modello stesso. 
   Tali indicatori offriranno un'idea riguardo alla qualità delle previsioni e all'adeguatezza del modello in relazione ai dati forniti.
 
   \item \textbf{Decisione di Salvare o Scartare:} A questo punto, si ha la possibilità di prendere una decisione. 
@@ -110,7 +111,8 @@ La struttura della repository si presenta nel seguente modo:
 .3 models.py.
 .3 uploads/.
 .2 instance.
-.3 site.db
+.3 site.db.
+.2 ca-root-cert.crt.
 .2 const.py.
 .2 install.sh.
 .2 models\_creator.py.
@@ -126,8 +128,8 @@ La struttura della repository si presenta nel seguente modo:
 \subsection{Gestione modelli}
 Il percorso di \texttt{dir\_of\_models} ospita una gerarchia di directory che riflette l'organizzazione dei modelli generati da ciascun utente. 
 Ogni utente è rappresentato da una propria sottodirectory all'interno della quale si trovano i modelli da essi creati. 
-È rilevabile che all'interno di queste sottodirectory utente, vi sono ulteriori suddivisioni in sotto-cartelle. È presente per ogni utente
-una directory denominata \texttt{.tmp\_models\_dir}, la quale contiene modelli che ancora non sono ancora stati ne salvati ne scartati, illustrando chiaramente
+È rilevabile che all'interno di queste sottodirectory utente, vi sono ulteriori suddivisioni in sottodirectory. È presente per ogni utente
+una directory denominata \texttt{.tmp\_models\_dir}, la quale contiene modelli che non sono ancora stati ne salvati ne scartati, illustrando chiaramente
 la loro connotazione temporanea. Per ciascun utente potrebbero esistere ulteriori sottodirectory il cui numero può variare.
 Queste ulteriori directory sono finalizzate a contenere i modelli creati per ogni sensore (la directory rappresenta il sensore).
 Tale suddivisione consente una gestione ordinata dei vari modelli che l'utente crea nel tempo.
@@ -147,16 +149,16 @@ All'interno della directory \texttt{flaskr} troviamo l'intera struttura dell'app
 
 \subsection{Gestione Utenti}
 All'interno della directory \texttt{instance} troviamo il database nel quale vengono memorizzati i vari utenti. Ongi utente è caratterrizzato
-da una coppia di parametri ovvero `username' e `password'. 
+da una coppia di parametri univoci, ovvero `username' e `password'. 
 
 \subsection{Creazione dei modelli}
 \begin{itemize}
   \item \textbf{reg\_class.py}: definizione della classe python `RegressionModel' che funge da contenitore per tutte le
   informazioni associate ad un modello, che può essere creato o importato nell'applicazione.
   \item \textbf{reg.py}: codice che si occupa della parte di calcolo e di creazione dei modelli.
-  \item \textbf{utils.py}: file che contiene funzioni di utilità come la trasformazione da timestamp alla matrice MxDxH o l'allineamento di 2 file csv etc.
+  \item \textbf{utils.py}: file che contiene funzioni di utilità per aiutare a formattare i file di input in modo specifico.
   \item \textbf{models\_creator.py}: script progettato per agevolare la creazione di molteplici modelli mediante una singola esecuzione.
-  \item \textbf{const.py}: file che contiene delle costanti utili per l'applicazione
+  \item \textbf{const.py}: file utilizzato per definire e dichiarare costanti che vengono utilizzate in diverse parti della libreria
 \end{itemize}
 
 \subsection{Iterazione col Broker}
@@ -174,9 +176,9 @@ I dati in formato CSV devono essere strutturati seguendo un formato preciso e co
 La prima riga dei file deve rappresentare l'intestazione, delineando i contenuti delle colonne, mentre la prima colonna è riservata ai timestamps, 
 i quali devono essere accuratamente organizzati in linea con le indicazioni fornite.
 \begin{enumerate} 
-  \item \textbf{Formato data e ora separati da spazio:}
+  \item \textbf{Formato ISO:}
   \begin{itemize}
-    \item Esempio: 2023-08-10 15:30:00
+    \item Esempio: \DTMdisplaydate{2023}{08}{10}{-1} \DTMdisplaytime{15}{30}{00}
     \item Formato: YYYY-MM-DD HH:MM:SS
   \end{itemize}
   \item \textbf{Formato data e ore in stile europeo:}
@@ -208,7 +210,7 @@ la quale troverà collocazione all'interno di una singola riga all'interno della
   
   \end{tabular}
   
-  \caption{MxDxH di 2023-08-10 15:30:00}
+  \caption{MxDxH di \DTMdisplaydate{2023}{08}{10}{-1} \DTMdisplaytime{15}{30}{00}}
 \end{table}
 
 \subsection{Parametro window}
@@ -229,17 +231,17 @@ l'istante corrente potrebbe non essere incluso nell'analisi aggregata.
 
 
 \begin{table}[h]
-  \begin{tabular}{|*{3}{c|}}
-  
-  \hline
-  timestamps & Temp & Umi\\
-  \hline
-  2023-08-10 13:30 & 25,1 & 8\\
-  \hline
-  2023-08-10 15:30 & 22,1 & 12\\
-  \hline
-  2023-08-10 16:30 & 21,1 & 11\\
-  \hline
+  \begin{tabular}{|c|c|c|}
+
+    \hline
+    timestamps & Temp & Umi\\
+    \hline
+    2023-08-10 13:30 & 25,1 & 8\\
+    \hline
+    2023-08-10 15:30 & 22,1 & 12\\
+    \hline
+    2023-08-10 16:30 & 21,1 & 11\\
+    \hline
   
   \end{tabular}
   
@@ -280,7 +282,7 @@ l'istante corrente potrebbe non essere incluso nell'analisi aggregata.
 
 \subsection{Manipolazione dati}
 Nel processo di manipolazione di dati espressi attraverso file CSV, sarà impiegata la libreria  \texttt{pandas}. L'operazione preliminare 
-consisterà nella conversione di questi file in strutture dati di tipo DataFrame mediante l'utilizzo della funzione  \texttt{csv\_read()}. 
+consisterà nella conversione di questi file in strutture dati di tipo DataFrame mediante l'utilizzo della funzione  \texttt{csv\_read}. 
 Tuttavia, è di fondamentale importanza porre attenzione a un insieme di strategie utili atte a garantire la qualità e l'integrità dei dati, 
 nonché a fornire una base solida per le analisi successive.
 
@@ -291,7 +293,7 @@ Un ulteriore passo sarà rappresentato dall'eliminazione delle righe contenenti 
 dei dati destinati all'analisi.
 
 Risulta, inoltre, essenziale considerare che l'analisi richiede l'utilizzo di due DataFrame distinti per il calcolo del modello finale. 
-Al fine di garantire la congruità tra questi due elementi, sarà impiegata la funzione \texttt{alligned()}. Questa misura mira a sincronizzare 
+Al fine di garantire la congruità tra questi due elementi, sarà impiegata la funzione \texttt{aligned}. Questa misura mira a sincronizzare 
 gli istanti temporali all'interno dei due DataFrame, assicurando che solo istanti comuni siano inclusi nei dati sottoposti all'analisi. 
 Ciò contribuirà a evitare conflitti temporali e a ottimizzare l'omogeneità nell'analisi stessa.
 

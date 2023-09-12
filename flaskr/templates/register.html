@@ -16,24 +16,59 @@
         <div class="modal-dialog"> 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Register</h4>
+                    <h4 class="modal-title">Join Today</h4>
                 </div>
                 {{ form.hidden_tag() }}
                 <div class="modal-body" align="left">
+                    
                     <label>Username</label>
-                    {{ form.username }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control") }}
+                    {% endif %}
+                    
                     <br />
+
                     <label>Password</label>
-                    {{ form.password }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control") }}
+                    {% endif %}
+                        
                     <br />
-                    <label>Confirm Password</label>
-                    {{ form.confirm_password }}
-                    <br />
+
+                    <label>Confirm assword</label>
+                    {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.confirm_password(class="form-control") }}
+                    {% endif %}
                     
                 </div>
                 <div class="modal-footer">
-                    Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
-                    {{ form.submit }}
+                    <small class="text-muted">
+                        Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
+                    </small>
+                    <div class="form-group" align="right">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
                 </div>
             </div>
         </div>
