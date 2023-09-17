@@ -1,24 +1,24 @@
 \babel@toc {italian}{}
 \babel@toc {italian}{}
-\contentsline {section}{\numberline {1}Introduzione}{3}{section.1}%
-\contentsline {section}{\numberline {2}Installazione ed esecuzione}{3}{section.2}%
-\contentsline {section}{\numberline {3}Guida all'Utilizzo}{3}{section.3}%
-\contentsline {section}{\numberline {4}Struttura del codice}{5}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Gestione modelli}{5}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Struttura Flask}{6}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Gestione Utenti}{6}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Creazione dei modelli}{6}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Iterazione col Broker}{7}{subsection.4.5}%
-\contentsline {section}{\numberline {5}Dettagli implementativi}{7}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Formato dei File CSV}{7}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Matrice MxDxH}{7}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Parametro window}{8}{subsection.5.3}%
-\contentsline {subsection}{\numberline {5.4}Manipolazione dati}{8}{subsection.5.4}%
-\contentsline {subsection}{\numberline {5.5}Missing values}{9}{subsection.5.5}%
-\contentsline {subsection}{\numberline {5.6}Maschera dei valori}{9}{subsection.5.6}%
-\contentsline {section}{\numberline {6}Funzionamento}{9}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Registrazione ed autenticazione}{9}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Iterazione Server e Creazione dei modelli}{10}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Calcolo del modello}{10}{subsection.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.1}Stepwise-regression}{10}{subsubsection.6.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.2}Salvataggio dei Modelli}{10}{subsubsection.6.3.2}%
+\contentsline {chapter}{\numberline {1}Introduzione}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Installazione ed esecuzione}{2}{chapter.2}%
+\contentsline {chapter}{\numberline {3}Guida all'Utilizzo}{3}{chapter.3}%
+\contentsline {chapter}{\numberline {4}Struttura del codice}{5}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Gestione modelli}{6}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Struttura Flask}{6}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Gestione Utenti}{6}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Creazione dei modelli}{7}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Iterazione col Broker}{7}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Dettagli implementativi}{8}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Formato dei File CSV}{8}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Matrice MxDxH}{8}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Parametro window}{9}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Manipolazione dati}{9}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Missing values}{10}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Maschera dei valori}{10}{section.5.6}%
+\contentsline {chapter}{\numberline {6}Funzionamento}{11}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Registrazione ed autenticazione}{11}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Iterazione Server e Creazione dei modelli}{11}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Calcolo del modello}{11}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Stepwise-regression}{12}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Salvataggio dei Modelli}{12}{section.6.5}%

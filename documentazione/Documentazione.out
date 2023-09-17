@@ -1,22 +1,22 @@
-\BOOKMARK [1][-]{section.1}{Introduzione}{}% 1
-\BOOKMARK [1][-]{section.2}{Installazione ed esecuzione}{}% 2
-\BOOKMARK [1][-]{section.3}{Guida all'Utilizzo}{}% 3
-\BOOKMARK [1][-]{section.4}{Struttura del codice}{}% 4
-\BOOKMARK [2][-]{subsection.4.1}{Gestione modelli}{section.4}% 5
-\BOOKMARK [2][-]{subsection.4.2}{Struttura Flask}{section.4}% 6
-\BOOKMARK [2][-]{subsection.4.3}{Gestione Utenti}{section.4}% 7
-\BOOKMARK [2][-]{subsection.4.4}{Creazione dei modelli}{section.4}% 8
-\BOOKMARK [2][-]{subsection.4.5}{Iterazione col Broker}{section.4}% 9
-\BOOKMARK [1][-]{section.5}{Dettagli implementativi}{}% 10
-\BOOKMARK [2][-]{subsection.5.1}{Formato dei File CSV}{section.5}% 11
-\BOOKMARK [2][-]{subsection.5.2}{Matrice MxDxH}{section.5}% 12
-\BOOKMARK [2][-]{subsection.5.3}{Parametro window}{section.5}% 13
-\BOOKMARK [2][-]{subsection.5.4}{Manipolazione dati}{section.5}% 14
-\BOOKMARK [2][-]{subsection.5.5}{Missing values}{section.5}% 15
-\BOOKMARK [2][-]{subsection.5.6}{Maschera dei valori}{section.5}% 16
-\BOOKMARK [1][-]{section.6}{Funzionamento}{}% 17
-\BOOKMARK [2][-]{subsection.6.1}{Registrazione ed autenticazione}{section.6}% 18
-\BOOKMARK [2][-]{subsection.6.2}{Iterazione Server e Creazione dei modelli}{section.6}% 19
-\BOOKMARK [2][-]{subsection.6.3}{Calcolo del modello}{section.6}% 20
-\BOOKMARK [3][-]{subsubsection.6.3.1}{Stepwise-regression}{subsection.6.3}% 21
-\BOOKMARK [3][-]{subsubsection.6.3.2}{Salvataggio dei Modelli}{subsection.6.3}% 22
+\BOOKMARK [0][-]{chapter.1}{Introduzione}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Installazione ed esecuzione}{}% 2
+\BOOKMARK [0][-]{chapter.3}{Guida all'Utilizzo}{}% 3
+\BOOKMARK [0][-]{chapter.4}{Struttura del codice}{}% 4
+\BOOKMARK [1][-]{section.4.1}{Gestione modelli}{chapter.4}% 5
+\BOOKMARK [1][-]{section.4.2}{Struttura Flask}{chapter.4}% 6
+\BOOKMARK [1][-]{section.4.3}{Gestione Utenti}{chapter.4}% 7
+\BOOKMARK [1][-]{section.4.4}{Creazione dei modelli}{chapter.4}% 8
+\BOOKMARK [1][-]{section.4.5}{Iterazione col Broker}{chapter.4}% 9
+\BOOKMARK [0][-]{chapter.5}{Dettagli implementativi}{}% 10
+\BOOKMARK [1][-]{section.5.1}{Formato dei File CSV}{chapter.5}% 11
+\BOOKMARK [1][-]{section.5.2}{Matrice MxDxH}{chapter.5}% 12
+\BOOKMARK [1][-]{section.5.3}{Parametro window}{chapter.5}% 13
+\BOOKMARK [1][-]{section.5.4}{Manipolazione dati}{chapter.5}% 14
+\BOOKMARK [1][-]{section.5.5}{Missing values}{chapter.5}% 15
+\BOOKMARK [1][-]{section.5.6}{Maschera dei valori}{chapter.5}% 16
+\BOOKMARK [0][-]{chapter.6}{Funzionamento}{}% 17
+\BOOKMARK [1][-]{section.6.1}{Registrazione ed autenticazione}{chapter.6}% 18
+\BOOKMARK [1][-]{section.6.2}{Iterazione Server e Creazione dei modelli}{chapter.6}% 19
+\BOOKMARK [1][-]{section.6.3}{Calcolo del modello}{chapter.6}% 20
+\BOOKMARK [1][-]{section.6.4}{Stepwise-regression}{chapter.6}% 21
+\BOOKMARK [1][-]{section.6.5}{Salvataggio dei Modelli}{chapter.6}% 22
