@@ -43,7 +43,7 @@ def modal(host_name, password, Ip, topic, path):
         'username': host_name,
         'password': password,
         'host': Ip,
-        'topic-ricevi': topic
+        'topic-ricezione': topic
     }
 
     # Save the data to a new JSON file

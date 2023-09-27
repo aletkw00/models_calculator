@@ -137,7 +137,7 @@ def configurazione_esterna_login_tls(json_data):
     par.update({"login": True})
     par.update({"username": json_data['username']})
     par.update({"password": json_data['password']})
-    par.update({"topic-ricevi": json_data['topic-ricevi']})
+    par.update({"topic-ricezione": json_data['topic-ricezione']})
     par.update({"topic-invio": "sensori/modelli"})
     par.update({"cert_tls": "ca-root-cert.crt"})
     return par
