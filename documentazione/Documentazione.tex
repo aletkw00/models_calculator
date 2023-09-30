@@ -52,11 +52,10 @@
 
 Questa libreria è stata sviluppata con l'obiettivo di agevolare il processo decisionale basato sull'analisi dei dati attraverso l'utilizzo 
 di modelli di regressione lineare. Il suo scopo principale consiste nel fornire agli utenti uno strumento efficiente ed intuitivo, 
-consentendo loro di generare modelli di regressione lineare tramite l'interazione con una interfaccia web dedicata. 
+consentendo loro di generare modelli di regressione lineare tramite l'interazione con una interfaccia web dedicata.
 Gli utenti possono fornire specifici parametri di input, dai quali la libreria trae origine per la creazione dei modelli.
-
-Questo strumento rappresenta una risorsa significativa per migliorare la capacità di prendere decisioni basate sui dati e condurre
-analisi predittive accurate, contribuendo così a ottimizzare il processo decisionale in vari contesti professionali.
+La libreria, offre uno strumento per condurre analisi predittive di alta precisione. 
+Grazie a essa, è possibile migliorare notevolmente la capacità di prendere decisioni informate in diversi contesti professionali.
 
 Questo documento è suddiviso come segue: nel capitolo~\ref{cha:import} è esposto il procedimento di importazione della libreria 
 e l'installazione dei prerequisiti necessari per il corretto funzionamento della stessa. 
@@ -74,10 +73,10 @@ Per installare la libreria, è necessario seguire attentamente i passaggi riport
 \section*{Installazione}
 \begin{enumerate}
   \item Scaricare l'intera repository dal repository GitHub ufficiale della libreria. 
-  È possibile farlo tramite il comando \texttt{git clone} oppure scaricando l'archivio ZIP direttamente dal sito.
+  È possibile scaricare l'archivio ZIP direttamente dal sito oppure su Linux tramite il comando \texttt{git clone}.
   \item Spostarsi da terminale all'interno della directory scaricata. Su Linux è possibile farlo col comando \texttt{cd \rootDirectory}
-  \item Prima di procedere con l'installazione, è fondamentale verificare di avere \texttt{pip} installato nel sistema. 
-  \texttt{pip} è il gestore dei pacchetti di Python e viene utilizzato per installare le dipendenze della libreria.
+  \item Prima di procedere con l'installazione, è fondamentale verificare di avere installato sul proprio sistema il gestore dei pacchetti 
+  \texttt{pip}, che verrà utilizzato per installare le dipendenze della libreria
   \item Nel caso in cui si stia utilizzando un sistema operativo Linux, è necessario rendere il file \texttt{install.sh} eseguibile. 
   Questo può essere fatto tramite il seguente comando da terminale: \texttt{chmod +x install.sh}
   \item Eseguire il seguente comando da terminale: \texttt{./install.sh}. L'uso di questo script semplifica il processo di installazione, 
@@ -130,7 +129,7 @@ il seguente comando: \texttt{python3 run.py}.
   \end{figure}
   
   \item \textbf{Visualizzazione dei Risultati:} Una volta creato il modello, la libreria fornirà indicatori che valutano l'adeguatezza del modello rispetto ai dati forniti. 
-  Nel caso in cui l'u tente abbia scelto di effettuare il test, verranno impiegati dei dati per valutare l'effettiva bontà delle previsioni, generando ulteriori indicatori.
+  Nel caso in cui l'utente abbia scelto di effettuare il test, verranno impiegati dei dati per valutare l'effettiva bontà delle previsioni, generando ulteriori indicatori.
 
   \begin{figure}[htp]
     \centering
@@ -151,7 +150,6 @@ il seguente comando: \texttt{python3 run.py}.
     \item \texttt{IP del broker}: indirizzo IP che identifica il broker al quale connettersi
     \item \texttt{Topic}: Topic sul quale pubblicare le predizioni utilizzando i modelli del sensore in cui è contenuto il file di configurazione
   \end{itemize}
-\end{enumerate}
 
 
 \begin{figure}[htp]
@@ -159,6 +157,10 @@ il seguente comando: \texttt{python3 run.py}.
   \includegraphics[width=0.5\textwidth]{images/img10.png}
   \caption{Pagina di configurazione del broker}
 \end{figure}
+
+  \item \textbf{Logout} Sarà possibile effettuare il logout il quale consentirà all'utente di disconnettersi dal proprio account attuale.
+  L'utente potrà quindi accedere con un altro account o eseguire nuovamente il login se lo desidera.
+\end{enumerate}
 
 \chapter{Struttura del codice}
 \label{cha:struttura}
@@ -210,8 +212,6 @@ Queste ulteriori directory sono finalizzate a contenere i modelli creati per ogn
 Tale suddivisione consente una gestione ordinata dei vari modelli che l'utente crea nel tempo.
 
 \section{Struttura Flask}
-Flask~\cite{flask} è un framework web leggero e flessibile scritto in Python. È progettato per semplificare la creazione di applicazioni web, 
-rendendo più accessibile la gestione delle richieste HTTP, delle route e delle risposte.
 All'interno della directory \texttt{flaskr} troviamo l'intera struttura dell'applicazione Flask.
 
 \begin{itemize}
@@ -229,11 +229,6 @@ All'interno della directory \texttt{flaskr} troviamo l'intera struttura dell'app
   delle classi dei modelli di dati che rappresentano gli utenti e le relative informazioni nel database.
 \end{itemize}
 
-\begin{figure}[htp]
-  \centering
-  \includegraphics[width=1\textwidth]{images/img7.png}
-  \caption{Gestione richieste HTTP di più utenti}
-\end{figure}
 
 \section{Gestione Utenti}
 All'interno della directory \texttt{instance} troviamo il database nel quale vengono memorizzati i vari utenti. Gli utenti
@@ -287,27 +282,108 @@ i quali devono essere accuratamente organizzati in linea con le indicazioni forn
 
 (Nota: è possibile tralasciare i secondi, se necessario)
 
-\section{Matrice MxDxH}
+\section{Manipolazione dati}
+Nel processo di manipolazione di dati espressi attraverso file CSV, sarà impiegata la libreria  \texttt{pandas}~\cite{pandas}. L'operazione preliminare 
+consisterà nella conversione di questi file in strutture dati di tipo DataFrame mediante l'utilizzo della funzione  \texttt{csv\_read}. 
+Tuttavia, è di fondamentale importanza porre attenzione a un insieme di strategie utili atte a garantire la qualità e l'integrità dei dati, 
+nonché a fornire una base solida per le analisi successive.
 
-La matrice in esame è stata progettata al fine di rappresentare l'intero arco temporale annuale, compresi i mesi, i giorni e le fasce orarie, 
-mediante l'utilizzo di valori discreti espressi in forma binaria. 
-La struttura matriciale è costituita da un totale di 12 colonne corrispondenti ai mesi dell'anno, 31 colonne assegnate 
-ai giorni rilevanti in ciascun mese e ulteriori 24 colonne riservate alle differenti fasce orarie. 
-Ciascun istante temporale sarà sottoposto a un processo di trasposizione nella forma di una sequenza binaria, 
-la quale troverà collocazione all'interno di una singola riga all'interno della struttura matriciale così concepita.
- 
-\begin{table}[h]\centering
-  \begin{tabular}{|*{14}{c|}}
-  
-  \hline
-  1m & ... & 8m & 12m & 1d & ... & 10d & ... & 31d & 00h & ... & 15h & ... & 23h\\
-  \hline
-  0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
-  \hline
+Tra queste strategie figura l'adozione di accorgimenti che mirano a eliminare le colonne prive di attributi numerici o 
+prive di definizione, con l'obiettivo di assicurare che solo le informazioni rilevanti siano conservate all'interno dei DataFrame. 
+Parallelamente, si compirà l'azione di rimozione delle righe duplicate, allo scopo di evitare duplicazioni superflue e garantire la coerenza dei dati. 
+Un ulteriore passo sarà rappresentato dall'eliminazione delle righe contenenti valori non definiti, in modo da garantire l'integrità e la completezza 
+dei dati destinati all'analisi.
+
+Risulta, inoltre, essenziale considerare che l'analisi richiede l'utilizzo di due DataFrame distinti per il calcolo del modello finale. 
+Al fine di garantire la congruità tra questi due elementi, sarà impiegata la funzione \texttt{alligned}. Questa misura mira a sincronizzare 
+gli istanti temporali all'interno dei due DataFrame, assicurando che solo istanti comuni siano inclusi nei dati sottoposti all'analisi. 
+Ciò contribuirà a evitare conflitti temporali e a ottimizzare l'omogeneità nell'analisi stessa.
+
+\begin{table}[htp]
+  \begin{minipage}{0.45\textwidth} % Prima tabella a sinistra
+    \centering
+    \begin{tabular}{|c|c|c|}
+
+      \hline
+      timestamps & Temp & Umi\\
+      \hline
+      2023-08-10 14:30 & 25,1 & 8\\
+      \hline
+      2023-08-10 15:30 & 22,1 & 12\\
+      \hline
+      2023-08-10 16:30 & 21,1 & 11\\
+      \hline
+      2023-08-10 17:30 & 20,3 & 13\\
+      \hline
+    
+    \end{tabular}
+    
+    \caption{File csv di input}
+  \end{minipage}
+  \hfill % Spazio tra le due tabelle
+  \begin{minipage}{0.45\textwidth} % Seconda tabella a destra
+    \centering
+    \begin{tabular}{|c|c|}
+
+      \hline
+      timestamps & Var\\
+      \hline
+      2023-08-10 13:30 & 25,3\\
+      \hline
+      2023-08-10 14:30 & 25,1\\
+      \hline
+      2023-08-10 15:30 & 22,1\\
+      \hline
+      2023-08-10 16:30 & 21,1\\
+      \hline
+      
+    
+    \end{tabular}
+    
+    \caption{File csv di output}
+  \end{minipage}
+\end{table}
+
+\begin{table}[htp]
+  \begin{minipage}{0.45\textwidth} % Prima tabella a sinistra
+    \centering
+    \begin{tabular}{|c|c|c|}
+
+      \hline
+    timestamps & Temp & Umi\\
+    \hline
+    2023-08-10 14:30 & 25,1 & 8\\
+    \hline
+    2023-08-10 15:30 & 22,1 & 12\\
+    \hline
+    2023-08-10 16:30 & 21,1 & 11\\
+    \hline
+    
   
   \end{tabular}
   
-  \caption{MxDxH di \DTMdisplaydate{2023}{08}{10}{-1} \DTMdisplaytime{15}{30}{00}}
+  \caption{File di input dopo la funzione alligned}
+  \end{minipage}
+  \hfill % Spazio tra le due tabelle
+  \begin{minipage}{0.45\textwidth} % Seconda tabella a destra
+    \centering
+    \begin{tabular}{|c|c|}
+
+      \hline
+    timestamps & Var\\
+    \hline
+    2023-08-10 14:30 & 25,1\\
+    \hline
+    2023-08-10 15:30 & 22,1\\
+    \hline
+    2023-08-10 16:30 & 21,1\\
+    \hline
+    
+  
+  \end{tabular}
+  
+  \caption{File csv di output dopo la funzione alligned}
+  \end{minipage}
 \end{table}
 
 \section{Parametro window}
@@ -316,18 +392,14 @@ la quale troverà collocazione all'interno di una singola riga all'interno della
 Il parametro `window', denotato da un valore intero positivo `i', assume una funzione di rilievo nell'ambito della temporizzazione dei dati, 
 contribuendo a determinare l'articolazione e l'interconnessione degli istanti temporali all'interno di un contesto sequenziale.
 
-Nel caso in cui il parametro `window' sia settato a 0, ciascun istante temporale è trattato come un'entità isolata, distinta dalle altre in termini 
-di rappresentazione e di relazioni temporali. In questa prospettiva, le informazioni ad esso associate sono espresse senza coinvolgimento di 
+Quando il parametro `window' è impostato a 0, ogni istante temporale viene trattato come un'entità isolata, distinta dalle altre in termini di 
+rappresentazione e relazioni temporali. In questa configurazione, le informazioni associate a ciascun istante sono espresse senza coinvolgimento di 
 istanti successivi o precedenti.
-
 Contrariamente, quando il parametro `window' è definito con un valore positivo `i', esso condiziona una dinamica di aggregazione temporale. 
 Ogni istante temporale, oltre a presentare i propri dati distintivi, incorpora anche i dati relativi agli `i' istanti temporali precedenti. 
 Questa configurazione crea una catena sequenziale di istanti collegati, consentendo l'analisi delle tendenze temporali su un intervallo di `i' istanti. 
-È da rilevare che, in situazioni in cui il numero di istanti temporali precedenti sia inferiore a `i', 
-l'istante corrente potrebbe non essere incluso nell'analisi aggregata.
-
-
-
+È importante notare che, in situazioni in cui il numero di istanti temporali precedenti sia inferiore a 
+`i', l'istante corrente potrebbe non essere incluso nell'analisi aggregata.
 \begin{table}[h]
   \centering
   \begin{tabular}{|c|c|c|}
@@ -335,7 +407,7 @@ l'istante corrente potrebbe non essere incluso nell'analisi aggregata.
     \hline
     timestamps & Temp & Umi\\
     \hline
-    2023-08-10 13:30 & 25,1 & 8\\
+    2023-08-10 14:30 & 25,1 & 8\\
     \hline
     2023-08-10 15:30 & 22,1 & 12\\
     \hline
@@ -386,111 +458,35 @@ l'istante corrente potrebbe non essere incluso nell'analisi aggregata.
   \caption{window impostato a 2}
 \end{table}
 
+\section{Matrice MxDxH}
 
-\section{Manipolazione dati}
-Nel processo di manipolazione di dati espressi attraverso file CSV, sarà impiegata la libreria  \texttt{pandas}~\cite{pandas}. L'operazione preliminare 
-consisterà nella conversione di questi file in strutture dati di tipo DataFrame mediante l'utilizzo della funzione  \texttt{csv\_read}. 
-Tuttavia, è di fondamentale importanza porre attenzione a un insieme di strategie utili atte a garantire la qualità e l'integrità dei dati, 
-nonché a fornire una base solida per le analisi successive.
+La matrice MxDxH è stata progettata con l'obiettivo di rappresentare l'intero arco temporale annuale, inclusi i mesi, i giorni e le fasce orarie, 
+mediante l'utilizzo di valori discreti espressi in forma binaria. Questa rappresentazione binaria dei timestamp ne facilita l'inclusione nel calcolo del modello, 
+agevolando analisi e previsioni basate su tendenze temporali e relazioni tra diversi istanti.
+La matrice è strutturata in modo tale da avere 12 colonne corrispondenti ai mesi 
+dell'anno (indicate con `m'), 31 colonne per i giorni rilevanti in ciascun mese (indicate con `d') e ulteriori 24 colonne per le diverse fasce orarie (indicate con `h'). 
+Per convertire un timestamp all'interno di questa matrice, vengono seguite queste fasi:
 
-Tra queste strategie figura l'adozione di accorgimenti che mirano a eliminare le colonne prive di attributi numerici o, potenzialmente, 
-prive di definizione, con l'obiettivo di assicurare che solo le informazioni rilevanti siano conservate all'interno dei DataFrame. 
-Parallelamente, si compirà l'azione di rimozione delle righe duplicate, allo scopo di evitare duplicazioni superflue e garantire la coerenza dei dati. 
-Un ulteriore passo sarà rappresentato dall'eliminazione delle righe contenenti valori non definiti, in modo da garantire l'integrità e la completezza 
-dei dati destinati all'analisi.
+\begin{enumerate}
+  \item \textbf{Identificazione del Mese}: La colonna `m' corrispondente al mese del timestamp contiene il valore 1, mentre tutte le altre colonne `m' sono a 0.
+  \item \textbf{Identificazione del Giorno}: La colonna `d' corrispondente al giorno del timestamp contiene il valore 1, mentre le altre colonne `d' sono a 0.
+  \item \textbf{Identificazione dell'Ora}: La colonna `h' corrispondente all'ora del timestamp contiene il valore 1, mentre le altre colonne `h' sono a 0.
+\end{enumerate}
 
-Risulta, inoltre, essenziale considerare che l'analisi richiede l'utilizzo di due DataFrame distinti per il calcolo del modello finale. 
-Al fine di garantire la congruità tra questi due elementi, sarà impiegata la funzione \texttt{alligned}. Questa misura mira a sincronizzare 
-gli istanti temporali all'interno dei due DataFrame, assicurando che solo istanti comuni siano inclusi nei dati sottoposti all'analisi. 
-Ciò contribuirà a evitare conflitti temporali e a ottimizzare l'omogeneità nell'analisi stessa.
 
-\begin{table}[htp]
-  \begin{minipage}{0.45\textwidth} % Prima tabella a sinistra
-    \centering
-    \begin{tabular}{|c|c|c|}
-
-      \hline
-      timestamps & Temp & Umi\\
-      \hline
-      2023-08-10 13:30 & 25,1 & 8\\
-      \hline
-      2023-08-10 15:30 & 22,1 & 12\\
-      \hline
-      2023-08-10 16:30 & 21,1 & 11\\
-      \hline
-      2023-08-10 17:30 & 20,3 & 13\\
-      \hline
-    
-    \end{tabular}
-    
-    \caption{File csv di input}
-  \end{minipage}
-  \hfill % Spazio tra le due tabelle
-  \begin{minipage}{0.45\textwidth} % Seconda tabella a destra
-    \centering
-    \begin{tabular}{|c|c|}
-
-      \hline
-      timestamps & Var\\
-      \hline
-      2023-08-10 12:30 & 25,3\\
-      \hline
-      2023-08-10 13:30 & 25,1\\
-      \hline
-      2023-08-10 15:30 & 22,1\\
-      \hline
-      2023-08-10 16:30 & 21,1\\
-      \hline
-      
-    
-    \end{tabular}
-    
-    \caption{File csv di output}
-  \end{minipage}
-\end{table}
-
-\begin{table}[htp]
-  \begin{minipage}{0.45\textwidth} % Prima tabella a sinistra
-    \centering
-    \begin{tabular}{|c|c|c|}
-
-      \hline
-    timestamps & Temp & Umi\\
-    \hline
-    2023-08-10 13:30 & 25,1 & 8\\
-    \hline
-    2023-08-10 15:30 & 22,1 & 12\\
-    \hline
-    2023-08-10 16:30 & 21,1 & 11\\
-    \hline
-    
+\begin{table}[h]\centering
+  \begin{tabular}{|*{15}{c|}}
+  
+  \hline
+  1m & ... & 8m & ... & 12m & 1d & ... & 10d & ... & 31d & 00h & ... & 15h & ... & 23h\\
+  \hline
+  0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+  \hline
   
   \end{tabular}
   
-  \caption{File di input dopo la funzione alligned}
-  \end{minipage}
-  \hfill % Spazio tra le due tabelle
-  \begin{minipage}{0.45\textwidth} % Seconda tabella a destra
-    \centering
-    \begin{tabular}{|c|c|}
-
-      \hline
-    timestamps & Var\\
-    \hline
-    2023-08-10 13:30 & 25,1\\
-    \hline
-    2023-08-10 15:30 & 22,1\\
-    \hline
-    2023-08-10 16:30 & 21,1\\
-    \hline
-    
-  
-  \end{tabular}
-  
-  \caption{File csv di output dopo la funzione alligned}
-  \end{minipage}
+  \caption{MxDxH di \DTMdisplaydate{2023}{08}{10}{-1} \DTMdisplaytime{15}{30}{00}}
 \end{table}
-
 
 \section{Missing values}
 
@@ -498,8 +494,20 @@ Considerando che la matrice MxDxH è statica, è possibile che l'utente non forn
 questa matrice sia diversa da zero. Questa situazione potrebbe generare problematiche durante il processo di elaborazione. 
 Per prevenire tali problematiche, è stata adottata una strategia di default: ogni colonna della matrice priva di informazioni viene rilevata e segnalata 
 all'utente. Successivamente, questa colonna viene esclusa dai dati utilizzati nell'analisi, al fine di assicurare una corretta elaborazione dei modelli.
+Infine queste colonne verranno segnalate all'utente insieme agli indicatori di bontà del modello calcolato.
 
+\section{Flask}
+  Flask~\cite{flask} è un framework web leggero e flessibile scritto in Python, progettato per semplificare la creazione di applicazioni web. 
+  L'integrazione di Flask con la libreria consente la creazione di un'interfaccia web intuitiva per configurare i parametri del modello. L'utilizzo di 
+  Flask semplifica non solo la gestione delle richieste HTTP e delle route, ma fornisce anche un sistema di gestione degli utenti, rendendo la libreria 
+  accessibile e utilizzabile in modo sicuro e intuitivo da parte di più utenti contemporaneamente.
 
+  \begin{figure}[htp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/img7.png}
+    \caption{Gestione richieste HTTP di più utenti}
+  \end{figure}
+  
 \section{Maschera dei valori}
 
 Al completamento del procedimento di calcolo di un modello, è possibile che il DataFrame risultante si presenti con una dimensione inferiore rispetto
@@ -524,94 +532,95 @@ e backward. Infine viene indicato il valore di winodw usato per calcolare il mod
 questo in quanto viene rappresentata la maschera dei valori.
 
 \begin{lstlisting}[caption={Esempio modello json creato.},label={esempio json},language=json]
-  {
-    "B": {
-        "const": 0.0005468847767569886,
-        "1m": 2929050859.3160734,
-        "2m": 0.0,
-        "3m": 0.0,
-        "4m": 3039033727.51237,
-        "5m": 9931225092.367886,
-        ...
-        "12m": 4736472045.944808,
-        "1d": 36154595302.28574,
-        ...
-        "31d": 23077162313.65703,
-        "00h": 2486308315.6457458,
-        ...
-        "23h": 0.1997236318436963,
-        "Barometer_HPa": 0.0,
-        "Temp__C": 0.0,
-        "HighTemp__C": 0.0,
-        "HeatingDegreeDays": -0.11052685874796615,
-        "Barometer_HPa-1": 0.0,
-        "Temp__C-1": 0.43701578124138385,
-        "HighTemp__C-1": 0.0,
-        "HeatingDegreeDays-1": 0.0
-    },
-    "calib_input_media": {
-        "1m": 0.014922898358481181,
-        "2m": 0.0,
-        "3m": 0.0,
-        "4m": 0.016083568230807494,
-        "5m": 0.2153871663074117,
-        ...
-        "12m": 0.040043110595257836,
-        "1d": 0.047587464765378874,
-        ...
-        "31d": 0.01881943292986238,
-        "00h": 0.04211573536726911,
-        ...
-        "23h": 0.041618305421986405,
-        "Barometer_HPa": 1014.2843143757254,
-        "Temp__C": 19.519134471895207,
-        "HighTemp__C": 19.706682142264963,
-        "HeatingDegreeDays": 0.025987730061349697,
-        "Barometer_HPa-1": 1014.2878046758415,
-        "Temp__C-1": 19.519142762394296,
-        "HighTemp__C-1": 19.70644171779141,
-        "HeatingDegreeDays-1": 0.025995937655446857
-    },
-    "calib_input_stdev": {
-        "1m": 0.1212494300378763,
-        "2m": 1.0,
-        "3m": 1.0,
-        "4m": 0.12580222229621932,
-        "5m": 0.4111077068511333,
-        ...
-        "12m": 0.19606847526564067,
-        "1d": 0.21290057719171604,
-        ...
-        "31d": 0.13589257839688937,
-        "00h": 0.2008615070943291,
-        ...
-        "23h": 0.1997236318436963,
-        "Barometer_HPa": 5.316383422851651,
-        "Temp__C": 7.47267783333523,
-        "HighTemp__C": 7.514185801621021,
-        "HeatingDegreeDays": 0.04416205072783581,
-        "Barometer_HPa-1": 5.314296827667562,
-        "Temp__C-1": 7.474440375604089,
-        "HighTemp__C-1": 7.5157614528587775,
-        "HeatingDegreeDays-1": 0.04417438440474232
-    },
-    "calib_output_media": 21.24883128834356,
-    "calib_output_stdev": 8.274022377012576,
-    "unselected_columns": [
-        "2m",
-        "3m",
-        "Barometer_HPa",
-        "Temp__C",
-        "HighTemp__C",
-        "Barometer_HPa-1",
-        "HighTemp__C-1": 0.0,
-        "HeatingDegreeDays-1": 0.0
-    ],
-    "window": 1
-  }
+{
+  "B": {
+      "const": 0.0005468847767569886,
+      "1m": 2929050859.3160734,
+      "2m": 0.0,
+      "3m": 0.0,
+      "4m": 3039033727.51237,
+      "5m": 9931225092.367886,
+      ...
+      "12m": 4736472045.944808,
+      "1d": 36154595302.28574,
+      ...
+      "31d": 23077162313.65703,
+      "00h": 2486308315.6457458,
+      ...
+      "23h": 0.1997236318436963,
+      "Barometer_HPa": 0.0,
+      "Temp__C": 0.0,
+      "HighTemp__C": 0.43701578124138385,
+      "HeatingDegreeDays": -0.11052685874796615,
+      "WindSpeed_Km_h": 0.27501578124138385
+  },
+  "calib_input_media": {
+      "1m": 0.014922898358481181,
+      "2m": 0.0,
+      "3m": 0.0,
+      "4m": 0.016083568230807494,
+      "5m": 0.2153871663074117,
+      ...
+      "12m": 0.040043110595257836,
+      "1d": 0.047587464765378874,
+      ...
+      "31d": 0.01881943292986238,
+      "00h": 0.04211573536726911,
+      ...
+      "23h": 0.041618305421986405,
+      "Barometer_HPa": 1014.2843143757254,
+      "Temp__C": 19.519134471895207,
+      "HighTemp__C": 19.706682142264963,
+      "HeatingDegreeDays": 0.025987730061349697,
+      "WindSpeed_Km_h": 17.756127731061358169
+  },
+  "calib_input_stdev": {
+      "1m": 0.1212494300378763,
+      "2m": 1.0,
+      "3m": 1.0,
+      "4m": 0.12580222229621932,
+      "5m": 0.4111077068511333,
+      ...
+      "12m": 0.19606847526564067,
+      "1d": 0.21290057719171604,
+      ...
+      "31d": 0.13589257839688937,
+      "00h": 0.2008615070943291,
+      ...
+      "23h": 0.1997236318436963,
+      "Barometer_HPa": 5.316383422851651,
+      "Temp__C": 7.47267783333523,
+      "HighTemp__C": 7.514185801621021,
+      "HeatingDegreeDays": 0.04416205072783581,
+      "WindSpeed_Km_h": 9.620528358061351418
+  },
+  "calib_output_media": 21.24883128834356,
+  "calib_output_stdev": 8.274022377012576,
+  "unselected_columns": [
+      "2m",
+      "3m",
+      "Barometer_HPa",
+      "Temp__C",
+  ],
+  "window": 0
+}
         
   \end{lstlisting}
-  
+
+\section{MQTT}
+MQTT è un protocollo di messaggistica leggero e flessibile progettato per dispositivi con limitate risorse di rete e di calcolo.
+Nel contesto delle interazioni con sensori, MQTT svolge un ruolo cruciale per diverse ragioni:
+\begin{itemize}
+  \item Comunicazione in tempo reale: consente ai sensori di inviare dati in tempo reale alla libreria.
+  \item Publish-Subscribe Model: MQTT utilizza un modello di publish-subscribe, dove i sensori agiscono 
+  come publisher che inviano dati a specifici argomenti (topics) e l'applicazione agisce come subscriber, ovvero che si 
+  iscrivono a tali argomenti per ricevere i dati pertinenti. Questo modello consente una gestione efficiente delle 
+  informazioni da parte dei dispositivi e delle applicazioni.
+  \item Scalabilità: MQTT è altamente scalabile e può gestire grandi quantità di dispositivi con facilità.
+
+\end{itemize}
+Con il modello di pubblicazione-sottoscrizione di MQTT, il programma può iscriversi a specifici argomenti (topics) 
+per ricevere solo i dati di interesse. Questo meccanismo semplifica la gestione delle informazioni provenienti da diversi sensori.
 
 \chapter{Funzionamento}
 \label{cha:funzionamento}
@@ -659,7 +668,7 @@ secondo caso verrà spostato nella directory del sensore precedentemente scelta.
 \section{Configurazione Broker}
 L'utente autenticato ha la possibilità di selezionare la directory del sensore e configurare il broker in qualsiasi momento tramite l'apposito modulo. 
 Una volta premuto il pulsante `Salva', il file di configurazione viene generato automaticamente all'interno della directory del sensore. 
-Se esisteva già un file di configurazione precedente, questo verrà sovrascritto con il nuovo.
+Se esistesse già un file di configurazione precedente, questo verrebbe sovrascritto con il nuovo.
 \bibliographystyle{plain}
 \bibliography{bibliography}
 

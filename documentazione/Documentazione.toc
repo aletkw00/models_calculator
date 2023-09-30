@@ -9,15 +9,17 @@
 \contentsline {section}{\numberline {4.2}Struttura Flask}{7}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Gestione Utenti}{8}{section.4.3}%
 \contentsline {section}{\numberline {4.4}Strumenti di Creazione dei Modelli}{8}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Iterazione col Broker}{9}{section.4.5}%
-\contentsline {chapter}{\numberline {5}Dettagli implementativi}{10}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Formato dei File CSV}{10}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Matrice MxDxH}{10}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Parametro window}{11}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Manipolazione dati}{11}{section.5.4}%
+\contentsline {section}{\numberline {4.5}Iterazione col Broker}{8}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Dettagli implementativi}{9}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Formato dei File CSV}{9}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Manipolazione dati}{9}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Parametro window}{10}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Matrice MxDxH}{11}{section.5.4}%
 \contentsline {section}{\numberline {5.5}Missing values}{12}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Maschera dei valori}{13}{section.5.6}%
-\contentsline {section}{\numberline {5.7}Formato dei modelli}{13}{section.5.7}%
+\contentsline {section}{\numberline {5.6}Flask}{12}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Maschera dei valori}{12}{section.5.7}%
+\contentsline {section}{\numberline {5.8}Formato dei modelli}{13}{section.5.8}%
+\contentsline {section}{\numberline {5.9}MQTT}{15}{section.5.9}%
 \contentsline {chapter}{\numberline {6}Funzionamento}{16}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Registrazione ed autenticazione}{16}{section.6.1}%
 \contentsline {section}{\numberline {6.2}Iterazione Server e Creazione dei modelli}{16}{section.6.2}%

@@ -45,7 +45,13 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
         if (xhr.status === 200) {
             var response = xhr.response;
             var outputElement = document.getElementById('output');
-            outputElement.innerHTML = response.message.replace(/\n/g, '<br>');
+            if ('failure' in response) {
+                alert('Errore: ' + response.failure);
+                outputElement.innerHTML = '';
+            } else {
+                
+                outputElement.innerHTML = response.message.replace(/\n/g, '<br>');
+            }
         } else {
             console.error('Request failed. Status:', xhr.status);
         }
@@ -64,11 +70,13 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
 function handleAction(action) {
     // Get the values from input fields
     var modelDir = document.querySelector('input[name="model_dir"]').value;
-    var filename = document.querySelector('input[name="filename"]').value;
     var hostname = document.querySelector('input[name="host_name"]').value;
     var password = document.querySelector('input[name="password"]').value;
     var IP = document.querySelector('input[name="IP"]').value;
     var topic = document.querySelector('input[name="topic"]').value;
+    
+
+    var outputContent = document.getElementById('output').innerHTML;
 
     // Determine the endpoint based on the action
     var endpoint = action === 'save' ? '/saving' : '/delete';
@@ -76,11 +84,11 @@ function handleAction(action) {
     // Prepare the payload based on the action
     var payload = {
         model_dir: modelDir,
-        filename: filename,
         hostname: hostname,
         password: password,
         IP: IP,
-        topic:topic
+        topic:topic,
+        output_content: outputContent
     };
 
     var xhr = new XMLHttpRequest();

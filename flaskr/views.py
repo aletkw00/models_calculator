@@ -1,7 +1,7 @@
 import ipaddress
 import shutil
 import json
-from flask import jsonify, request, render_template, flash, redirect, url_for
+from flask import jsonify, request, render_template, flash, redirect, url_for, session
 from werkzeug.utils import secure_filename
 from flaskr import app, db, bcrypt
 from flask_login import login_user, logout_user, login_required
@@ -11,7 +11,6 @@ from const import *
 from flaskr.models import User
 from flaskr.login import RegistrationForm, LoginForm
 
-user_path = ''
 
 def move_file(source_path, destination_path):
     shutil.move(source_path, destination_path)
@@ -38,6 +37,10 @@ def modal(host_name, password, Ip, topic, path):
         error_message = 'Invalid Ip Address'
         return json_response('failure', error_message)
     
+    if not os.path.exists(path):
+        error_message = 'Model directory not exist, Please select an existing one'
+        return json_response('failure', error_message)
+    
     # Create a dictionary with the data
     data = {
         'username': host_name,
@@ -59,10 +62,10 @@ def index():
 @app.route('/models_creator', methods=['GET','POST'])
 @login_required
 def run_models_creation():
-    # Get the name of the directory of the model
-    model_dir = secure_filename(request.form.get('model_dir'))
-    model_dir = os.path.join(user_path, model_dir)
 
+    # Get the name of the directory of the model
+    session['model_dir'] = secure_filename(request.form.get('model_dir'))
+    model_dir = os.path.join(session['user_path'], session['model_dir'])
     # Check if directory alredady exists, if not create
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
@@ -75,12 +78,14 @@ def run_models_creation():
     # Checking extensions of files
     extension1 = os.path.splitext(file1.filename)[1]
     if extension1 not in app.config['ALLOWED_EXTENSIONS']:
-        return jsonify({'message': 'Input non è un file .csv'})
+        error_message = 'Input file not CSV file'
+        return jsonify({'failure': error_message})
     
     for file2 in files:
         extension2 = os.path.splitext(file2.filename)[1]
         if extension2 not in app.config['ALLOWED_EXTENSIONS']:
-            return jsonify({'message': 'Inserisci file .csv'})
+            error_message = 'Output file(s) not CSV file'
+            return jsonify({'failure': error_message})
         
     # Iterate for each file in the files List, and Save them
     i=1
@@ -95,10 +100,10 @@ def run_models_creation():
         INPUT_FILE))
 
     window = request.form.get('window')
-    filename = secure_filename(request.form.get('filename'))
+    session['filename'] = secure_filename(request.form.get('filename'))
     test = '-test' if request.form.get('test') else ''
 
-    path_tmp_models_dir = os.path.join(user_path, TMP_MODELS_DIRECTORY)
+    path_tmp_models_dir = os.path.join(session['user_path'], TMP_MODELS_DIRECTORY)
 
     # Command to execute as command line
     command = [
@@ -112,8 +117,8 @@ def run_models_creation():
     if window != '':
         window = '-i' + window
         command.append(window)
-    if filename !='':
-        filename = '-o' + filename
+    if session['filename'] !='':
+        filename = '-o' + session['filename']
         command.append(filename)
     if test != '':
         command.append(test)
@@ -133,49 +138,71 @@ def run_models_creation():
             file_path = os.path.join(app.config['UPLOAD_DIRECTORY'], filename)
             if os.path.isfile(file_path) and filename != '.gitkeep':
                 os.remove(file_path)
+        session['runned'] = True
 
     return jsonify({'message': generated_string})
 
 
 @app.route('/delete', methods=['POST'])
 def delete_function():
-
     data = request.get_json()
-    model_dir = secure_filename(data.get('model_dir'))
-    filename = secure_filename(data.get('filename'))
-    if filename == '':
-        filename = DEFAULT_MODEL_NAME
-        
-    model_dir = os.path.join(user_path, model_dir)
-    tmp_model_dir_path = os.path.join(user_path, TMP_MODELS_DIRECTORY)
+    if data.get('output_content') == 'Processing...' or data.get('output_content') == '':
+        error_message = 'Models not calculated yet'
+        return json_response('failure', error_message)
 
-    # Remove models from tmp user directory
-    for file in os.listdir(tmp_model_dir_path):
-        if file.startswith(filename):
-            os.remove(os.path.join(tmp_model_dir_path, file))
+    if session['runned'] == True:  
+        if session['filename'] == '':
+            filename = DEFAULT_MODEL_NAME
+        else:
+            filename = session['filename']
+            
+        model_dir = os.path.join(session['user_path'], session['model_dir'])
+        tmp_model_dir_path = os.path.join(session['user_path'], TMP_MODELS_DIRECTORY)
 
-    # Check if the directory previously created is empty. Eventually delete it
-    if os.path.exists(model_dir) and os.path.isdir(model_dir):
-        if not os.listdir(model_dir):
-            os.rmdir(model_dir)
-    
-    return json_response('success', 'All correct')
+        # Remove models from tmp user directory
+        for file in os.listdir(tmp_model_dir_path):
+            if file.startswith(filename):
+                os.remove(os.path.join(tmp_model_dir_path, file))
+
+        # Check if the directory previously created is empty. Eventually delete it
+        if os.path.exists(model_dir) and os.path.isdir(model_dir):
+            if not os.listdir(model_dir):
+                os.rmdir(model_dir)
+        session['runned'] = False
+        return json_response('success', 'All correct')
+    else:
+        error_message = 'Models not calculated yet'
+        return json_response('failure', error_message)
 
 @app.route('/saving', methods=['POST'])
 def saving_function():
-
     data = request.get_json()
-    model_dir = secure_filename(data.get('model_dir'))
-    filename = secure_filename(data.get('filename'))
-    if filename == '':
-        filename = DEFAULT_MODEL_NAME
+    if data.get('output_content') == 'Processing...':
+        error_message = 'Models not calculated yet'
+        return json_response('failure', error_message)
+    
+    
+
+    if session['runned'] == False:
+        
+        session['model_dir'] = secure_filename(data.get('model_dir'))
+        if session['model_dir'] == '':
+            error_message = 'Select a model direcotry'
+            return json_response('failure', error_message)
+        else:
+            session['filename'] == ''
+    else:
+        if session['filename'] == '':
+            filename = DEFAULT_MODEL_NAME
+        else:
+            filename = session['filename']
 
     host_name = data.get('hostname')
     password = data.get('password')
     Ip = data.get('IP')
     topic = data.get('topic')
 
-    model_dir = os.path.join(user_path, model_dir)
+    model_dir = os.path.join(session['user_path'], session['model_dir'])
 
     # Create if possible the broker config file
     if all([host_name, password, Ip, topic]):
@@ -183,13 +210,14 @@ def saving_function():
         if response.json['status'] == 'failure':
             return response
     
+    if session['runned'] == True:
     # Move models from tmp directory to the choosen one
-    tmp_model_dir_path = os.path.join(user_path, TMP_MODELS_DIRECTORY)
-    for file in os.listdir(tmp_model_dir_path):
-        if file.startswith(filename):
-            move_file(os.path.join(tmp_model_dir_path, file),
-                      os.path.join(model_dir, file))
-    
+        tmp_model_dir_path = os.path.join(session['user_path'], TMP_MODELS_DIRECTORY)
+        for file in os.listdir(tmp_model_dir_path):
+            if file.startswith(filename):
+                move_file(os.path.join(tmp_model_dir_path, file),
+                        os.path.join(model_dir, file))
+    session['runned'] = False
     return json_response('success', 'All correct')
 
 
@@ -225,10 +253,9 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            global user_path
-            user_path = os.path.join(MODEL_DIR, form.username.data)
-
-            visible_directory = get_visible_directory(user_path)
+            session['user_path'] = os.path.join(MODEL_DIR, form.username.data)
+            session['runned'] = False
+            visible_directory = get_visible_directory(session['user_path'])
             return render_template('index.html', model_dirs=visible_directory)
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
