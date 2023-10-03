@@ -171,8 +171,9 @@ def make_regression(X_train, Y_train, window: int, test: bool=True):
                         sum(output_calibrazione**2))
     RRSE = math.sqrt((sum((output_calibrazione-final_deny)**2)/\
                       sum((output_calibrazione-calib_output_media)**2)))
-    print(f'\nAdjR2 del modello:  {AdjR2:.4f} \nBMSEadj del modello:\
-        {BMSEadj:.4f} \nRRSE del modello: {RRSE:.4f}')
+    print(f'\nAdjR2 del modello:  {AdjR2:.4f} \n'
+          f'BMSEadj del modello: {BMSEadj:.4f} \n'
+          f'RRSE del modello: {RRSE:.4f}')
     
     #TEST
     if test:

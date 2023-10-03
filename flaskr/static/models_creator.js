@@ -1,22 +1,31 @@
-// Check the window field to be an integer and not < 0
-function validateForm(event, showProcessing) {
-    var windowInput = document.getElementById("window_input");
-    var windowError = document.getElementById("window_error");
-    
+// If user click on element model_dir_input then call showModelDirList()
+document.getElementById('model_dir').addEventListener('click', showModelDirList);
 
+// Show the list of dir
+function showModelDirList() {
+    document.getElementById('model_dir_list').style.display = 'block';
+}
 
-    var windowValue = parseInt(windowInput.value); // Converto il valore in un intero
+// Set the value of model_dir_input then close the list of dir
+function selectModelDir(dir) {
+    document.getElementById('model_dir').value = dir;
+    document.getElementById('model_dir_list').style.display = 'none';
+}
 
-    if ((windowInput.value != '' & isNaN(windowValue)) || windowValue < 0) {
-        windowError.style.display = "block";
-        event.preventDefault();  // Previeni l'invio del modulo
-    } else {
-        windowError.style.display = "none";
-        if (showProcessing) {
-            showProcessing();
-            
-        }
-    }
+function updateFileName(inputId) {
+    const input = document.getElementById(inputId);
+    const fileName = input.files[0] ? input.files[0].name : ''; // Ottieni il nome del primo file o una stringa vuota
+    const label = input.nextElementSibling; // Ottieni l'etichetta successiva all'input
+
+    label.innerHTML = fileName;
+}
+
+function updateFileNames(inputId) {
+    const input = document.getElementById(inputId);
+    const fileNames = Array.from(input.files).map(file => file.name).join(', ');
+    const label = input.nextElementSibling; // Ottieni l'etichetta successiva all'input
+
+    label.innerHTML = fileNames || 'Choose files';
 }
 
 // Print the messagge 'Processing...' in the div 'output'
@@ -24,50 +33,8 @@ function showProcessing() {
     document.getElementById("output").innerHTML = "Processing...";
 }
 
-
-document.getElementById('uploadForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
-
-    // Get all input value from form 'uploadForm'
-    var formData = new FormData(this);
-
-    // Create a new XMLHttpRequest object
-    var xhr = new XMLHttpRequest();
-
-    // Configure the request
-    xhr.open('POST', '/models_creator', true);
-
-    // Set the response type
-    xhr.responseType = 'json';
-
-    // Set the onload callback function
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var response = xhr.response;
-            var outputElement = document.getElementById('output');
-            if ('failure' in response) {
-                alert('Errore: ' + response.failure);
-                outputElement.innerHTML = '';
-            } else {
-                
-                outputElement.innerHTML = response.message.replace(/\n/g, '<br>');
-            }
-        } else {
-            console.error('Request failed. Status:', xhr.status);
-        }
-    };
-
-    // Set the onerror callback function
-    xhr.onerror = function() {
-        console.error('Request failed');
-    };
-
-    // Send the request with the form data
-    xhr.send(formData);
-});
-
 // Save or Delete button
-function handleAction(action) {
+function handleAction(action, event) {
     // Get the values from input fields
     var modelDir = document.querySelector('input[name="model_dir"]').value;
     var hostname = document.querySelector('input[name="host_name"]').value;
@@ -107,10 +74,8 @@ function handleAction(action) {
             inputFields.forEach(function(input) {
                 input.value = '';
             });
-
-            // Reload the page after the request is completed
-            location.reload();
-            
+            location.reload()
+                
         } else {
             // Show error message without clearing input fields
             alert('Error: ' + message);
@@ -119,4 +84,5 @@ function handleAction(action) {
     };
 
     xhr.send(JSON.stringify(payload));
+    event.preventDefault();
 }

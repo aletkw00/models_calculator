@@ -9,7 +9,7 @@ import os
 import subprocess
 from const import *
 from flaskr.models import User
-from flaskr.login import RegistrationForm, LoginForm
+from flaskr.login import RegistrationForm, LoginForm, ModelForm
 
 
 def move_file(source_path, destination_path):
@@ -61,86 +61,99 @@ def index():
 
 @app.route('/models_creator', methods=['GET','POST'])
 @login_required
-def run_models_creation():
-
-    # Get the name of the directory of the model
-    session['model_dir'] = secure_filename(request.form.get('model_dir'))
-    model_dir = os.path.join(session['user_path'], session['model_dir'])
-    # Check if directory alredady exists, if not create
-    if not os.path.exists(model_dir):
-        os.makedirs(model_dir)
-
-    # Get the files
-    file1 = request.files['file1']
-    files = request.files.getlist("file2")
-
-
-    # Checking extensions of files
-    extension1 = os.path.splitext(file1.filename)[1]
-    if extension1 not in app.config['ALLOWED_EXTENSIONS']:
-        error_message = 'Input file not CSV file'
-        return jsonify({'failure': error_message})
+def models_creator():
     
-    for file2 in files:
-        extension2 = os.path.splitext(file2.filename)[1]
-        if extension2 not in app.config['ALLOWED_EXTENSIONS']:
-            error_message = 'Output file(s) not CSV file'
-            return jsonify({'failure': error_message})
+    form = ModelForm()
+    vis_dir = get_visible_directory(session['user_path'])
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            # Get the name of the directory of the model
+            session['model_dir'] = secure_filename(request.form.get('model_dir'))
+            model_dir = os.path.join(session['user_path'], session['model_dir'])
+            
+
+            # Get the files
+            file1 = request.files['file1']
+            files = request.files.getlist("file2")
+
+
+            # Checking extensions of files
+            extension1 = os.path.splitext(file1.filename)[1]
+            if extension1 not in app.config['ALLOWED_EXTENSIONS']:
+                flash('Input file not CSV file', 'danger')
+                return render_template('index.html', model_dirs=vis_dir, form=form)
+            
+            for file2 in files:
+                extension2 = os.path.splitext(file2.filename)[1]
+                if extension2 not in app.config['ALLOWED_EXTENSIONS']:
+                    flash('Output file(s) not CSV file', 'danger')
+                    return render_template('index.html', model_dirs=vis_dir, form=form)
+                    
+                
+            # Iterate for each file in the files List, and Save them
+            i=1
+            for file2 in files:
+                file2.save(os.path.join(
+                    app.config['UPLOAD_DIRECTORY'],
+                    'st' + str(i) + '_' + OUTPUT_FILE))
+                i+=1
+
+            file1.save(os.path.join(
+                app.config['UPLOAD_DIRECTORY'],
+                INPUT_FILE))
+
+            window = str(request.form.get('window'))
+            
+            session['filename'] = secure_filename(request.form.get('modelname'))
+            test = '-test' if request.form.get('test') else ''
+
+            path_tmp_models_dir = os.path.join(session['user_path'], TMP_MODELS_DIRECTORY)
+
+            # Command to execute as command line
+            command = [
+                'python3', 
+                'models_creator.py', 
+                app.config['UPLOAD_DIRECTORY'], 
+                path_tmp_models_dir
+            ]
+
+            # Adding flags to the command
+            if window != '':
+                window = '-i' + window
+                command.append(window)
+            if session['filename'] !='':
+                filename = '-o' + session['filename']
+                command.append(filename)
+            if test != '':
+                command.append(test)
+            # Run the script
+            try:
+                result = subprocess.run(command, capture_output=True, text=True)
+
+                if result.returncode == 0:
+                    generated_string = result.stdout.strip()
+                else:
+                    generated_string = f"Error: {result.stderr.strip()}"
+
+            except subprocess.CalledProcessError:
+                generated_string = 'Something went wrong with the script'
+            finally:
+                for filename in os.listdir(app.config['UPLOAD_DIRECTORY']):
+                    file_path = os.path.join(app.config['UPLOAD_DIRECTORY'], filename)
+                    if os.path.isfile(file_path) and filename != '.gitkeep':
+                        os.remove(file_path)
+                session['runned'] = True
+                # Check if directory alredady exists, if not create
+                if not os.path.exists(model_dir):
+                    os.makedirs(model_dir)
+                session['generated_string'] = generated_string.strip()
+
+            return redirect(url_for('models_creator'))
         
-    # Iterate for each file in the files List, and Save them
-    i=1
-    for file2 in files:
-        file2.save(os.path.join(
-            app.config['UPLOAD_DIRECTORY'],
-            'st' + str(i) + '_' + OUTPUT_FILE))
-        i+=1
+    generated_string = session.get('generated_string', '')
 
-    file1.save(os.path.join(
-        app.config['UPLOAD_DIRECTORY'],
-        INPUT_FILE))
+    return render_template('index.html', model_dirs=vis_dir, form=form, string=generated_string)
 
-    window = request.form.get('window')
-    session['filename'] = secure_filename(request.form.get('filename'))
-    test = '-test' if request.form.get('test') else ''
-
-    path_tmp_models_dir = os.path.join(session['user_path'], TMP_MODELS_DIRECTORY)
-
-    # Command to execute as command line
-    command = [
-        'python3', 
-        'models_creator.py', 
-        app.config['UPLOAD_DIRECTORY'], 
-        path_tmp_models_dir
-    ]
-
-    # Adding flags to the command
-    if window != '':
-        window = '-i' + window
-        command.append(window)
-    if session['filename'] !='':
-        filename = '-o' + session['filename']
-        command.append(filename)
-    if test != '':
-        command.append(test)
-    # Run the script
-    try:
-        result = subprocess.run(command, capture_output=True, text=True)
-
-        if result.returncode == 0:
-            generated_string = result.stdout.strip()
-        else:
-            generated_string = f"Error: {result.stderr.strip()}"
-
-    except subprocess.CalledProcessError:
-        generated_string = 'Something went wrong with the script'
-    finally:
-        for filename in os.listdir(app.config['UPLOAD_DIRECTORY']):
-            file_path = os.path.join(app.config['UPLOAD_DIRECTORY'], filename)
-            if os.path.isfile(file_path) and filename != '.gitkeep':
-                os.remove(file_path)
-        session['runned'] = True
-
-    return jsonify({'message': generated_string})
 
 
 @app.route('/delete', methods=['POST'])
@@ -169,6 +182,7 @@ def delete_function():
             if not os.listdir(model_dir):
                 os.rmdir(model_dir)
         session['runned'] = False
+        session['generated_string'] = ''
         return json_response('success', 'All correct')
     else:
         error_message = 'Models not calculated yet'
@@ -218,6 +232,7 @@ def saving_function():
                 move_file(os.path.join(tmp_model_dir_path, file),
                         os.path.join(model_dir, file))
     session['runned'] = False
+    session['generated_string'] = ''
     return json_response('success', 'All correct')
 
 
@@ -255,8 +270,8 @@ def login():
             login_user(user, remember=form.remember.data)
             session['user_path'] = os.path.join(MODEL_DIR, form.username.data)
             session['runned'] = False
-            visible_directory = get_visible_directory(session['user_path'])
-            return render_template('index.html', model_dirs=visible_directory)
+            session['generated_string'] = ''
+            return redirect(url_for('models_creator'))
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html', title='Login', form=form)
