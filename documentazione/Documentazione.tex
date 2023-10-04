@@ -34,7 +34,6 @@
 \reportitle{Sviluppo di una libreria Python per la creazione e gestione di sensori virtuali}
 
 
-%----------- Initialisation -------------------
         
 \margins 
 \mytitlepage
@@ -47,15 +46,14 @@
 
 \cleardoublepage 
 
-\chapter{Introduzione}
-\label{cha:intro}
+\chapter*{Introduzione}
 
-Questa libreria è stata sviluppata con l'obiettivo di agevolare il processo decisionale basato sull'analisi dei dati attraverso l'utilizzo 
-di modelli di regressione lineare. Il suo scopo principale consiste nel fornire agli utenti uno strumento efficiente ed intuitivo, 
-consentendo loro di generare modelli di regressione lineare tramite l'interazione con una interfaccia web dedicata.
-Gli utenti possono fornire specifici parametri di input, dai quali la libreria trae origine per la creazione dei modelli.
-La libreria, offre uno strumento per condurre analisi predittive di alta precisione. 
-Grazie a essa, è possibile migliorare notevolmente la capacità di prendere decisioni informate in diversi contesti professionali.
+Questa libreria è stata sviluppata con l'obiettivo di offrire uno strumento per condurre analisi predittive di alta precisione, 
+migliorando notevolmente la capacità di prendere decisioni informate in diversi contesti professionali attraverso l'utilizzo 
+di modelli di regressione lineare. 
+Il suo scopo principale consiste nel fornire agli utenti uno strumento efficiente ed intuitivo, 
+consentendo loro di generare i suddetti modelli tramite l'interazione con una interfaccia web dedicata.
+Gli utenti possono fornire specifici parametri di input, dai quali la libreria crea i modelli.  
 
 Questo documento è suddiviso come segue: nel capitolo~\ref{cha:import} è esposto il procedimento di importazione della libreria 
 e l'installazione dei prerequisiti necessari per il corretto funzionamento della stessa. 
@@ -68,19 +66,16 @@ le diverse componenti del codice.
 \chapter{Installazione ed esecuzione}
 \label{cha:import}
 
+\section*{Installazione}
 Per installare la libreria, è necessario seguire attentamente i passaggi riportati di seguito:
 
-\section*{Installazione}
 \begin{enumerate}
-  \item Scaricare l'intera repository dal repository GitHub ufficiale della libreria. 
-  È possibile scaricare l'archivio ZIP direttamente dal sito oppure su Linux tramite il comando \texttt{git clone}.
-  \item Spostarsi da terminale all'interno della directory scaricata. Su Linux è possibile farlo col comando \texttt{cd \rootDirectory}
-  \item Prima di procedere con l'installazione, è fondamentale verificare di avere installato sul proprio sistema il gestore dei pacchetti 
-  \texttt{pip}, che verrà utilizzato per installare le dipendenze della libreria
-  \item Nel caso in cui si stia utilizzando un sistema operativo Linux, è necessario rendere il file \texttt{install.sh} eseguibile. 
-  Questo può essere fatto tramite il seguente comando da terminale: \texttt{chmod +x install.sh}
-  \item Eseguire il seguente comando da terminale: \texttt{./install.sh}. L'uso di questo script semplifica il processo di installazione, 
-  in quanto gestirà automaticamente l'installazione di tutte le dipendenze necessarie appositamnte indicate nel file \texttt{requirements.txt}
+  \item Visita il repository ufficiale della libreria su GitHub e scarica l'archivio ZIP direttamente dal sito o utilizzare il comando \texttt{git clone `URL'} da terminale.
+  \item Utilizza il comando \texttt{cd \rootDirectory} da terminale per spostarti all'interno della directory appena scaricata.
+  \item Assicurati di avere \texttt{pip}, il gestore dei pacchetti Python, installato sul tuo sistema.
+  \item Utilizza il comando \texttt{chmod +x install.sh} nel terminale per rendere il file \texttt{install.sh} eseguibile.
+  \item Eseguire il seguente comando \texttt{./install.sh} da terminale. Questo script semplifica l'installazione, gestendo automaticamente il processo 
+  e installando tutte le dipendenze necessarie specificate nel file \texttt{requirements.txt}
 \end{enumerate}
 
 \section*{Esecuzione}
@@ -92,75 +87,95 @@ il seguente comando: \texttt{python3 run.py}.
 \chapter{Guida all'Utilizzo}
 \label{cha:guida}
 
-\section{Creazione dei Modelli}
+Questo capitolo è una guida introduttiva che accompagna l'utente all'interno della libreria. Fornisce istruzioni chiare su come interagire con la libreria, 
+comprese le spiegazioni dei campi che l'utente dovrà compilare per creare i suoi modelli di regressione lineare.
+
+\section{Accesso e Autenticazione}
 \begin{enumerate}
-  \item \textbf{Accedi al Server:} Utilizza il tuo browser per accedere alla pagina di creazione dei modelli della libreria, 
-  collegandoti utilizzando l'indirizzo IP del server.
+  \item \textbf{Accedi al server:} Accedere alla pagina di creazione dei modelli della libreria mediante il browser, collegandosi tramite l'indirizzo IP del server.
 
   \item \textbf{Login:} Per poter utilizzare la libreria è necessario effetturare l'autenticazione, fornendo username e passsword. In caso non si sia già in possesso
   di un account sarà necessario crearne uno attraverso l'apposita pagina di registrazione. 
 
   \begin{figure}[htp]
-    \begin{minipage}{0.45\textwidth}
+    \begin{minipage}[b]{0.5\linewidth}
+      \centering
       \includegraphics[width=\linewidth]{images/img2.png}
       \caption{Pagina di Registrazione}
-  \end{minipage}\hfill
-  \begin{minipage}{0.5\textwidth}
+    \end{minipage}
+    \hspace{0.5cm}
+    \begin{minipage}[b]{0.5\linewidth}
+      \centering
       \includegraphics[width=\linewidth]{images/img3.png}
       \caption{Pagina di Login}
-  \end{minipage}
-  
+    \end{minipage}
   \end{figure}
 
-  \item \textbf{Fornitura dei Parametri}: Per creare un modello, è necessario fornire i seguenti parametri tramite la pagina web del server:
-  \begin{itemize}
-    \item Scegliere tra le opzioni disponibili o introdurre un nuovo nominativo per un sensore, al quale verranno connessi i modelli oggetto della creazione imminente.
-    \item Carica il file di input contenente i dati storici relativi al sensore.
-    \item Carica uno o più file di output che rappresentino la variabile di risposta da prevedere.
-    \item Imposta il valore  \hyperref[win]{`window'}, espresso come numero intero non negativo, che stabilirà quanti istanti temporali precedenti verranno considerati durante il processo di creazione del modello.
-    \item Assegna un nome al modello. Se stai caricando più file di output, il nome verrà affiancato da un numero intero progressivo.
-    \item Scegli se eseguire il test del modello. In caso affermativo, i dati verranno divisi in addestramento (80\%) e test (20\%) per la verifica della precisione.
-  \end{itemize}
 
-  \begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.75\textwidth]{images/img9.png}
-    \caption{Pagina di creazione dei modelli}
-  \end{figure}
+\end{enumerate}
+
+
+\section{Configurazione dei Modelli}
+
+
+\textbf{Impostazione dei Parametri}: Per creare un modello, è necessario fornire i seguenti parametri tramite la pagina web del server:
+\begin{itemize}
+  \item Scegliere il nome di una directory tra le quelle già disponibili o introdurre un nuovo nominativo per la directory di un sensore, al quale verranno connessi i modelli oggetto della creazione imminente.
+  \item Carica il file CSV di input contenente i dati storici relativi al sensore.
+  \item Carica uno o più file CSV di output che rappresentino la variabile di risposta da prevedere.
+  \item Imposta il valore  \hyperref[win]{`window'}, espresso come numero intero non negativo, che stabilirà quanti istanti temporali precedenti verranno considerati durante il processo di creazione del modello.
+  \item Assegna un nome al modello. Se stai caricando più file di output, il nome verrà affiancato da un numero intero progressivo.
+  \item Scegli se eseguire il test del modello. In caso affermativo, i dati verranno divisi in addestramento (80\%) e test (20\%) per la verifica della precisione.
+\end{itemize}
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{images/img1.png}
+  \caption{Pagina di creazione dei modelli}
+\end{figure}
   
+
+
+\section{Valutazione dei Risultati}
+\begin{enumerate}
   \item \textbf{Visualizzazione dei Risultati:} Una volta creato il modello, la libreria fornirà indicatori che valutano l'adeguatezza del modello rispetto ai dati forniti. 
   Nel caso in cui l'utente abbia scelto di effettuare il test, verranno impiegati dei dati per valutare l'effettiva bontà delle previsioni, generando ulteriori indicatori.
 
+  \item \textbf{Decisione di Salvare o Scartare:} Si avrà la possibilità di prendere una decisione. 
+  Sarà possibile scegliere di salvare il modello nella directory del sensore precedentemente indicata o scartarlo completamente.
+
   \begin{figure}[htp]
     \centering
-    \includegraphics[width=0.25\textwidth]{images/img4.png}
+    \includegraphics[width=0.4\textwidth]{images/img6.png}
     \caption{Risultati calcolo del modello}
   \end{figure}
-  
 
-  \item \textbf{Decisione di Salvare o Scartare:} A questo punto, si ha la possibilità di prendere una decisione. 
-  È possibile scegliere di salvare il modello nella directory del sensore precedentemente indicata o scartarlo completamente.
+\end{enumerate}
+
+\section{Opzioni Avanzate (Opzionale)}
+\begin{enumerate}
+  \item \textbf{Salvataggio con Dati Broker (opzionale):} Nel caso si decida di salvare il modello, sarà possibile creare un file di configurazione 
+  per il broker che verrà automaticamente salvato nella directory del sensore indicata. Sarà eventualmente possibile creare il file anche in un secondo momento,
+  indicando la directory del sensore. 
   
-  \item \textbf{Salvataggio con Dati Broker (opzionale):} Nel caso si decida di salvare il modello, sarà possibile creare un file di configigurazione 
-  per il broker che verrà automaticamente salvato nella directory del sensore.  I parametri di configurazione del broker sono i seguenti:
+I parametri di configurazione del broker sono i seguenti:
   
   \begin{itemize}
     \item \texttt{Name}: Nome utente da utilizzare per connettersi al broker
     \item \texttt{Password}: Password associata al nome utente
-    \item \texttt{IP del broker}: indirizzo IP che identifica il broker al quale connettersi
+    \item \texttt{IP del broker}: Indirizzo IP che identifica il broker al quale connettersi
     \item \texttt{Topic}: Topic sul quale pubblicare le predizioni utilizzando i modelli del sensore in cui è contenuto il file di configurazione
   \end{itemize}
 
 
 \begin{figure}[htp]
   \centering
-  \includegraphics[width=0.5\textwidth]{images/img10.png}
+  \includegraphics[width=0.65\textwidth]{images/img10.png}
   \caption{Pagina di configurazione del broker}
 \end{figure}
 
-  \item \textbf{Logout} Sarà possibile effettuare il logout il quale consentirà all'utente di disconnettersi dal proprio account attuale.
-  L'utente potrà quindi accedere con un altro account o eseguire nuovamente il login se lo desidera.
 \end{enumerate}
+
 
 \chapter{Struttura del codice}
 \label{cha:struttura}
@@ -185,7 +200,7 @@ La struttura della repository si presenta nel seguente modo:
 .4 register.html.
 .3 \_\_init\_\_.py.
 .3 views.py.
-.3 login.py.
+.3 forms.py.
 .3 models.py.
 .3 uploads/.
 .2 instance.
@@ -203,13 +218,14 @@ La struttura della repository si presenta nel seguente modo:
 }
 
 \section{Gestione modelli}
-Il percorso di \texttt{dir\_of\_models} ospita una gerarchia di directory che riflette l'organizzazione dei modelli generati da ciascun utente. 
-Ogni utente è rappresentato da una propria sottodirectory all'interno della quale si trovano i modelli da essi creati. 
-È rilevabile che all'interno di queste sottodirectory utente, vi sono ulteriori suddivisioni in sottodirectory. È presente per ogni utente
-una directory denominata \texttt{.tmp\_models\_dir}, la quale contiene modelli che non sono ancora stati ne salvati ne scartati, illustrando chiaramente
-la loro connotazione temporanea. Per ciascun utente potrebbero esistere ulteriori sottodirectory il cui numero può variare.
-Queste ulteriori directory sono finalizzate a contenere i modelli creati per ogni sensore.
-Tale suddivisione consente una gestione ordinata dei vari modelli che l'utente crea nel tempo.
+Il percorso \texttt{dir\_of\_models} contiene una struttura di directory che organizza i modelli generati dagli utenti. Ogni utente ha la propria directory, 
+all'interno della quale vengono memorizzati i modelli da loro creati. All'interno delle directory degli utenti, 
+ci sono ulteriori suddivisioni in sottodirectory. Ciascun utente ha una directory chiamata \texttt{.tmp\_models\_dir}, che funge da area temporanea per 
+i modelli ancora in fase di valutazione e non ancora definitivamente salvati o eliminati.
+
+Inoltre, ci possono essere ulteriori sottodirectory per ciascun utente, la cui quantità può variare. 
+Queste ulteriori sottodirectory sono progettate per contenere i modelli creati per specifici sensori. 
+Questa organizzazione consente una gestione chiara e ordinata dei modelli generati dagli utenti nel corso del tempo.
 
 \section{Struttura Flask}
 All'interno della directory \texttt{flaskr} troviamo l'intera struttura dell'applicazione Flask.
@@ -224,7 +240,8 @@ All'interno della directory \texttt{flaskr} troviamo l'intera struttura dell'app
   Inoltre, questo file incorpora il codice di configurazione, l'inizializzazione delle estensioni Flask e altre impostazioni globali dell'applicazione.
   \item \textbf{views.py}: file che definisce il comportamento dell'app in risposta alle interazioni degli utenti con la pagina web. Contiene le definizioni 
   delle route URL e delle funzioni di visualizzazione che gestiscono le richieste dell'utente e restituiscono le risposte appropriate.
-  \item \textbf{login.py}: file che definisce due classi di form per l'applicazione Flask: una per la registrazione dell'utente e l'altra per l'accesso.
+  \item \textbf{forms.py}: file che definisce tre classi di form per l'applicazione Flask: una per la registrazione dell'utente, un'altra per l'accesso e 
+  una terza per la configurazione del modello da creare.
   \item \textbf{models.py}: file che definisce come vengono rappresentati gli utenti nel database dell'applicazione. Questo file contiene le definizioni 
   delle classi dei modelli di dati che rappresentano gli utenti e le relative informazioni nel database.
 \end{itemize}
@@ -238,7 +255,7 @@ automaticamente durante la fase di registrazione.
 
 \section{Strumenti di Creazione dei Modelli}
 \begin{itemize}
-  \item \textbf{reg\_class.py}: definizione della classe python `RegressionModel' che funge da contenitore per tutte le
+  \item \textbf{reg\_class.py}: definizione della classe python \texttt{RegressionModel} che funge da contenitore per tutte le
   informazioni associate ad un modello, che può essere creato o importato nell'applicazione.
   \item \textbf{reg.py}: codice che si occupa della parte di calcolo e di creazione dei modelli. Questo modulo è responsabile 
   per l'implementazione delle operazioni di creazione dei modelli basati sui dati forniti dall'utente.
@@ -247,16 +264,8 @@ automaticamente durante la fase di registrazione.
   \item \textbf{models\_creator.py}: script progettato per semplificare la creazione di più modelli di regressione mediante un'unica esecuzione. 
   Utilizza la libreria argparse~\cite{argparse} per accettare input da riga di comando.  Facilita l'automatizzazione della creazione di modelli, 
   consentendo agli utenti di ottimizzare il processo senza dover ripetere manualmente le stesse operazioni.
-  \item \textbf{const.py}: file utilizzato per definire e dichiarare costanti che vengono utilizzate in diverse parti della libreria
+  \item \textbf{const.py}: file utilizzato per definire e dichiarare costanti che vengono utilizzate in diverse parti della libreria.
 \end{itemize}
-
-\section{Iterazione col Broker}
-Il file \texttt{subscriber.py} si occuperà di stabilire una connessione con un intermediario (broker) attraverso le credenziali specificate in 
-un file posizionato all'interno di una directory dedicata al sensore dell'utente e ad un certificato    q. Dopo aver stabilito con successo questa connessione, il programma riceverà 
-dati dal broker a cui è connesso. Questi dati verranno utilizzati per effettuare previsioni di valori utilizzando modelli preesistenti. 
-Le previsioni risultanti saranno quindi inviate al topic specificato nel file di configurazione.
-Questo codice fornisce un'applicazione basata sul protocollo MQTT~\cite{mqtt}, che utilizza la libreria Paho~\cite{paho} per connettersi 
-a un broker MQTT, pubblicare messaggi e sottoscrivere argomenti per ricevere messaggi pubblicati.
 
 
 \chapter{Dettagli implementativi}
@@ -397,7 +406,7 @@ rappresentazione e relazioni temporali. In questa configurazione, le informazion
 istanti successivi o precedenti.
 Contrariamente, quando il parametro `window' è definito con un valore positivo `i', esso condiziona una dinamica di aggregazione temporale. 
 Ogni istante temporale, oltre a presentare i propri dati distintivi, incorpora anche i dati relativi agli `i' istanti temporali precedenti. 
-Questa configurazione crea una catena sequenziale di istanti collegati, consentendo l'analisi delle tendenze temporali su un intervallo di `i' istanti. 
+Questa configurazione crea una sequenza continua di momenti interconnessi, consentendo l'analisi delle tendenze temporali su un intervallo di  `i' istanti. 
 È importante notare che, in situazioni in cui il numero di istanti temporali precedenti sia inferiore a 
 `i', l'istante corrente potrebbe non essere incluso nell'analisi aggregata.
 \begin{table}[h]
@@ -490,11 +499,12 @@ Per convertire un timestamp all'interno di questa matrice, vengono seguite quest
 
 \section{Missing values}
 
-Considerando che la matrice MxDxH è statica, è possibile che l'utente non fornisca dati sufficienti per garantire che ogni colonna di 
-questa matrice sia diversa da zero. Questa situazione potrebbe generare problematiche durante il processo di elaborazione. 
-Per prevenire tali problematiche, è stata adottata una strategia di default: ogni colonna della matrice priva di informazioni viene rilevata e segnalata 
-all'utente. Successivamente, questa colonna viene esclusa dai dati utilizzati nell'analisi, al fine di assicurare una corretta elaborazione dei modelli.
-Infine queste colonne verranno segnalate all'utente insieme agli indicatori di bontà del modello calcolato.
+Per evitare complicazioni durante il processo di elaborazione dei modelli, a causa di colonne del Dataframe prive di informazioni significative,
+(per esempio tutta una colonna impostata allo stesso valore) è stata adottata una strategia di default. Ogni colonna del Dataframe priva di informazioni, 
+viene rilevata e segnalata all'utente. Successivamente, questa colonna viene esclusa dai dati utilizzati nell'analisi, al fine di assicurare una corretta 
+elaborazione. Infine queste colonne verranno segnalate all'utente insieme agli indicatori di bontà del modello calcolato. 
+Considerando che la matrice MxDxH è statica, è possibile che l'utente non fornisca dati sufficienti per garantire che ogni sua colonna sia diversa da zero. 
+
 
 \section{Flask}
   Flask~\cite{flask} è un framework web leggero e flessibile scritto in Python, progettato per semplificare la creazione di applicazioni web. 
@@ -507,27 +517,48 @@ Infine queste colonne verranno segnalate all'utente insieme agli indicatori di b
     \includegraphics[width=1\textwidth]{images/img7.png}
     \caption{Gestione richieste HTTP di più utenti}
   \end{figure}
-  
+
+\section{Modello di Design Post/Redirect/Get (PRG)}
+L'applicazione segue il modello di design Post/Redirect/Get (PRG) per gestire le richieste di creazione dei modelli. 
+Quando un utente invia un modulo per creare un modello, la richiesta viene gestita attraverso una richiesta POST. Dopo il completamento del processo, 
+l'utente viene reindirizzato a una pagina successiva utilizzando una richiesta di reindirizzamento (HTTP Redirect). 
+Questo approccio impedisce il ri-invio accidentale del modulo da parte dell'utente e assicura un comportamento più prevedibile e sicuro dell'applicazione.
+
+
+\begin{figure}[htp]
+  \begin{minipage}[b]{0.5\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/img8.png}
+  \caption{Senza PRG: Ri-invio accidentale del modulo.}
+  \end{minipage}
+  \hspace{0.5cm}
+  \begin{minipage}[b]{0.5\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/img5.png}
+  \caption{Con PRG: Prevenzione del ri-invio del modulo.}
+  \end{minipage}
+  \end{figure}
+
 \section{Maschera dei valori}
 
 Al completamento del procedimento di calcolo di un modello, è possibile che il DataFrame risultante si presenti con una dimensione inferiore rispetto
 a quella originale. Questa riduzione dimensionale deriva dal fatto che durante le fasi di selezione step-forward e step-backward, alcune colonne vengono 
-scelte o escluse dal modello stesso. Questa dinamica introduce la complessità di adattare i dati futuri al modello stesso.
+scelte o escluse dal modello stesso. Questa dinamica introduce la complessità di adattare i dati futuri al modello generato.
 
 Per affrontare questa situazione, è stata introdotta una soluzione: l'implementazione di una maschera per i coefficienti. 
 Questa maschera costituirà una mappatura dei valori dei coefficienti associati a ciascuna colonna del DataFrame originale. 
-Pertanto, le colonne che non risultano presenti nel DataFrame finale verranno assegnate un valore di coefficiente pari a zero. Al contrario, le colonne 
+Pertanto, alle colonne che non risultano presenti nel DataFrame finale verrà assegnato un valore di coefficiente pari a zero. Al contrario, le colonne 
 selezionate, che preservano il loro valore di coefficiente precedentemente calcolato, sono riconosciute come significative nel contesto del modello. 
 Questa metodologia di mascheramento dei coefficienti si traduce in un vantaggio determinante per l'adattamento dei dati futuri al modello, 
 persino in presenza di variazioni dimensionali nel DataFrame.
 
 \section{Formato dei modelli}
 
-I modelli di previsione sono memorizzati nel formato JSON attraverso l'utilizzo della classe definita nel file \texttt{reg\_class.py}.
-Questa classe è stata appositamente progettata per raccogliere i dettagli fondamentali dei modelli di regressione lineare 
+I modelli di previsione sono memorizzati nel formato JSON attraverso l'utilizzo della classe  \texttt{RegressionModel} definita nel file \texttt{reg\_class.py}.
+Questa classe è stata appositamente progettata per raccogliere i dettagli fondamentali dei modelli di regressione lineare, 
 tenendo traccia dei coefficienti associati alle colonne del file di input, delle medie e delle deviazioni standard di queste colonne, 
 oltre alla media e alla deviazione standard dell'unica colonna del file di output e alle colonne non selezionate durante la fase di step-foreward
-e backward. Infine viene indicato il valore di winodw usato per calcolare il modello.
+e backward. Infine, viene indicato il valore di winodw usato per calcolare il modello.
 (Nel modello non sarà presente la colonna timestamps in quanto sostituita dalla matrice MxDxH). Alcuni coefficenti saranno impostati a 0, 
 questo in quanto viene rappresentata la maschera dei valori.
 
@@ -669,6 +700,16 @@ secondo caso verrà spostato nella directory del sensore precedentemente scelta.
 L'utente autenticato ha la possibilità di selezionare la directory del sensore e configurare il broker in qualsiasi momento tramite l'apposito modulo. 
 Una volta premuto il pulsante `Salva', il file di configurazione viene generato automaticamente all'interno della directory del sensore. 
 Se esistesse già un file di configurazione precedente, questo verrebbe sovrascritto con il nuovo.
+
+\section{Iterazione col Broker}
+Il file \texttt{subscriber.py} stabilirà una connessione con un intermediario (broker) attraverso le credenziali specificate in 
+un file posizionato all'interno di una directory dedicata al sensore dell'utente e ad un certificato. Dopo aver stabilito la connessione, il programma riceverà 
+dati dal topic indicato dal file di configurazione del broker. Questi dati verranno utilizzati come input per effettuare predizioni utilizzando modelli preesistenti. 
+Le previsioni risultanti saranno quindi inviate al topic specificato nel file di configurazione. 
+Questo codice fornisce un'applicazione basata sul protocollo MQTT~\cite{mqtt}, che utilizza la libreria Paho~\cite{paho} per connettersi 
+a un broker MQTT, pubblicare messaggi e sottoscrivere argomenti per ricevere messaggi pubblicati.
+
+
 \bibliographystyle{plain}
 \bibliography{bibliography}
 

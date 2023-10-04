@@ -9,7 +9,7 @@ import os
 import subprocess
 from const import *
 from flaskr.models import User
-from flaskr.login import RegistrationForm, LoginForm, ModelForm
+from flaskr.forms import RegistrationForm, LoginForm, ModelForm
 
 
 def move_file(source_path, destination_path):

@@ -1,27 +1,30 @@
-\BOOKMARK [0][-]{chapter.1}{Introduzione}{}% 1
-\BOOKMARK [0][-]{chapter.2}{Installazione ed esecuzione}{}% 2
-\BOOKMARK [0][-]{chapter.3}{Guida all'Utilizzo}{}% 3
-\BOOKMARK [1][-]{section.3.1}{Creazione dei Modelli}{chapter.3}% 4
-\BOOKMARK [0][-]{chapter.4}{Struttura del codice}{}% 5
-\BOOKMARK [1][-]{section.4.1}{Gestione modelli}{chapter.4}% 6
-\BOOKMARK [1][-]{section.4.2}{Struttura Flask}{chapter.4}% 7
-\BOOKMARK [1][-]{section.4.3}{Gestione Utenti}{chapter.4}% 8
-\BOOKMARK [1][-]{section.4.4}{Strumenti di Creazione dei Modelli}{chapter.4}% 9
-\BOOKMARK [1][-]{section.4.5}{Iterazione col Broker}{chapter.4}% 10
-\BOOKMARK [0][-]{chapter.5}{Dettagli implementativi}{}% 11
-\BOOKMARK [1][-]{section.5.1}{Formato dei File CSV}{chapter.5}% 12
-\BOOKMARK [1][-]{section.5.2}{Manipolazione dati}{chapter.5}% 13
-\BOOKMARK [1][-]{section.5.3}{Parametro window}{chapter.5}% 14
-\BOOKMARK [1][-]{section.5.4}{Matrice MxDxH}{chapter.5}% 15
-\BOOKMARK [1][-]{section.5.5}{Missing values}{chapter.5}% 16
-\BOOKMARK [1][-]{section.5.6}{Flask}{chapter.5}% 17
-\BOOKMARK [1][-]{section.5.7}{Maschera dei valori}{chapter.5}% 18
-\BOOKMARK [1][-]{section.5.8}{Formato dei modelli}{chapter.5}% 19
-\BOOKMARK [1][-]{section.5.9}{MQTT}{chapter.5}% 20
-\BOOKMARK [0][-]{chapter.6}{Funzionamento}{}% 21
-\BOOKMARK [1][-]{section.6.1}{Registrazione ed autenticazione}{chapter.6}% 22
-\BOOKMARK [1][-]{section.6.2}{Iterazione Server e Creazione dei modelli}{chapter.6}% 23
-\BOOKMARK [1][-]{section.6.3}{Calcolo del modello}{chapter.6}% 24
-\BOOKMARK [2][-]{subsection.6.3.1}{Stepwise-regression}{section.6.3}% 25
-\BOOKMARK [1][-]{section.6.4}{Salvataggio dei Modelli}{chapter.6}% 26
-\BOOKMARK [1][-]{section.6.5}{Configurazione Broker}{chapter.6}% 27
+\BOOKMARK [0][-]{chapter.1}{Installazione ed esecuzione}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Guida all'Utilizzo}{}% 2
+\BOOKMARK [1][-]{section.2.1}{Accesso e Autenticazione}{chapter.2}% 3
+\BOOKMARK [1][-]{section.2.2}{Configurazione dei Modelli}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.3}{Valutazione dei Risultati}{chapter.2}% 5
+\BOOKMARK [1][-]{section.2.4}{Opzioni Avanzate \(Opzionale\)}{chapter.2}% 6
+\BOOKMARK [0][-]{chapter.3}{Struttura del codice}{}% 7
+\BOOKMARK [1][-]{section.3.1}{Gestione modelli}{chapter.3}% 8
+\BOOKMARK [1][-]{section.3.2}{Struttura Flask}{chapter.3}% 9
+\BOOKMARK [1][-]{section.3.3}{Gestione Utenti}{chapter.3}% 10
+\BOOKMARK [1][-]{section.3.4}{Strumenti di Creazione dei Modelli}{chapter.3}% 11
+\BOOKMARK [0][-]{chapter.4}{Dettagli implementativi}{}% 12
+\BOOKMARK [1][-]{section.4.1}{Formato dei File CSV}{chapter.4}% 13
+\BOOKMARK [1][-]{section.4.2}{Manipolazione dati}{chapter.4}% 14
+\BOOKMARK [1][-]{section.4.3}{Parametro window}{chapter.4}% 15
+\BOOKMARK [1][-]{section.4.4}{Matrice MxDxH}{chapter.4}% 16
+\BOOKMARK [1][-]{section.4.5}{Missing values}{chapter.4}% 17
+\BOOKMARK [1][-]{section.4.6}{Flask}{chapter.4}% 18
+\BOOKMARK [1][-]{section.4.7}{Modello di Design Post/Redirect/Get \(PRG\)}{chapter.4}% 19
+\BOOKMARK [1][-]{section.4.8}{Maschera dei valori}{chapter.4}% 20
+\BOOKMARK [1][-]{section.4.9}{Formato dei modelli}{chapter.4}% 21
+\BOOKMARK [1][-]{section.4.10}{MQTT}{chapter.4}% 22
+\BOOKMARK [0][-]{chapter.5}{Funzionamento}{}% 23
+\BOOKMARK [1][-]{section.5.1}{Registrazione ed autenticazione}{chapter.5}% 24
+\BOOKMARK [1][-]{section.5.2}{Iterazione Server e Creazione dei modelli}{chapter.5}% 25
+\BOOKMARK [1][-]{section.5.3}{Calcolo del modello}{chapter.5}% 26
+\BOOKMARK [2][-]{subsection.5.3.1}{Stepwise-regression}{section.5.3}% 27
+\BOOKMARK [1][-]{section.5.4}{Salvataggio dei Modelli}{chapter.5}% 28
+\BOOKMARK [1][-]{section.5.5}{Configurazione Broker}{chapter.5}% 29
+\BOOKMARK [1][-]{section.5.6}{Iterazione col Broker}{chapter.5}% 30

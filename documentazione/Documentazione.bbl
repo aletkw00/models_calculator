@@ -3,12 +3,6 @@
 \bibitem{argparse}
 \url{https://docs.python.org/3/library/argparse.html}.
 
-\bibitem{mqtt}
-\url{https://mqtt.org/}.
-
-\bibitem{paho}
-\url{https://pypi.org/project/paho-mqtt/}.
-
 \bibitem{pandas}
 \url{https://pandas.pydata.org/}.
 
@@ -20,5 +14,11 @@
 
 \bibitem{statsmodels}
 \url{https://www.statsmodels.org/stable/index.html}.
+
+\bibitem{mqtt}
+\url{https://mqtt.org/}.
+
+\bibitem{paho}
+\url{https://pypi.org/project/paho-mqtt/}.
 
 \end{thebibliography}

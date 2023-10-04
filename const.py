@@ -1,3 +1,5 @@
+import os
+
 COLONNE_ORE = ['00h', '01h', '02h', '03h', '04h', '05h','06h', '07h', '08h', \
                '09h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', \
                '18h', '19h', '20h', '21h', '22h', '23h']
@@ -10,7 +12,7 @@ COLONNE_MESI = ['1m', '2m', '3m', '4m', '5m', '6m', '7m', '8m', '9m', '10m', \
                 '11m', '12m']
 INPUT_FILE = 'input.csv'
 OUTPUT_FILE = 'output.csv'
-CSV_DIR = 'flaskr/uploads/'
+CSV_DIR = os.path.join('flaskr', 'uploads')
 MODEL_DIR = 'dir_of_models'
 DEFAULT_MODEL_NAME = 'final'
 TMP_MODELS_DIRECTORY = '.tmp_models_dir'
