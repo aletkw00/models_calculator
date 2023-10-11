@@ -5,6 +5,7 @@ import json
 parte per il logging
 """
 
+
 class Log:
     def __init__(self, file):
         self.file = file
@@ -30,13 +31,6 @@ class Log:
         json_object = json.dumps(self.dict, indent=4)
         with open(self.file, 'w') as f:
             f.write(json_object)
-
-    def incrementa_riga(self):
-        """
-        Funzione che incrementa il contatore delle righe
-        """
-        self.dict.update({"riga": (self.dict.get("riga") + 1)})
-        Log.salva(self)
 
     def errore(self, testo):
         self.dict.update({"ultimo_errore": testo})

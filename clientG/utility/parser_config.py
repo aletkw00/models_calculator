@@ -13,10 +13,18 @@ def parser_command_definizione():
     """
     parser = argparse.ArgumentParser(
         description='client mqtt: legge da csv e pubblica su mqtt una stringa in formato json')
+    parser.add_argument("-debug",
+                        type=bool,
+                        dest='debug',
+                        help='abilita o disabilita il debug, True e False')
     parser.add_argument("-file",
                         type=str,
                         dest='csv_file',
                         help='file sorgente csv')
+    parser.add_argument("-host",
+                        type=str,
+                        dest='host',
+                        help='IP o dns del server mqtt')
     parser.add_argument("-int",
                         "-intervallo",
                         type=int,
@@ -26,10 +34,6 @@ def parser_command_definizione():
                         type=int,
                         dest='inizio',
                         help="numero di elementi da scartare all'inizio")
-    parser.add_argument("-host",
-                        type=str,
-                        dest='host',
-                        help='IP o dns del server mqtt')
     parser.add_argument("-topic",
                         type=str,
                         dest='topic',
@@ -45,6 +49,7 @@ def config_crea(file: str):
     """
     configurazione = configparser.ConfigParser()
     configurazione.add_section('Default')
+    configurazione['Default']['debug'] = 'False'
     configurazione['Default']['csv_file'] = 'Input.csv'
     configurazione['Default']['attesa_secondi'] = '900'
     configurazione['Default']['inizio'] = '0'
@@ -62,7 +67,8 @@ def config_crea(file: str):
 
 class ParserConfig:
     def __init__(self, file: str):
-        self.dizionario = {"csv_file": "",
+        self.dizionario = {"debug": "",
+                           "csv_file": "",
                            "attesa_secondi": "",
                            "inizio": "",
                            "log_file": "",
@@ -82,6 +88,7 @@ class ParserConfig:
         """
         config = configparser.ConfigParser()
         config.read(self.file)
+        self.dizionario.update({"debug": config['Default']['debug']})
         self.dizionario.update({"csv_file": config['Default']['csv_file']})
         self.dizionario.update({"attesa_secondi": config['Default']['attesa_secondi']})
         self.dizionario.update({"inizio": config['Default']['inizio']})
@@ -105,10 +112,13 @@ class ParserConfig:
                 ARGS.csv_file,ARGS.secondi,ARGS.host,ARGS.topic)
             )
         '''
+        # booleano per debug
+        if args.debug is not None:
+            self.dizionario.update({"debug": args.debug})
         # file sorgente in csv
         if args.csv_file is not None:
             self.dizionario.update({"csv_file": args.csv_file})
-        # tempo di intervallo per ogni invio
+        # tempo d'intervallo per ogni invio
         # SEMPRE IN SECONDI
         if args.secondi is not None:
             self.dizionario.update({"attesa_secondi": args.secondi})
@@ -122,6 +132,9 @@ class ParserConfig:
         # nome del topic
         if args.topic is not None:
             self.dizionario.update({"topic": args.topic})
+
+    def get_debug(self):
+        return self.dizionario.get('debug')
 
     def get_csv_file(self):
         return self.dizionario.get('csv_file')

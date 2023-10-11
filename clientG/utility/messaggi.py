@@ -27,8 +27,19 @@ class Messaggi:
     def __init__(self, file: str):
         self.file = file
         self.list_msg = []
-        self.workList_msg = []
-        self.indice_ultimo_mess_avvio = None
+        self.msg_numero = 0
+
+    def __iter__(self):
+        # self.iterator = 0
+        return self
+
+    def __next__(self):
+        if self.msg_numero < len(self.list_msg):
+            msg = self.list_msg[self.msg_numero]
+            self.msg_numero += 1
+            return msg
+        else:
+            raise StopIteration
 
     def csv_to_json(self):
         """
@@ -44,14 +55,17 @@ class Messaggi:
                 # aggiunge la riga in un array
                 self.list_msg.append(row)
 
-    def elimina_inizio(self, righe):
-        self.workList_msg = self.list_msg[righe:]
+    def set_msg_contatore(self, numero):
+        self.msg_numero = numero
+
+    def get_msg_contatore(self):
+        return self.msg_numero - 1
 
     def reset(self):
-        self.workList_msg = self.list_msg
+        self.msg_numero = 0
 
     def controllo_se_fine(self):
-        if len(self.workList_msg) < 100:
+        if (len(self.list_msg) - self.msg_numero) < 100:
             Messaggi.reset(self)
             return True
         return False
@@ -63,34 +77,26 @@ class Messaggi:
         timezone_roma = datetime.datetime.now(pytz.timezone('Europe/Rome'))
         # print(timezone_roma)
         # tempo_corrente = time.localtime()
-        righe_saltare = 0
         minuti_totali_correnti = (timezone_roma.hour * 60) + timezone_roma.minute
         # controllo che l'ultimo messaggio sia prima dell'ora e dei minuti
-        for msg in self.workList_msg:
-            msg_tempo_str = msg.get("Date_Time")
+        while self.list_msg[self.msg_numero]:
+            msg_tempo_str = self.list_msg[self.msg_numero].get("Date_Time")
             msg_tempo = time.strptime(msg_tempo_str, "%d/%m/%Y %H:%M")
             if msg_tempo.tm_hour > timezone_roma.hour or msg_tempo.tm_min > timezone_roma.minute:
-                righe_saltare = righe_saltare + 1
+                self.msg_numero += 1
             else:
                 break
         # cerco il messaggio appena prima dell'ora attuale
-        for msg in self.workList_msg[righe_saltare:]:
-            msg_tempo_str = msg.get("Date_Time")
+        while self.list_msg[self.msg_numero]:
+            msg_tempo_str = self.list_msg[self.msg_numero].get("Date_Time")
             msg_tempo = time.strptime(msg_tempo_str, "%d/%m/%Y %H:%M")
             # print(msg_tempo)
             # print(type(msg_tempo))
             # print(tempo_corrente)
             minuti_totali_msg = (msg_tempo.tm_hour * 60) + msg_tempo.tm_min
             if minuti_totali_msg < minuti_totali_correnti:
-                righe_saltare = righe_saltare + 1
+                self.msg_numero += 1
             else:
+                self.msg_numero -= 1
                 break
-        self.indice_ultimo_mess_avvio = righe_saltare - 1
-        return self.indice_ultimo_mess_avvio >= len(self.list_msg)
-
-    def get_ultimo_messaggio_avvio(self):
-        return self.indice_ultimo_mess_avvio
-
-    def get_work_list(self):
-        return self.workList_msg[self.indice_ultimo_mess_avvio:]
-
+        return self.msg_numero >= len(self.list_msg)

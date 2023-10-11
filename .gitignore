@@ -2,3 +2,4 @@ testing/
 __pycache__/
 flaskr/__pycache__/
 csv_files/
+/clientG/Input.csv

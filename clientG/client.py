@@ -92,20 +92,20 @@ if __name__ == "__main__":
     logs.legge_crea()
 
     # ritardo per avvio del servizio #################################
-    time.sleep(15)  # ###############################################
+    if not parametri.get_debug():
+        time.sleep(15)
 
     # leggo e creo ogni messaggio, li metto in un array
     mess = messaggi.Messaggi(parametri.get_csv_file())
     mess.csv_to_json()
 
-    # elimino i messaggi già letti
-    mess.elimina_inizio(logs.get_riga())
+    # salto i messaggi già letti
+    mess.set_msg_contatore(logs.get_riga())
 
     # controllare che non si è già alla fine
-    if mess.controllo_se_fine():
-        logs.set_riga(0)
+    mess.controllo_se_fine()
 
-    # punto da cui eseguire un loop infinito di invio
+    # punto da cui eseguire un loop infinito d'invio
     # si deve resettare il contatore riga, e i messaggi letti
     while True:
         # SEZIONE DI SINCRONIZZAZIONE CON L'ORA E I MINUTI CORRENTI
@@ -116,35 +116,35 @@ if __name__ == "__main__":
             logs.errore(testo)
             sys.exit(1)
 
-        logs.set_riga(logs.get_riga() + mess.get_ultimo_messaggio_avvio())
-
-        workArray = mess.get_work_list()
-
-        # SEZIONE DI INVIO DI MESSAGGI OGNI TOT TEMPO
+        # SEZIONE D'INVIO DI MESSAGGI OGNI TOT TEMPO
         #
         # ciclo sul array
         # ci deve essere subito 1 invio
         contatore_sincronizzazione = 1
-        for message in workArray:
-            # print(message)
-            # print(type(message))
-            # print(json.dumps(message))
+        for message in iter(mess):
 
-            ritorno = publish_mqtt(parametri, json.dumps(message))
-            if len(ritorno) > 1:
-                logs.errore(ritorno.args)
-                sys.exit(1)
+            # debug
+            if parametri.get_debug():
+                # print(message)
+                # print(type(message))
+                print(json.dumps(message))
+            # esecuzione normale
+            else:
+                ritorno = publish_mqtt(parametri, json.dumps(message))
+                if len(ritorno) > 1:
+                    logs.errore(ritorno.args)
+                    sys.exit(1)
 
-            logs.incrementa_riga()
-            contatore_sincronizzazione = contatore_sincronizzazione - 1
+            logs.set_riga(mess.get_msg_contatore())
+            contatore_sincronizzazione -= 1
             # sincronizzazione dell'invio con i minuti
             if contatore_sincronizzazione == 0:
                 contatore_sincronizzazione = 20
                 messaggi.attesa_sincronizzazione(parametri.get_secondi())
             else:
-                # minuti di intervallo
+                # minuti d'intervallo
                 time.sleep(parametri.get_secondi())
 
         # reset per ricominciare a inviare dal primo messaggio
         mess.reset()
-        logs.set_riga(0)
+        logs.set_riga(mess.get_msg_contatore())

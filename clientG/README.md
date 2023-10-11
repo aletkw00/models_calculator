@@ -37,7 +37,7 @@ I file necessari allo script sono:
 | input.cvs          | file da cui leggere i dati                            |
 
 NOTA: la prima esecuzione crea il file delle configurazioni 'default-conf.ini' 
-con i seguenti parametri personalizzabili
+con i seguenti parametri personalizzabili:
 
 | configurazione | descrizione                                                                                   |
 |----------------|-----------------------------------------------------------------------------------------------|
@@ -58,15 +58,23 @@ con i seguenti parametri personalizzabili
 ## Funzionamento del client
 - primo step
     - sincronizzazione con l'ora corrente:<br>
-      parte dall'ultimo messaggio inviato e confronta l'ora e minuti<br>
-      invia il messaggio precedente a quell'ora<br>
-      esempio: sono le 16:25 invia il messaggio delle 16:15
-    - attende i minuti/secondi restanti rispetto al tempo dato:<br>
-      invia il messaggio nei secondi/minuti indicati
+        - parte dall'ultimo messaggio inviato e confronta l'ora e minuti<br>
+        - invia il messaggio precedente all'ora corrente<br>
+        esempio: sono le 16:25 invia il messaggio delle 16:15
+    - attende i minuti/secondi restanti rispetto al tempo dato:
+        - invia il messaggio nei secondi/minuti indicati
 - secondo step
     - loop infinito fino alla fine delle righe del csv
 
 NOTA: a ogni invio viene salvato in un file log in json l'ultima riga inviata
+
+### File di log
+Nel file log.json vengono salvati;
+
+| variabile | descrizione                            |
+|-----------|----------------------------------------|
+| riga      | il numero della riga dell'ultimo invio |
+| errore    | se ci sono errori di invio             |
 
 ## Altri metodi di esecuzione del client
 ### Metodo 1 - come figlio di un processo
