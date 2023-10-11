@@ -14,9 +14,8 @@ def parser_command_definizione():
     parser = argparse.ArgumentParser(
         description='client mqtt: legge da csv e pubblica su mqtt una stringa in formato json')
     parser.add_argument("-debug",
-                        type=bool,
-                        dest='debug',
-                        help='abilita o disabilita il debug, True e False')
+                        action='store_true',
+                        help='abilita il debug se presente')
     parser.add_argument("-file",
                         type=str,
                         dest='csv_file',
@@ -88,18 +87,18 @@ class ParserConfig:
         """
         config = configparser.ConfigParser()
         config.read(self.file)
-        self.dizionario.update({"debug": config['Default']['debug']})
-        self.dizionario.update({"csv_file": config['Default']['csv_file']})
-        self.dizionario.update({"attesa_secondi": config['Default']['attesa_secondi']})
-        self.dizionario.update({"inizio": config['Default']['inizio']})
-        self.dizionario.update({"log_file": config['Default']['log_file']})
-        self.dizionario.update({"host": config['Default']['host']})
-        self.dizionario.update({"porta": config['Default']['porta']})
-        self.dizionario.update({"login": config['Default']['login']})
-        self.dizionario.update({"username": config['Default']['username']})
-        self.dizionario.update({"password": config['Default']['password']})
-        self.dizionario.update({"topic": config['Default']['topic']})
-        self.dizionario.update({"cert_tls": config['Default']['cert_tls']})
+        self.dizionario.update({"debug": config.getboolean('Default', 'debug')})
+        self.dizionario.update({"csv_file": config.get('Default', 'csv_file')})
+        self.dizionario.update({"attesa_secondi": config.getint('Default', 'attesa_secondi')})
+        self.dizionario.update({"inizio": config.getint('Default', 'inizio')})
+        self.dizionario.update({"log_file": config.get('Default', 'log_file')})
+        self.dizionario.update({"host": config.get('Default', 'host')})
+        self.dizionario.update({"porta": config.getint('Default', 'porta')})
+        self.dizionario.update({"login": config.getboolean('Default', 'login')})
+        self.dizionario.update({"username": config.get('Default', 'username')})
+        self.dizionario.update({"password": config.get('Default', 'password')})
+        self.dizionario.update({"topic": config.get('Default', 'topic')})
+        self.dizionario.update({"cert_tls": config.get('Default', 'cert_tls')})
 
     def config_terminale(self, args):
         """
