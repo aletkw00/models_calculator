@@ -24,6 +24,11 @@ def index():
     return redirect(url_for('access_bp.login'))
 
 
+@root_errors_bp.route('/favicon.ico')
+def favicon():
+    return redirect('/static/favicon.ico')
+
+
 @root_errors_bp.app_errorhandler(404)
 def not_found(e):
   return render_template('pages/general.html', e=e), 404
@@ -34,7 +39,6 @@ def not_found(e):
 
 @root_errors_bp.app_errorhandler(500)
 def not_found(e):
-  f.na = 9
   return render_template('pages/general.html', e=e), 500
 
 """
