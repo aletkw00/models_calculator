@@ -1,0 +1,18 @@
+body { 
+    width: 100vw; 
+    height: 100vh; 
+    margin: 0px; 
+    padding: 0px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(255,255,255,1), rgba(0,200,235,1));
+}
+
+.form-style{
+    width: inherit;
+}
+
+.form-footer{
+    justify-content: space-between !important; 
+}

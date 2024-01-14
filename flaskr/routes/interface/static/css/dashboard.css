@@ -1,0 +1,14 @@
+.col-md-4{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.card{
+    height: 8rem;
+}
+
+.card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

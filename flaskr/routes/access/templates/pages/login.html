@@ -1,0 +1,67 @@
+{% extends "mainAccess.html" %}
+{% block content %}
+    
+    <form method="POST" action="">
+        <div class="modal-dialog"> 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Login</h4>
+                </div>
+                {{ form.hidden_tag() }}
+                <div class="modal-body">
+                    {{ form.email.label(class="form-control-label")}}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control") }}
+                    {% endif %}
+
+                    <br />
+
+                    {{ form.password.label(class="form-control-label")}}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control") }}
+                    {% endif %}
+
+                    <br />
+
+                    <div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show">
+                                    {{ message }}                                    
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+                <div class="modal-footer form-footer">
+                    <div class="text-muted">
+                        Need An Account? <a class="btn btn-info" href="{{ url_for('access_bp.register') }}">Sign Up Now</a>
+                    </div>
+                    <div>
+                        {{ form.submit(class="btn btn-success") }}
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </form>
+
+{% endblock %}

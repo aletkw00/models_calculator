@@ -1,0 +1,21 @@
+.mytitle{
+    flex-direction: column !important;
+}
+
+.correction-col{
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+}
+
+.list-group-item{
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.list-button{
+    margin: 2px !important;
+}
+
+.right-top-text{
+    display: flex;
+}

@@ -1,0 +1,16 @@
+{% extends "mainErrors.html" %}
+
+{% block content %}
+<body>
+    <div class="d-flex align-items-center justify-content-center vh-100">
+        <div class="text-center">
+            <h1 class="display-1 fw-bold">{{e.code}}</h1>
+            <p class="fs-3"> <span class="text-danger">Opps!</span> {{e.name}}.</p>
+            <p class="lead">
+                {{e.description}}
+                </p>
+            <button class="btn btn-primary" onclick="history.back()" >Return to previus page</button>
+        </div>
+    </div>
+</body>
+{% endblock %}

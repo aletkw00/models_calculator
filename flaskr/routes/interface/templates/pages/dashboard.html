@@ -1,0 +1,82 @@
+{% extends "mainInterface.html" %}
+
+{% block css %}
+<link
+rel="stylesheet"
+type="text/css"
+href="{{ url_for('interface_bp.static', filename='css/dashboard.css') }}"
+/>  
+{% endblock css %}
+
+{% block scripts %}
+{% endblock scripts %}
+
+{% block content %}
+
+<div>
+    <div class="container">      
+        <div class="row text-center my-4" style="flex-direction: column !important;">
+          <h1>Dashboard - Choose a function</h1>
+      </div>
+      <div id="first-row" class="row">
+        <div class="col-md-4">
+          <div class="card border-primary text-center">
+            <div class="card-body">
+                <a href="{{ url_for('interface_bp.account') }}">
+                    <h4 class="card-title">My account</h4>
+                </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-primary text-center">
+            <div class="card-body" >
+                <a href="{{ url_for('interface_bp.file_manager') }}">
+                    <h4 class="card-title">File manager</h4>
+                </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-primary text-center">
+            <div class="card-body">
+                <a href="{{ url_for('interface_bp.regression_calculator') }}">
+                    <h4 class="card-title">Regression Model Calculator</h4>
+                </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="second-row" class="row">
+        <div class="col-md-4" hidden>
+          <div class="card border-primary text-center">
+            <div class="card-body">
+                <a href="{{ url_for('interface_bp.regression_calculator') }}">
+                    <h4 class="card-title">Regression Model Calculator</h4>
+                </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" hidden>
+          <div class="card border-primary text-center">
+            <div class="card-body">
+                <a href="{{ url_for('interface_bp.regression_calculator') }}">
+                    <h4 class="card-title">Regression Model Calculator</h4>
+                </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" hidden>
+          <div class="card border-primary text-center">
+            <div class="card-body">
+                <a href="{{ url_for('interface_bp.regression_calculator') }}">
+                    <h4 class="card-title">Regression Model Calculator</h4>
+                </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

@@ -1,0 +1,16 @@
+.mytitle{
+    flex-direction: column !important;
+}
+
+.fit-content{
+    height: auto;
+    padding-right: 80px;
+}
+
+.text-bold{
+    font-weight: bold;
+}
+
+.text-a-bit-bold{
+    font-weight: 500;
+}

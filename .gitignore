@@ -1,5 +1,15 @@
 testing/
 __pycache__/
 flaskr/__pycache__/
+flaskr/routes/access/__pycache__/
+flaskr/routes/api/__pycache__/
+flaskr/routes/interface/__pycache__/
+flaskr/routes/root_errors/__pycache__/
 csv_files/
-/clientG/Input.csv
+script/clientG/Input.csv
+dir_of_models/
+venv/
+venv6/
+.vscode/
+.idea/
+instance/

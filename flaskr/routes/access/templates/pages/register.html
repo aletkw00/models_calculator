@@ -1,0 +1,70 @@
+{% extends "mainAccess.html" %}
+{% block content %}
+    
+    <form method="POST" action="">
+        <div class="modal-dialog"> 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Join Today</h4>
+                </div>
+                {{ form.hidden_tag() }}
+                <div class="modal-body">
+                    
+                    {{ form.email.label(class="form-control-label")}}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control") }}
+                    {% endif %}
+                    
+                    <br />
+
+                    {{ form.password.label(class="form-control-label")}}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <label class="form-control-label" for="field_password">{{form.password.description}}</label>
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control") }}
+                        <label class="form-control-label" for="field_password">{{form.password.description}}</label>
+                    {% endif %}
+                        
+                    <br />
+
+                    {{ form.confirm_password.label(class="form-control-label")}}
+                    {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.confirm_password(class="form-control") }}
+                    {% endif %}
+                    
+                </div>
+                <div class="modal-footer form-footer">
+                    <div class="text-muted">
+                        Already Have An Account? <a class="btn btn-info" href="{{ url_for('access_bp.login') }}">Sign In</a>
+                    </div>
+                    <div>
+                        {{ form.submit(class="btn btn-success") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </form>
+
+{% endblock %}

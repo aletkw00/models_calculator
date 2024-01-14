@@ -1,4 +1,10 @@
 #!/bin/bash
-pip3 install -r requirements.txt
-
-mkdir uploads
+python -m venv venv
+./venv/Script/activate
+echo install requirements depends on python version
+echo -----------
+echo form python 3.11
+echo python -m pip install -r requirements-base.txt
+echo -----------
+echo for python 3.6 
+echo python -m pip install -r requirements-python36.txt
