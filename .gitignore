@@ -8,8 +8,10 @@ flaskr/routes/root_errors/__pycache__/
 csv_files/
 script/clientG/Input.csv
 dir_of_models/
+deploy/
 venv/
 venv6/
 .vscode/
 .idea/
 instance/
+flaskr/site.db

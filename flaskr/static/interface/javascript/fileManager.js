@@ -43,7 +43,7 @@ function downloadFile(dir){
 
 function deleteFolder(dir, list){
     $("#confirmation_title").html('Delete confirmation');
-    $("#confirmation_body").html('Are you sure to delete "' + dir.split('\\').pop() + '" folder and all its content ?');
+    $("#confirmation_body").html('Are you sure to delete "' + dir.split('/').pop() + '" folder and all its content ?');
     $("#confirmation_no").html('Yes');
     $("#confirmation_no").off()
     $("#confirmation_no").on("click", function (){
@@ -55,7 +55,7 @@ function deleteFolder(dir, list){
 
 function deleteFile(dir){
     $("#confirmation_title").html('Delete confirmation');
-    $("#confirmation_body").html('Are you sure to delete "' + dir.split('\\').pop() + '" ?');
+    $("#confirmation_body").html('Are you sure to delete "' + dir.split('/').pop() + '" ?');
     $("#confirmation_no").html('Yes');
     $("#confirmation_no").off()
     $("#confirmation_no").on("click", function (){
@@ -120,7 +120,7 @@ function leftList() {
                 if (current_dir == ''){
                     string_dir = previus_dir + key;
                 }else{
-                    string_dir = previus_dir + '\\\\' + key;
+                    string_dir = previus_dir + '//' + key;
                 }
                 buttonOnclick.setAttribute('onclick', 'leftDirClick(\'' + string_dir +'\')');            
                 buttonOnclick.textContent = 'Open';
@@ -176,19 +176,19 @@ function rightList() {
                 var buttonOnclick = document.createElement('button');
                 buttonOnclick.type = 'button';
                 buttonOnclick.className = 'btn btn-secondary btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'rightDirClick(\''+ current_dir + '\\\\' + key+'\')');
+                buttonOnclick.setAttribute('onclick', 'rightDirClick(\''+ current_dir + '/' + key+'\')');
                 buttonOnclick.textContent = 'Open';
                 listButton.append(buttonOnclick);
                 var buttonOnclick = document.createElement('button');
                 buttonOnclick.type = 'button';
                 buttonOnclick.className = 'btn btn-success btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'downloadFolder(\''+ current_dir + '\\\\' + key+'\')');
+                buttonOnclick.setAttribute('onclick', 'downloadFolder(\''+ current_dir + '/' + key+'\')');
                 buttonOnclick.textContent = 'Download';
                 listButton.append(buttonOnclick);
                 var buttonOnclick = document.createElement('button');
                 buttonOnclick.type = 'button';
                 buttonOnclick.className = 'btn btn-danger btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'deleteFolder(\''+ current_dir + '\\\\' + key+'\', \'R\')');
+                buttonOnclick.setAttribute('onclick', 'deleteFolder(\''+ current_dir + '/' + key+'\', \'R\')');
                 buttonOnclick.textContent = 'Delete';
                 listButton.append(buttonOnclick);
                 newItem.append(listButton);
@@ -204,13 +204,13 @@ function rightList() {
                 var buttonOnclick = document.createElement('button');
                 buttonOnclick.type = 'button';
                 buttonOnclick.className = 'btn btn-success btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'downloadFile(\''+ current_dir + '\\\\' + key+'\')');
+                buttonOnclick.setAttribute('onclick', 'downloadFile(\''+ current_dir + '/' + key+'\')');
                 buttonOnclick.textContent = 'Download';
                 listButton.append(buttonOnclick);
                 var buttonOnclick = document.createElement('button');
                 buttonOnclick.type = 'button';
                 buttonOnclick.className = 'btn btn-danger btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'deleteFile(\''+ current_dir + '\\\\' + key+'\')');
+                buttonOnclick.setAttribute('onclick', 'deleteFile(\''+ current_dir + '/' + key+'\')');
                 buttonOnclick.textContent = 'Delete';
                 listButton.append(buttonOnclick);
                 newItem.append(listButton);

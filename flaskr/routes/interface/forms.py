@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, MultipleFileField, FileRequired, FileAllowed
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Email, Length, ValidationError, Optional, InputRequired
 from flaskr.models import User
@@ -49,7 +49,7 @@ class ModelForm(FlaskForm):
                            id="field_file_input",
                            description='Choose a input file',
                            validators=[FileRequired(), FileAllowed(['csv'], 'Only one CVS file')])
-    files_output = MultipleFileField(label='Model expected outputs:',
+    files_output = FileField(label='Model expected outputs:',
                                      id="field_files_output",
                                      description='Choose multiple expected output',
                                      validators=[FileRequired(), FileAllowed(['csv'], 'Only CVS files')])

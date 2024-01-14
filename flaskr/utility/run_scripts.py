@@ -1,11 +1,10 @@
 import subprocess
-import asyncio
 
 class GenerateRegressionModel:
     def __init__(self, upload_Path: str, result_path_TMP: str) -> None:
         self.command = [
             'python',
-            r'.\script\regression\models_creator.py',
+            './script/regression/models_creator.py',
             upload_Path,
             result_path_TMP
         ]
@@ -24,7 +23,10 @@ class GenerateRegressionModel:
 
     def run_script(self):
         try:
-            result = subprocess.run(self.command, capture_output=True, text=True)
+            result = subprocess.run(self.command,
+                                    stdout = subprocess.PIPE,
+                                    stderr = subprocess.PIPE,
+                                    universal_newlines=True)
 
             if result.returncode == 0:
                 return result.stdout.strip()
@@ -41,17 +43,10 @@ class DeleteFileTimer:
         # IT IS IN SECONDS
         self.time = 15
         #command must be in a single string
-        self.command = 'python' + \
-            r' .\script\utility\delete_file_timer.py' + \
-            ' -file \"' + path_file_to_delete + '\"' + \
-            ' -time ' + str(self.time)
-        asyncio.run(self.run_command())
-
-    async def run_command(self):
-        #print('ok')
-        process = await asyncio.create_subprocess_shell(self.command)
-        #print(f'subprocess: {process}')
-        
-    def run_script(self):
-        return
+        self.command = ['python',
+            './script/utility/delete_file_timer.py',
+            '-file', path_file_to_delete,
+            '-time', str(self.time)]
+        #print(self.command)
+        subprocess.Popen(self.command)
 

@@ -91,7 +91,7 @@ class FileSystem:
         return os.path.join(self.get_path_user(id), self.dir_name_tmp_model)
 
 
-    def get_visible_directory(self, id: int) -> list[str]:
+    def get_visible_directory(self, id: int):
         path = self.get_path_user(id)
         directory = [folder for folder in os.listdir(path)
                     if os.path.isdir(os.path.join(path, folder))
@@ -124,7 +124,7 @@ class FileSystem:
         return initial_filename + "-" + secure_filename(dir)
 
 
-    def check_files_extension(self, file1, files) -> str|None :
+    def check_files_extension(self, file1, files):
         extension1 = os.path.splitext(file1.filename)[1]
         if extension1 not in self.allowed_extensions:
             return 'Input file not CSV file'
@@ -145,7 +145,7 @@ class FileSystem:
         self._save_a_file(file, self.get_path_upload(id), self.input_file)
 
 
-    def save_all_uploaded_output(self, files: list[FileStorage], id: int) -> None:
+    def save_all_uploaded_output(self, files, id: int) -> None:
         i = 1
         for file2 in files:
             self._save_a_file(file2,

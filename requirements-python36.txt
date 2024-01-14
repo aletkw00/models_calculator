@@ -10,6 +10,7 @@ Flask-Login==0.5.0
 Flask-SQLAlchemy==2.5.1
 Flask-WTF==1.0.1
 greenlet==2.0.2
+gunicorn==21.2.0
 idna==3.6
 importlib-metadata==4.8.3
 ipaddress==1.0.23
@@ -17,10 +18,13 @@ itsdangerous==2.0.1
 Jinja2==3.0.3
 MarkupSafe==2.0.1
 numpy==1.19.5
+packaging==21.3
 paho-mqtt==1.6.1
 pandas==1.1.5
 patsy==0.5.6
+pkg-resources==0.0.0
 pycparser==2.21
+pyparsing==3.1.1
 python-dateutil==2.8.2
 pytz==2023.3.post1
 scipy==1.5.4

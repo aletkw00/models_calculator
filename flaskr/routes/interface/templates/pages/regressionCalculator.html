@@ -4,13 +4,13 @@
 <link
 rel="stylesheet"
 type="text/css"
-href="{{ url_for('interface_bp.static', filename='css/regressionCalculator.css') }}"
+href="{{ url_for('interface_bp.static', filename='interface/css/regressionCalculator.css') }}"
 />  
 {% endblock css %}
 
 {% block scripts %}
 <script 
-    src="{{ url_for('interface_bp.static', filename='javascript/regressionCalculator.js')}}" 
+    src="{{ url_for('interface_bp.static', filename='interface/javascript/regressionCalculator.js')}}" 
     type="text/javascript">
 </script>
 {% endblock scripts %}
@@ -79,7 +79,7 @@ href="{{ url_for('interface_bp.static', filename='css/regressionCalculator.css')
                         {{ form.files_output.label(class="form-control-label text-bold")}}
                         <div id="container_field_files_output" class="custom-file">
                             {% if form.files_output.errors %}
-                                {{ form.files_output(class="custom-file-input form-control is-invalid", onchange="updateFilesOutput()") }}
+                                {{ form.files_output(multiple="", class="custom-file-input form-control is-invalid", onchange="updateFilesOutput()") }}
                                 <label id="label_field_files_output" class="custom-file-label fit-content" for="files_output">{{form.files_output.description}}</label>
                                 <div class="invalid-feedback">
                                     {% for error in form.files_output.errors %}
@@ -87,7 +87,7 @@ href="{{ url_for('interface_bp.static', filename='css/regressionCalculator.css')
                                     {% endfor %}
                                     </div>
                             {% else %}
-                                {{ form.files_output(class="custom-file-input form-control", onchange="updateFilesOutput()") }}
+                                {{ form.files_output(multiple="", class="custom-file-input form-control", onchange="updateFilesOutput()") }}
                                 <label id="label_field_files_output" class="custom-file-label fit-content" for="files_output">{{form.files_output.description}}</label>
                             {% endif %}
                         </div>
