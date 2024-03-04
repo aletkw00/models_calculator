@@ -1,0 +1,92 @@
+%! Author = Gianni
+%! Date = 17/10/2023
+
+
+\chapter{Configurazioni broker MQTT}
+\label{ch:broker-configurazioni-broker-mqtt}
+
+\section{/mosquitto.conf}
+\label{sec:/mosquitto.conf}
+Questa configurazione è quella che mosquitto dovrebbe creare al momento dell'installazione.
+Se non è presente potrebbe non funzionare.\newline
+Il seguente file deve essere inserito in \textbf{/etc/mosquitto}.
+\begin{lstlisting}[caption={mosquitto.conf},language=text]
+# Place your local configuration in /etc/mosquitto/conf.d/
+#
+# A full description of the configuration file is at
+# /usr/share/doc/mosquitto/examples/mosquitto.conf.example
+
+pid_file /var/run/mosquitto.pid
+
+persistence true
+persistence_location /var/lib/mosquitto/
+
+log_dest file /var/log/mosquitto/mosquitto.log
+
+include_dir /etc/mosquitto/conf.d
+\end{lstlisting}
+
+\section{/conf.d/localhost-TLS.config}
+\label{sec:/conf.d/localhost-tls.config}
+Questa configurazione è quella creata ad hoc.
+Ha 2 listener separati, uno per localhost con accesso libero, uno per tutti con accesso tramite
+credenziali e connessione tramite SSL/TLS.\newline
+Il seguente file deve essere inserito in \textbf{/etc/mosquitto/conf.d}.
+\begin{lstlisting}[caption={mosquitto.conf},language=text]
+# abilita differenti configurazioni per listener
+per_listener_settings true
+#
+# per accesso solo locale e libero
+listener 1883 localhost
+allow_anonymous true
+#
+# per accesso con credenziali e certificato SSL/TLS
+listener 8883
+allow_anonymous false
+password_file /etc/mosquitto/passwordfile
+certfile /etc/mosquitto/certs/fullchain.pem
+keyfile /etc/mosquitto/certs/privkey.pem
+\end{lstlisting}
+
+\section{Script rinnovo certificati}
+\label{sec:script-rinnovo-certificati}
+Questo script deve essere messo nella cartella /etc/letsencrypt/renewal-hooks/deploy/ e reso eseguibile.
+Copia i certificati del dominio inserito nella cartella /etc/mosquitto/certs/ in modo che Mosquitto possa accedervi.
+Quando copia, invia a Mosquitto un segnale per ricaricare i certificati.
+\begin{lstlisting}[caption={mosquitto-copy.sh},language=text]
+#!/bin/sh
+
+# This is an example deploy renewal hook for certbot that copies newly updated
+# certificates to the Mosquitto certificates directory and sets the ownership
+# and permissions so only the mosquitto user can access them, then signals
+# Mosquitto to reload certificates.
+
+# RENEWED_DOMAINS will match the domains being renewed for that certificate, so
+# may be just "example.com", or multiple domains "www.example.com example.com"
+# depending on your certificate.
+
+# Place this script in /etc/letsencrypt/renewal-hooks/deploy/ and make it
+# executable after editing it to your needs.
+
+# Set which domain this script will be run for
+MY_DOMAIN=example.com
+# Set the directory that the certificates will be copied to.
+CERTIFICATE_DIR=/etc/mosquitto/certs
+
+for D in ${RENEWED_DOMAINS}; do
+	if [ "${D}" = "${MY_DOMAIN}" ]; then
+		# Copy new certificate to Mosquitto directory
+		cp ${RENEWED_LINEAGE}/fullchain.pem ${CERTIFICATE_DIR}/server.pem
+		cp ${RENEWED_LINEAGE}/privkey.pem ${CERTIFICATE_DIR}/server.key
+
+		# Set ownership to Mosquitto
+		chown mosquitto: ${CERTIFICATE_DIR}/server.pem ${CERTIFICATE_DIR}/server.key
+
+		# Ensure permissions are restrictive
+		chmod 0600 ${CERTIFICATE_DIR}/server.pem ${CERTIFICATE_DIR}/server.key
+
+		# Tell Mosquitto to reload certificates and configuration
+		pkill -HUP -x mosquitto
+	fi
+done
+\end{lstlisting}

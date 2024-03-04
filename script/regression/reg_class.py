@@ -1,7 +1,8 @@
-import json
 import pandas as pd
 import numpy as np
+import json
 import statsmodels.api as sm
+
 from utils import get_time
 
 class RegressionModel:

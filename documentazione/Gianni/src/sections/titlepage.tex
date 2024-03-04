@@ -1,0 +1,54 @@
+%! Author = Gianni
+%! Date = 12/12/2023
+
+\begin{titlepage}
+
+    \centering
+    {\scshape\LARGE Università degli Studi di Verona \par}
+    \vspace{1.5cm}
+    \textsc{\Large Dipartimento di informatica}\\[0.5cm]
+    \textsc{\large Laurea Triennale - Informatica}\\[0.5cm]
+    \vspace{1.5cm}
+
+    \rule{\linewidth}{0.35 mm} \\[0.4 cm]
+    {\huge \bfseries \reportitle \par} \
+    \rule{\linewidth}{0.35 mm} \\[1.5 cm]
+    \vspace{1cm}
+
+    \ifthenelse{\boolean{isThesis}}
+    {
+    \begin{minipage}{0.5\textwidth}
+        \begin{flushleft}
+            \large
+            \textit{Autore:}\\
+            Gianni \textsc{Donadon}\\
+            \textit{Matricola:}\\
+            VR437200
+        \end{flushleft}
+    \end{minipage}
+    ~
+    \begin{minipage}{0.4\textwidth}
+        \begin{flushright}
+            \large
+            \textit{Relatore:}\\
+            Davide \textsc{Quaglia}\\
+            \textit{Co-Relatore:}\\
+            Elia \textsc{Brentarolli}
+        \end{flushright}
+    \end{minipage}
+    }{
+    \begin{minipage}{1\textwidth}
+        \begin{flushleft}
+            \large
+            \textit{Autore:}\\
+            Gianni \textsc{Donadon}\\
+            \textit{Matricola:}\\
+            VR437200
+        \end{flushleft}
+    \end{minipage}
+    }
+
+    \vfill\vfill\vfill
+    {\large Anno accademico 2022-2023 \par}
+
+\end{titlepage}

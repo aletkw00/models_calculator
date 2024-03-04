@@ -1,0 +1,144 @@
+%! Author = Gianni
+%! Date = 17/10/2023
+
+
+\chapter{Configurazioni Home Assistant}
+\label{ch:hass-appendix}
+
+
+\section{Definizioni di sensori MQTT}
+\label{sec:hass-appendix-sensori}
+Qui sono riportate le definizioni di sensori MQTT 
+usate nel file configuration.yaml.
+
+\subsection*{Sensore con valore semplice}
+\label{sec:hass-appendix-sensori-normali}
+La configurazione di un sensore con valore numerico intero. 
+\begin{lstlisting}[language=bash]
+    - name: Serra reale Temperatura Aria
+      state_topic: sensori
+      unique_id: sensor.reali.serraAirTemperature
+      unit_of_measurement: "°C"
+      value_template: >
+        {% if value_json.Temp__C | is_number %}
+          {{ value_json.Temp__C }}
+        {% else %}
+          {{ sensor.reali.serraAirTemperature }}
+        {% endif %}
+\end{lstlisting}
+
+
+\subsection*{Sensore con valore arrotondato}
+\label{sec:hass-appendix-sensori-float}
+La configurazione di un sensore con valore numerico con la virgola 
+che viene arrotondato alla seconda cifra decimale.
+\begin{lstlisting}[language=bash]
+    - name: Serra stima RL Temperatura 1
+      state_topic: sensori/modelliRL
+      unique_id: sensor.PredRL.serraTemperatura_1
+      unit_of_measurement: "°C"
+      value_template: >
+        {% if value_json.RL_1 | is_number %}
+          {{ value_json.RL_1 | float | round(2) }}
+        {% else %}
+          {{ sensor.PredRL.serraTemperatura_1 }}
+        {% endif %}
+\end{lstlisting}
+
+
+\section{Definizioni di cards}
+\label{sec:hass-appendix-plancia}
+Di seguito viene riportato il codice usato per la creazione
+delle card nell'interfaccia grafica.
+
+\subsection*{Card per le entità}
+\label{sec:hass-appendix-plancia-entità}
+Permette di mostrare il nome e il valore del sensore.
+\begin{lstlisting}[language=bash]
+    - type: entities
+      title: Temperatura
+      entities:
+        - entity: sensor.serra_reale_temperatura_aria
+          name: Temperatura Aria
+        - entity: sensor.serra_reale_massima_temperatura_aria
+          name: Temperatura Aria massima
+        - entity: sensor.serra_reale_minima_temperatura_aria
+          name: Temperatura Aria minima    
+\end{lstlisting}
+
+\subsection*{Card per immagini-elementi}
+\label{sec:hass-appendix-plancia-pic-ele}
+Permette di mostrare un'immagine con sopra dei badge 
+che contengono i valori dei sensori.
+\begin{lstlisting}[language=bash]
+    - type: picture-elements
+      title: Stime RL
+      image: http://mydomain.it:8123/local/Mappa_new.png
+      elements:
+        - type: state-badge
+          entity: sensor.serra_stima_rl_temperatura_1
+          style:
+            top: 28%
+            left: 37%
+            scale: 95%
+            color: rgba(0,0,0,0)
+        - type: state-badge
+          entity: sensor.serra_stima_rl_temperatura_3
+          style:
+            top: 50%
+            left: 37%
+            scale: 95%
+            color: rgba(0,0,0,0)
+        - type: state-badge
+          entity: sensor.serra_stima_rl_temperatura_5
+          style:
+            top: 74%
+            left: 37%
+            scale: 95%
+            color: rgba(0,0,0,0)
+        - type: state-badge
+          entity: sensor.serra_stima_rl_temperatura_7
+          style:
+            top: 95%
+            left: 37%
+            scale: 95%
+            color: rgba(0,0,0,0)
+        - type: state-badge
+          entity: sensor.serra_stima_rl_temperatura_2
+          style:
+            top: 28%
+            left: 62%
+            scale: 95%
+            color: rgba(0,0,0,0)
+        - type: state-badge
+          entity: sensor.serra_stima_rl_temperatura_4
+          style:
+            top: 50%
+            left: 62%
+            scale: 95%
+            color: rgba(0,0,0,0)
+        - type: state-badge
+          entity: sensor.serra_stima_rl_temperatura_6
+          style:
+            top: 74%
+            left: 62%
+            scale: 95%
+            color: rgba(0,0,0,0)
+        - type: state-badge
+          entity: sensor.serra_stima_rl_temperatura_8
+          style:
+            top: 95%
+            left: 62%
+            scale: 95%
+            color: rgba(0,0,0,0)
+\end{lstlisting}
+
+\subsection*{Card per iframe}
+\label{sec:hass-appendix-plancia-iframe}
+Permette di mostrare una pagina web all'interno di un elemento.
+È stato usato per inserire i grafici di Grafana.
+\begin{lstlisting}[language=bash]
+    - type: iframe
+      url: >- url_to_web_page_to_embed
+      aspect_ratio: 40% 
+\end{lstlisting}

@@ -24,7 +24,7 @@ href="{{ url_for('interface_bp.static', filename='interface/css/regressionCalcul
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                    <div class="alert alert-{{ category }} alert-dismissible fade in show">
                         {{ message }}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -56,7 +56,17 @@ href="{{ url_for('interface_bp.static', filename='interface/css/regressionCalcul
                             </div>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        {{ form.modelname.label(class="form-control-label text-bold")}}
+                        <label class="form-control-label text-a-bit-bold" for="modelname">{{form.modelname.description}}</label>
+                        {{ form.modelname(placeholder="Type the name of result file", class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <div class="form-control-label text-a-bit-bold">Supported input date:</div>
+                        <div class="form-control-label text-a-bit-bold">- 18/12/2000 10:15:00</div>
+                        <div class="form-control-label text-a-bit-bold">- 2000-12-20 10:15:00</div>
+                        <div class="form-control-label text-a-bit-bold">- 2000_12_20_10_1 </div>
+                    </div>
                     <div class="form-group">
                         {{ form.file_input.label(class="form-control-label text-bold")}}                     
                         <div class="custom-file">
@@ -112,22 +122,17 @@ href="{{ url_for('interface_bp.static', filename='interface/css/regressionCalcul
                         </div>
                     </div>
                     <div class="form-group">
-                        {{ form.modelname.label(class="form-control-label text-bold")}}
-                        <label class="form-control-label text-a-bit-bold" for="modelname">{{form.modelname.description}}</label>
-                        {{ form.modelname(placeholder="Type the name of result file", class="form-control") }}
-                    </div>
-                    <div class="form-group">
                         {{ form.test.label(class="form-control-label text-bold")}}
                         {{ form.test() }}
                     </div>
                     <div class="form-group">
-                        {{ form.submit(class="btn btn-primary", onclick="showProcessing()") }}
+                        {{ form.submit(class="btn btn-primary", onclick="showUploading()") }}
                     </div>
                 </form>
             </div>
         </div>
         <div class="col-md-6 border border-secondary rounded">
-            <h1>Result</h1>            
+            <h1>Phases</h1>
             <!--                
             <button type="button" name="age" id="age" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-secondary">Broker Config</button>
             <div id="add_data_Modal" class="modal fade">
@@ -157,21 +162,36 @@ href="{{ url_for('interface_bp.static', filename='interface/css/regressionCalcul
                 </div>
             </div>
             -->
-            <div id="before_result">
-                <br>
-                <br>
-                <br>
-                <h3>Started processing.</h3>
-                <h3>This may take some minutes.</h3>
+            <div id="before_result_uploading" style="display: flex;">
+                <h3 style="padding-right: 5px;">Phase 1 - Checking settings.</h3>
+                <h3 id="before_result_uploading_error" style="color: red;display: none;">Error</h3>
+                <h3 id="before_result_uploading_ok" style="color: green;display: none;">OK</h3>
             </div>
-            <div id="result_real">              
-                <div>
-                    <textarea name="result" id="result_regression" cols="40" rows="8">{{ string }}</textarea>
-                </div> <!-- New div to display the generated string --> 
-                <br>
-                <h4 id="text_result"></h4>  
+            <div style="display: none;">
+                <div id="process_phase">{{phase}}</div>
+                <div id="process_data_window">{{data_window}}</div>
+                <div id="process_data_test">{{data_test}}</div>
+            </div>
+            <div id="before_result_processing" style="border-top-style: solid;border-width: 1px;">
+                <h3 style="padding-right: 5px;">Phase 2 - Start processing. This may take some minutes.</h3>
+                <div style="display: flex;">
+                    <h3>Processing time:</h3>
+                    <div class="timer h3">
+                        <span class="hour">00</span>h <span class="minute">00</span>m <span class="second">00</span>s
+                    </div>
+                </div>
+                <div id="before_result_processing_bar" class="progress" style="position: relative;">
+                    <div class="progress-bar progress-bar-striped indeterminate">
+                </div>                
+            </div>
+            <div id="result_body" style="border-top-style: solid;border-width: 1px;">
+                <h3 style="padding-right: 5px;">Phase 3 - Result.</h3>         
+                <div id="result_body_output_body">
+                    <textarea name="result" id="result_body_output" cols="34" rows="8" style="resize: both;"></textarea>
+                </div>
+                <h4 id="result_body_message"></h4>  
                 <br>   
-                <div id="buttons_result">
+                <div id="result_body_buttons">
                     <a class="btn btn-info" href="{{ url_for('interface_bp.file_manager') }}">Go to file manager to download or delete</a>
                     <!--
                     <button type="button" id="actionButton" onclick="handleAction('save', event)" class="btn btn-success">Save</button>

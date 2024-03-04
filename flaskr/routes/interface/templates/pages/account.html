@@ -22,6 +22,11 @@ href="{{ url_for('interface_bp.static', filename='interface/css/account.css') }}
     </div>
     <div class="row justify-content-md-center">
         <div class="col-md-6">
+            <h3>You can edit only your email or password or both. Is show the current email, but not password for security reasons.</h3>
+        </div>    
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-6">
             <div>
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}

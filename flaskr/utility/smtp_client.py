@@ -1,13 +1,15 @@
 
 from smtplib import SMTP, SMTP_SSL
 from email.message import EmailMessage
-from file_system import read_a_file_byte
+from flaskr.utility.file_system import read_a_file_byte
 
+from flaskr import app
 
 """
 # ONLY FOR TEST
 import os
 import smtp_server
+from file_system import read_a_file_byte
 
 def read_a_file_byte(path, name_file):
     with open(file=os.path.join(path, name_file), mode='rb') as f:
@@ -20,10 +22,11 @@ def read_a_file_byte(path, name_file):
 class email_Sender():
 
     def __init__(self) -> None:
-        self.hostname = 'mail.email.ma'
-        self.port = 465
-        self.sender = 'mail@email.ma'
-        self.password = 'password'
+        self.hostname = app.config['MAIL_SERVER']
+        self.port = app.config['MAIL_PORT']
+        self.tls = app.config['MAIL_USE_TLS']
+        self.username = app.config['MAIL_USERNAME']
+        self.password = app.config['MAIL_PASSWORD']
         self.charset = 'utf-8'
         self.contentPlain = 'text/plain'
         self.contentHtml = 'text/html'
@@ -41,7 +44,7 @@ class email_Sender():
 
         self.msg = EmailMessage()
         self.msg.set_charset(self.charset)
-        self.msg.add_header("From", self.sender)
+        self.msg.add_header("From", self.username)
         self.msg.add_header("To", dest)
         self.recipient = dest
         self.msg.add_header("Subject", subj)
@@ -65,9 +68,9 @@ class email_Sender():
         #
         client = SMTP_SSL(self.hostname, self.port)
         #client.set_debuglevel(True) # show communication with the server
-        client.login(self.sender, self.password)
+        client.login(self.username, self.password)
         try:
-            client.sendmail(self.sender, self.recipient, self.msg.as_string().encode("utf-8"))
+            client.sendmail(self.username, self.recipient, self.msg.as_string().encode("utf-8"))
         finally:
             client.quit()
 

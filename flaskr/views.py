@@ -29,7 +29,8 @@ file_system = FileSystem()
 blueprint name: root_errors_bp
 for routes:
 /
-404 (all app)
+/favicon.ico
+404, 403, 500 (all app and /api)
 """
 app.register_blueprint(root_errors_bp)
 
@@ -37,8 +38,10 @@ app.register_blueprint(root_errors_bp)
 """
 blueprint name: access_bp
 for routes:
+/logout
 /login
 /register
+/recover_password
 """
 app.register_blueprint(access_bp)
 
@@ -46,17 +49,23 @@ app.register_blueprint(access_bp)
 """
 blueprint name: interface_bp
 for routes:
-/logout
-/models_creator
+/dashboard
+/account
+/file_manager
+/regression_calculator
+/about
 """
 app.register_blueprint(interface_bp)
 
 
 """
 blueprint name: api_bp
-for routes with /api:
-/delete
-/saving
+for routes:
+/api/file_manager/getlist
+/api/file_manager/get
+/api/file_manager/delete
+/api/file_manager/rename
+/api/regression_calculator/run
 """
 app.register_blueprint(api_bp, url_prefix='/api')
 

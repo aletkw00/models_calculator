@@ -26,16 +26,39 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.cs
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" id="confirmation_body">
+        <div class="modal-body confirmation_body" id="confirmation_body">
+            <div id="confirmation_body_text1"></div>
+            <div id="confirmation_body_text2" style="display: block;"></div>
+            <input id="confirmation_body_input" type="text">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" id="confirmation_no" data-dismiss="modal"></button>
-          <button type="button" class="btn btn-primary" id="confirmation_ok" data-dismiss="modal"></button>
+          <button type="button" class="btn btn-danger" id="confirmation_ok" data-dismiss="modal"></button>
+          <button type="button" class="btn btn-primary" id="confirmation_no" data-dismiss="modal"></button>
         </div>
       </div>
     </div>
-  </div>
+</div>
 
+<div class="modal fade" id="confirmation2" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmation2_title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body confirmation_body" id="confirmation2_body">
+            <div id="confirmation2_body_text1"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="confirmation2_ok" data-dismiss="modal"></button>
+          <button type="button" class="btn btn-primary" id="confirmation2_no" data-dismiss="modal"></button>
+        </div>
+      </div>
+    </div>
+</div>
+    
 <div class="container">
     <div class="row text-center my-4 mytitle" >
         <h1>File Manager</h1>
@@ -53,7 +76,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.cs
             <div id="right-top">
                 <li class="list-group-item">
                     <div class="right-top-text">
-                        <h4>Current folder: </h4>
+                        <h4>Current folder: /</h4>
                         <h4 id="current_dir_text"></h4>
                     </div>
                     <button id="button_download_folder" type="button" class="btn btn-secondary btn-sm list-button" >Download all this content</button>                        

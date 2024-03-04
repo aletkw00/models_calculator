@@ -1,10 +1,16 @@
 import subprocess
 
+#python = 'python' # locale con Visual Studio code
+python = '/home/donadon/web-server-flask/venv/bin/python3' # nel server
+
+path_RL_models_creator = './script/regression/models_creator.py'
+path_delete_file_timer = './script/utility/delete_file_timer.py'
+
 class GenerateRegressionModel:
     def __init__(self, upload_Path: str, result_path_TMP: str) -> None:
         self.command = [
-            'python',
-            './script/regression/models_creator.py',
+            python,
+            path_RL_models_creator,
             upload_Path,
             result_path_TMP
         ]
@@ -43,8 +49,8 @@ class DeleteFileTimer:
         # IT IS IN SECONDS
         self.time = 15
         #command must be in a single string
-        self.command = ['python',
-            './script/utility/delete_file_timer.py',
+        self.command = [python,
+            path_delete_file_timer,
             '-file', path_file_to_delete,
             '-time', str(self.time)]
         #print(self.command)

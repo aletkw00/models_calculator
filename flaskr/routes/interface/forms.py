@@ -41,29 +41,30 @@ class AccountForm(FlaskForm):
 
 
 class ModelForm(FlaskForm):
-    model_dir = StringField(label='Model Directory:',
+    model_dir = StringField(label='Model Output Directory:',
                             id="field_model_dir",
                             description='Type a new folder name or select an existing folder',
                             validators=[DataRequired(), Length(max=20)])
     file_input = FileField(label='Model input:',
                            id="field_file_input",
-                           description='Choose a input file',
+                           description='Choose a CSV input file',
                            validators=[FileRequired(), FileAllowed(['csv'], 'Only one CVS file')])
     files_output = FileField(label='Model expected outputs:',
                                      id="field_files_output",
-                                     description='Choose multiple expected output',
+                                     description='Choose multiple CSV for expected output',
                                      validators=[FileRequired(), FileAllowed(['csv'], 'Only CVS files')])
     window = IntegerField(label='Window:',
                           id="field_window",
                           description='Enter a integer value from 0',
                           validators=[Optional()])
-    modelname = StringField(label='Model Name:',
+    modelname = StringField(label='Model Result Name:',
                             id="field_model_name",
                             description='Before the name there is always current year_month_day_hour_min_sec',
                             validators=[InputRequired(), Length(max=20)])
     test = BooleanField(label='Test:',
                         id="field_test",
-                        validators=[Optional()])
+                        validators=[Optional()],
+                        default=False)
     submit = SubmitField(label='Run Script',
                          id="submit_button")
 

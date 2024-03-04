@@ -1,0 +1,62 @@
+%! Author = Gianni
+%! Date = 17/10/2023
+
+% Preamble
+\documentclass[a4paper,12pt]{report}
+
+% Packages
+\usepackage[italian]{babel}
+\usepackage[left=3cm,right=3cm,top=2.3cm,bottom=3.5cm]{geometry}
+\usepackage{listings, lstautogobble}
+\usepackage{xcolor}
+\usepackage{dirtree}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ifthen}
+
+\usepackage{breakurl}
+\def\UrlBreaks{\do\/\do-}
+
+\input{preambre-definitions.tex}
+
+\newboolean{isThesis}
+\setboolean{isThesis}{true}
+
+%Document
+\begin{document}
+
+\reportitle{Sviluppo di un'architettura in cloud per la virtualizzazione di sensori e modelli di crescita in agricoltura}
+
+\include{sections/titlepage}
+
+\mytoc
+
+\include{sections/introduction}
+
+\include{sections/chapter1}
+
+\include{sections/chapter2}
+
+\include{sections/chapter3}
+
+\include{sections/chapter4}
+
+\include{sections/chapter5}
+
+\include{sections/conclusion}
+
+\appendix
+
+\include{sections/appendix2}
+
+\include{sections/appendix3}
+
+\include{sections/appendix5}
+
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+\end{document}

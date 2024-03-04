@@ -6,4 +6,17 @@ window.onload = function f(){
     }else{
         $("#button_dashboard").show();
     }
+    //alert_autodismiss();
+}
+
+function alert_autodismiss(){
+    let alert_list = document.querySelectorAll('.alert')
+    alert_list.forEach(function(alert) {
+        new bootstrap.Alert(alert);
+
+        let alert_timeout = 5000;
+        setTimeout(() => {
+            bootstrap.Alert.getInstance(alert).close();
+        }, +alert_timeout);
+    });
 }

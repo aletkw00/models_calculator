@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 
 from reg import make_regression
 from utils import alligned, csv_read
@@ -38,6 +38,9 @@ def get_models(csvDir, finalModelsDir, test=False, window=0, name=DEFAULT_MODEL_
 
     output = csv_read(output_files)
     inp = csv_read(os.path.join(csvDir,INPUT_FILE))
+    if inp is None:
+        raise Exception("RottoTuttoException: "+os.path.join(csvDir,INPUT_FILE))
+    
     index = 1
     
     for out in output:  
@@ -47,33 +50,37 @@ def get_models(csvDir, finalModelsDir, test=False, window=0, name=DEFAULT_MODEL_
         index+=1
 
 
+def def_parser_args():
+    parser = argparse.ArgumentParser(description='Calculate models')
+    parser.add_argument('csvDir', type=str,
+                        help='directory of csv')
+    parser.add_argument('finalModelsDir', type=str,
+                        help='directory of models')
+    parser.add_argument('-t', '--test',
+                        help='devide data files into 80% train and 20% test ')
+    parser.add_argument('-i', '--window', type=int,
+                        help='window of previous timestamps')
+    parser.add_argument('-o', '--name', type=str,
+                        help='output json file name')
+    return parser
 
-parser = argparse.ArgumentParser(description='Calculate models')
-parser.add_argument('csvDir', type=str,
-                    help='directory of csv')
-parser.add_argument('finalModelsDir', type=str,
-                    help='directory of models')
-parser.add_argument('-t', '--test',
-                    help='devide data files into 80% train and 20% test ')
-parser.add_argument('-i', '--window', type=int,
-                    help='window of previous timestamps')
-parser.add_argument('-o', '--name', type=str,
-                    help='output json file name')
 
-args = parser.parse_args()
-if args.test and args.name and args.window:
-    get_models(args.csvDir, args.finalModelsDir, True, args.window, args.name)
-elif args.test and args.window:
-    get_models(args.csvDir, args.finalModelsDir, True, args.window)
-elif args.test and args.name:
-    get_models(args.csvDir, args.finalModelsDir, True, name=args.name)
-elif args.window and args.name:
-    get_models(args.csvDir, args.finalModelsDir, False, args.window, args.name)
-elif args.test:
-    get_models(args.csvDir, args.finalModelsDir, True)
-elif args.name:
-    get_models(args.csvDir, args.finalModelsDir, False, name=args.name)
-elif args.window:
-    get_models(args.csvDir, args.finalModelsDir, False, args.window)
-else:
-    get_models(args.csvDir, args.finalModelsDir)
+if __name__ == "__main__":
+    parser = def_parser_args()
+    ARGS = parser.parse_args()
+    if ARGS.test and ARGS.name and ARGS.window:
+        get_models(ARGS.csvDir, ARGS.finalModelsDir, True, ARGS.window, ARGS.name)
+    elif ARGS.test and ARGS.window:
+        get_models(ARGS.csvDir, ARGS.finalModelsDir, True, ARGS.window)
+    elif ARGS.test and ARGS.name:
+        get_models(ARGS.csvDir, ARGS.finalModelsDir, True, name=ARGS.name)
+    elif ARGS.window and ARGS.name:
+        get_models(ARGS.csvDir, ARGS.finalModelsDir, False, ARGS.window, ARGS.name)
+    elif ARGS.test:
+        get_models(ARGS.csvDir, ARGS.finalModelsDir, True)
+    elif ARGS.name:
+        get_models(ARGS.csvDir, ARGS.finalModelsDir, False, name=ARGS.name)
+    elif ARGS.window:
+        get_models(ARGS.csvDir, ARGS.finalModelsDir, False, ARGS.window)
+    else:
+        get_models(ARGS.csvDir, ARGS.finalModelsDir)

@@ -8,14 +8,33 @@ let current_dir = null;
 let previus_dir = null;
 let left_list = null;
 let right_list = null;
+let new_input_name = '';
 
-window.onload = function f(){start()}
+window.onload = function f(){
+    start();
+    modal_confimation();
+}
 
 function start(){
     getList('', 'START');
     $("#button_main").hide();    
     $("#select_folder").show();
     $("#button_download_folder").hide(); 
+}
+
+function modal_confimation(){
+    let input = document.getElementById('confirmation_body_input');
+    input.addEventListener('input', (event) =>{
+        //console.log(event);
+        //console.log(input.value);
+        new_input_name = input.value;
+        //console.log(new_input_name);
+        if (new_input_name != ''){
+            $("#confirmation_ok").prop('disabled', false);
+            return;
+        }
+        $("#confirmation_ok").prop('disabled', true);
+    });
 }
 
 function leftDirClick(dir) {
@@ -41,27 +60,83 @@ function downloadFile(dir){
     download(dir,false);
 }
 
+function message(text){
+    $("#confirmation2_title").html('Information');
+    $("#confirmation2_body_text1").html(text);
+    $("#confirmation2_ok").html('Yes');
+    $("#confirmation2_ok").off();
+    $("#confirmation2_ok").hide();
+    $("#confirmation2_no").html('Close');
+    $('#confirmation2').modal('show');
+}
+
+function renameFolder(dir, list){
+    let folderName = dir.split('/').pop();
+    let input = document.getElementById('confirmation_body_input');
+    input.value = '';
+    input.placeholder = folderName;
+    $("#confirmation_title").html('Rename confirmation');
+    $("#confirmation_body_text1").html('Current folder name: "' + folderName + '".');
+    $("#confirmation_body_text2").html('Type the new folder name.');
+    $("#confirmation_body_text2").show();
+    $("#confirmation_body_input").show();
+    $("#confirmation_ok").html('Yes');
+    $("#confirmation_ok").off();
+    $("#confirmation_ok").prop('disabled', true);
+    $("#confirmation_ok").on("click", function (){
+        rename_fun(dir, new_input_name, true, list)
+    });
+    $("#confirmation_no").html('No - I keep it');
+    $('#confirmation').modal('show');
+}
+
+function renameFile(dir){
+    let fileName = dir.split('/').pop();
+    let input = document.getElementById('confirmation_body_input');
+    input.value = '';
+    input.placeholder = fileName;
+    $("#confirmation_title").html('Rename confirmation');
+    $("#confirmation_body_text1").html('Current file name: "' + fileName + '".');
+    $("#confirmation_body_text2").html('Type the new file name. (Keep same file extension)');
+    $("#confirmation_body_text2").show();
+    $("#confirmation_body_input").show();
+    $("#confirmation_ok").html('Yes');
+    $("#confirmation_ok").off();
+    $("#confirmation_ok").prop('disabled', true);
+    $("#confirmation_ok").on("click", function (){
+        rename_fun(dir, new_input_name, false)
+    });
+    $("#confirmation_no").html('No - I keep it');
+    $('#confirmation').modal('show');
+}
+
 function deleteFolder(dir, list){
     $("#confirmation_title").html('Delete confirmation');
-    $("#confirmation_body").html('Are you sure to delete "' + dir.split('/').pop() + '" folder and all its content ?');
-    $("#confirmation_no").html('Yes');
-    $("#confirmation_no").off()
-    $("#confirmation_no").on("click", function (){
+    $("#confirmation_body_text1").html('Are you sure to delete "' + dir.split('/').pop() + '" folder and all its content ?');
+    $("#confirmation_body_text2").hide();
+    $("#confirmation_body_input").hide();
+    $("#confirmation_ok").html('Yes');
+    $("#confirmation_ok").off();
+    $("#confirmation_ok").prop('disabled', false);
+    $("#confirmation_ok").on("click", function (){
         delete_fun(dir,true, list)
     });
-    $("#confirmation_ok").html('No - I keep it');
+    $("#confirmation_no").html('No - I keep it');
     $('#confirmation').modal('show');
 }
 
 function deleteFile(dir){
     $("#confirmation_title").html('Delete confirmation');
-    $("#confirmation_body").html('Are you sure to delete "' + dir.split('/').pop() + '" ?');
-    $("#confirmation_no").html('Yes');
-    $("#confirmation_no").off()
-    $("#confirmation_no").on("click", function (){
+    $("#confirmation_body_text1").html('Are you sure to delete "' + dir.split('/').pop() + '" ?');
+    $("#confirmation_body_text2").hide();
+    $("#confirmation_body_input").hide();
+    $("#confirmation_ok").html('Yes');
+    $("#confirmation_ok").off();
+    $("#confirmation_ok").prop('disabled', false);
+    $("#confirmation_ok").on("click", function (){
         delete_fun(dir,false)
     });
-    $("#confirmation_ok").html('No - I keep it');
+    $("#confirmation_no").html('No - I keep it');
     $('#confirmation').modal('show');
 }
 
@@ -113,24 +188,30 @@ function leftList() {
                 newItem.append(iconItem);
                 //second element
                 var listButton = document.createElement('span');
-                var buttonOnclick = document.createElement('button');
-                buttonOnclick.type = 'button';
-                buttonOnclick.className = 'btn btn-secondary btn-sm list-button';
+                var buttonOpenFolder = document.createElement('button');
+                buttonOpenFolder.type = 'button';
+                buttonOpenFolder.className = 'btn btn-info btn-sm list-button';
                 var string_dir;
                 if (current_dir == ''){
                     string_dir = previus_dir + key;
                 }else{
                     string_dir = previus_dir + '//' + key;
                 }
-                buttonOnclick.setAttribute('onclick', 'leftDirClick(\'' + string_dir +'\')');            
-                buttonOnclick.textContent = 'Open';
-                listButton.append(buttonOnclick);
-                var buttonOnclick = document.createElement('button');
-                buttonOnclick.type = 'button';
-                buttonOnclick.className = 'btn btn-danger btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'deleteFolder(\''+ string_dir +'\', \'L\')');
-                buttonOnclick.textContent = 'X';
-                listButton.append(buttonOnclick);
+                buttonOpenFolder.setAttribute('onclick', 'leftDirClick(\'' + string_dir +'\')');            
+                buttonOpenFolder.textContent = 'Open';
+                var buttonRenameFolder = document.createElement('button');
+                buttonRenameFolder.type = 'button';
+                buttonRenameFolder.className = 'btn btn-warning btn-sm list-button';
+                buttonRenameFolder.setAttribute('onclick', 'renameFolder(\''+ string_dir +'\', \'L\')');
+                buttonRenameFolder.textContent = 'Rename';
+                var buttonDeleteFolder = document.createElement('button');
+                buttonDeleteFolder.type = 'button';
+                buttonDeleteFolder.className = 'btn btn-danger btn-sm list-button';
+                buttonDeleteFolder.setAttribute('onclick', 'deleteFolder(\''+ string_dir +'\', \'L\')');
+                buttonDeleteFolder.textContent = 'X';
+                listButton.append(buttonOpenFolder);
+                listButton.append(buttonRenameFolder);
+                listButton.append(buttonDeleteFolder);
                 newItem.append(listButton);
                 DOMleftlist.appendChild(newItem);
             }
@@ -173,24 +254,30 @@ function rightList() {
                 newItem.append(iconItem);
                 //second element
                 var listButton = document.createElement('span');
-                var buttonOnclick = document.createElement('button');
-                buttonOnclick.type = 'button';
-                buttonOnclick.className = 'btn btn-secondary btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'rightDirClick(\''+ current_dir + '/' + key+'\')');
-                buttonOnclick.textContent = 'Open';
-                listButton.append(buttonOnclick);
-                var buttonOnclick = document.createElement('button');
-                buttonOnclick.type = 'button';
-                buttonOnclick.className = 'btn btn-success btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'downloadFolder(\''+ current_dir + '/' + key+'\')');
-                buttonOnclick.textContent = 'Download';
-                listButton.append(buttonOnclick);
-                var buttonOnclick = document.createElement('button');
-                buttonOnclick.type = 'button';
-                buttonOnclick.className = 'btn btn-danger btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'deleteFolder(\''+ current_dir + '/' + key+'\', \'R\')');
-                buttonOnclick.textContent = 'Delete';
-                listButton.append(buttonOnclick);
+                var buttonOpenFolder = document.createElement('button');
+                buttonOpenFolder.type = 'button';
+                buttonOpenFolder.className = 'btn btn-info btn-sm list-button';
+                buttonOpenFolder.setAttribute('onclick', 'rightDirClick(\''+ current_dir + '/' + key+'\')');
+                buttonOpenFolder.textContent = 'Open';
+                var buttonDownloadFolder = document.createElement('button');
+                buttonDownloadFolder.type = 'button';
+                buttonDownloadFolder.className = 'btn btn-success btn-sm list-button';
+                buttonDownloadFolder.setAttribute('onclick', 'downloadFolder(\''+ current_dir + '/' + key+'\')');
+                buttonDownloadFolder.textContent = 'Download';
+                var buttonRenameFolder = document.createElement('button');
+                buttonRenameFolder.type = 'button';
+                buttonRenameFolder.className = 'btn btn-warning btn-sm list-button';
+                buttonRenameFolder.setAttribute('onclick', 'renameFolder(\''+ current_dir + '/' + key+'\', \'R\')');
+                buttonRenameFolder.textContent = 'Rename';
+                var buttonDeleteFolder = document.createElement('button');
+                buttonDeleteFolder.type = 'button';
+                buttonDeleteFolder.className = 'btn btn-danger btn-sm list-button';
+                buttonDeleteFolder.setAttribute('onclick', 'deleteFolder(\''+ current_dir + '/' + key+'\', \'R\')');
+                buttonDeleteFolder.textContent = 'Delete';
+                listButton.append(buttonOpenFolder);
+                listButton.append(buttonDownloadFolder);
+                listButton.append(buttonRenameFolder);
+                listButton.append(buttonDeleteFolder);
                 newItem.append(listButton);
             } else {
                 //if is a file
@@ -201,18 +288,24 @@ function rightList() {
                 newItem.append(iconItem);
                 //second element
                 var listButton = document.createElement('span');
-                var buttonOnclick = document.createElement('button');
-                buttonOnclick.type = 'button';
-                buttonOnclick.className = 'btn btn-success btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'downloadFile(\''+ current_dir + '/' + key+'\')');
-                buttonOnclick.textContent = 'Download';
-                listButton.append(buttonOnclick);
-                var buttonOnclick = document.createElement('button');
-                buttonOnclick.type = 'button';
-                buttonOnclick.className = 'btn btn-danger btn-sm list-button';
-                buttonOnclick.setAttribute('onclick', 'deleteFile(\''+ current_dir + '/' + key+'\')');
-                buttonOnclick.textContent = 'Delete';
-                listButton.append(buttonOnclick);
+                var buttonDownloadFile = document.createElement('button');
+                buttonDownloadFile.type = 'button';
+                buttonDownloadFile.className = 'btn btn-success btn-sm list-button';
+                buttonDownloadFile.setAttribute('onclick', 'downloadFile(\''+ current_dir + '/' + key+'\')');
+                buttonDownloadFile.textContent = 'Download';
+                var buttonRenameFile = document.createElement('button');
+                buttonRenameFile.type = 'button';
+                buttonRenameFile.className = 'btn btn-warning btn-sm list-button';
+                buttonRenameFile.setAttribute('onclick', 'renameFile(\''+ current_dir + '/' + key+'\')');
+                buttonRenameFile.textContent = 'Rename';
+                var buttonDeleteFile = document.createElement('button');
+                buttonDeleteFile.type = 'button';
+                buttonDeleteFile.className = 'btn btn-danger btn-sm list-button';
+                buttonDeleteFile.setAttribute('onclick', 'deleteFile(\''+ current_dir + '/' + key+'\')');
+                buttonDeleteFile.textContent = 'Delete';
+                listButton.append(buttonDownloadFile);
+                listButton.append(buttonRenameFile);
+                listButton.append(buttonDeleteFile);
                 newItem.append(listButton);
             }
             DOMrightlist.appendChild(newItem);
@@ -302,6 +395,40 @@ function download(path, isDir){
     xhr.send(JSON.stringify(payload));
 }
 
+function rename_fun(path, newname, isDir, list){
+    var payload = {
+        oldpath: path,
+        newname: newname,
+        isDir: isDir
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/file_manager/rename', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+        try {
+            var response = JSON.parse(xhr.responseText);
+        } catch (error) {
+            return {'Error': true}
+        }
+        result = Object.keys(response)
+        returnName = response['name']
+        //console.log(result)
+        //console.log(response[result[0]])
+        if (response[result[0]]){
+            if (list == 'L'){
+                previus_dir = '';
+                reloadLeft();
+            }else{
+                reloadRight();
+            }
+            message('Rinominato con ' + newname);
+        };
+    };
+
+    xhr.send(JSON.stringify(payload));
+
+}
 
 function delete_fun(path, isDir, list){
     var payload = {

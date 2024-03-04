@@ -3,10 +3,11 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user
 
 from flaskr.models import User
-from flaskr.routes.access.forms import LoginForm, RegistrationForm
+from flaskr.routes.access.forms import LoginForm, RegistrationForm, RecoverPasswordForm
 from flaskr import db, bcrypt
 
 from flaskr.utility.file_system import FileSystem
+from flaskr.utility.smtp_client import email_Sender
 
 # Defining a blueprint
 access_bp = Blueprint(
@@ -69,3 +70,34 @@ def register():
         flash(f'Account created! Now you are able to log in', 'success')
         return redirect(url_for('access_bp.login'))
     return render_template('pages/register.html', title='Registrazione', form=form)
+
+@access_bp.route('/recover_password', methods=['GET', 'POST'])
+def recover_password(): 
+    if current_user.is_authenticated:
+        return redirect(url_for('interface_bp.dashboard'))
+    """ Create a user account and then create his folder in 'dir_of_models'
+    """
+    form = RecoverPasswordForm()
+    if form.validate_on_submit():
+        user: User = User.query.filter_by(email=form.email.data).first()
+        if user:
+            """
+            DA TROVARE UN MODO PER GENERARE UNA PASSWORD RANDOM
+            AGGIORNARE IL DB CON LA NUOVA PASSWORD
+            hashed_password = bcrypt generate_password_hash(RANDOM PASSWORD).decode('utf-8')
+            
+            DA IMPLEMENTARE cambio nel DB
+            CONTROLLARE LE IMPOSTAZIONI DEL CLIENT PER L'INVIO
+
+            subject = 'Recupero password Flask'
+            body = "La tua nuova password per l'account flask è" + RANDOM PASSWORD
+            isHtml = False
+
+            client = email_Sender()
+            client.create_message(form.email.data,subject,body,isHtml)
+            client.send_email()
+
+            """
+        flash(f'Email sent! Check your mailbox.', 'success')
+        return redirect(url_for('access_bp.login'))
+    return render_template('pages/recover.html', title='Recupero', form=form)

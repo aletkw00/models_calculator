@@ -1,0 +1,524 @@
+%! Author = Gianni
+%! Date = 08/02/2024
+
+\chapter{Client MQTT}
+\label{ch:client-mqtt}
+
+\section{Implementazione nel progetto}
+\label{sec:client-introduzione}
+Ogni componente deve avere un client per comunicare tramite il broker.
+Nel progetto è stata scelta come client la libreria python "paho-mqtt", in quanto viene sviluppata
+dalla fondazione Eclipse, la stessa del broker Mosquitto.
+Inoltre si è deciso di sviluppare i client con il linguaggio di programmazione Python,
+perché è un linguaggio interpretato spesso usato per l'analisi di dati
+e permette di eseguire il debug in modo semplice.
+La seguente guida è stata pensata per sistemi Linux Ubuntu.
+
+\section{Installazione}
+\label{sec:client-installazione}
+
+\subsection{Python}
+\label{subsec:client-installazione-python}
+Per poter procedere è necessario installare Python nel proprio sistema operativo.
+Si consiglia di installare l'ultima versione di Python 3 supportata dal proprio sistema (si veda il sito ufficiale \cite{client-python}).
+L'esecuzione di Python avviene dal terminale dei comandi o tramite script.
+Si noti che, in base a come sono impostate le variabili di ambiente, 
+python può essere eseguito con il nome "python" o "python3".
+In base al sistema operativo in uso è possibile che Python sia già installato.
+Per verificare la versione installata si procede con il seguente comando:
+\begin{lstlisting}[language=bash]
+	python3 -V
+	# oppure
+	# python -V
+\end{lstlisting}
+Se non risulta installato, nei sistemi Ubuntu si procede all'installazione con:
+\begin{lstlisting}[language=bash]
+	sudo apt install python3-pip
+\end{lstlisting}
+Successivamente si consiglia di chiudere e riaprire il terminale per usare le variabili di ambiente aggiornate.
+
+
+\subsection{L'ambiente virtuale}
+\label{subsec:client-installazione-ambiente-virtuale}
+L'uso di un ambiente virtuale (virtual environment) è un aspetto spesso sottovalutato quando si programma in Python.
+Un ambiente virtuale è isolato dall'installazione base di Python 
+e ha una cartella propria in cui si trovano le dipendenze e le configurazioni per l'esecuzione del proprio codice.
+In questo modo si possono avere diverse versioni di una libreria su diversi ambienti che sfruttano la stessa installazione Python.
+Molto spesso la funzionalità dell'ambiente virtuale viene installata insieme a Python,
+dato che dalla versione 3.3 di Python è stata introdotta nel modulo "venv" una versione basilare della libreria "virtualenv".
+Per sfruttare a pieno le funzionalità della virtualizzazione si può installare la libreria "virtualenv" \cite{client-virtualenv},
+ma per questo progetto è più che sufficiente quella integrata in Python.
+Per verificare se la libreria è installata si procede con:
+\begin{lstlisting}[language=bash]
+	python3 -m venv
+\end{lstlisting}
+Se la libreria è già installata viene notificato un errore di mancanza di argomenti; in caso contrario si deve installare con:
+\begin{lstlisting}[language=bash]
+	sudo apt install python3-venv
+\end{lstlisting}
+Una volta terminata l'installazione si può procedere alla creazione di un ambiente, 
+posizionandosi nella cartella in cui lo si vuole generare ed eseguendo: 
+\begin{lstlisting}[language=bash]
+	python3 -m venv venv
+\end{lstlisting}
+L'ultimo parametro è quello che specifica il path in cui verrà creato l'ambiente.
+In questo caso si crea nella cartella corrente un ambiente chiamato "venv".
+Una volta creato, si deve dire a Python di cambiare l'ambiente che sta usando.
+Si procede con l'attivazione:
+\begin{lstlisting}[language=bash]
+	source venv/bin/activate
+\end{lstlisting}
+Questo comando richiama uno script all'interno dell'ambiente e attiva l'ambiente solo nel terminale corrente.
+Da questo punto in poi tutto quello che si esegue modifica solo questo ambiente virtuale.
+Si può procedere con l'installazione delle varie librerie e pacchetti.\newline
+Per disattivare un ambiente e ritornare all'ambiente base di Python si esegue:
+\begin{lstlisting}[language=bash]
+	deactivate
+\end{lstlisting}
+Per eliminare un ambiente è sufficiente eliminare la cartella dell'ambiente virtuale.
+
+\subsection{I requisiti}
+\label{subsec:client-installazione-requisiti}
+Spesso nei progetti Python si ha a disposizione un file denominato "requirements" (requisiti), 
+in cui è presente la lista delle librerie e la versione usata dal progetto.
+Per l'installazione dei requisiti si esegue:
+\begin{lstlisting}[language=bash]
+	python3 -m pip install -r requirements.txt
+\end{lstlisting}
+In questo modo nell'ambiente virtuale sono installati tutti i componenti 
+che il progetto richiedeva quando è stato sviluppato.
+Da questo punto in poi si è pronti a eseguire il progetto.\newline
+Per salvare la lista delle dipendenze del corrente ambiente si usa il comando:
+\begin{lstlisting}[language=bash]
+	python3 -m pip freeze > requirements.txt
+\end{lstlisting}
+
+\subsection{La libreria paho-mqtt}
+\label{subsec:client-installazione-libreria}
+Si procede a installare la libreria come descritto nella documentazione ufficiale \cite{client-paho-doc-main},
+nell'ambiente in cui si vuole eseguire il codice, con il seguente comando:
+\begin{lstlisting}[language=bash]
+	python3 -m pip install paho-mqtt
+\end{lstlisting}
+Viene installata la libreria nell'ultima versione compatibile con le varie dipendenze.
+Ora è possibile creare dei client per interagire con il broker.\newline
+Per rimuovere la libreria è sufficiente eseguire la disinstallazione: \label{python-rimuovere-libreria}
+\begin{lstlisting}[language=bash]
+	python3 -m pip uninstall paho-mqtt
+\end{lstlisting}
+
+
+\section{Le componenti del client}
+\label{sec:client-creazione}
+La libreria è formata principalmente da 3 moduli: client, publish e subscribe.
+Il modulo "client" è quello completo che contiene tutto, dalla connessione alla pubblicazione e l'iscrizione.
+I moduli "publish" e "subscribe" invece sono una versione semplificata della pubblicazione e dell'iscrizione,
+quindi non ci sono tutte le funzionalità per gestire la connessione.\newline
+Per il progetto è stato usato il modulo "client" per la creazione degli skeleton dei client
+così da non avere limitazioni per futuri sviluppi.
+Ci si è basati sulla documentazione \cite{client-paho-doc-complete}, 
+nello specifico quella per il client in cui sono descritte le varie funzionalità \cite{client-paho-doc-client}.
+Sulla repository GitHub della libreria vengono forniti anche esempi di script già preimpostati \cite{client-paho-doc-examples},
+tuttavia si è preferito creare da zero gli script per soddisfare le necessità.
+Inoltre è stata molto utile la seguente guida che spiega in dettaglio passo a passo 
+le fasi per l'invio e la ricezione da un topic \cite{client-paho-guide-1}.
+
+\subsection{Gestione della connessione}
+\label{subsec:client-creazione-connesione}
+Per iniziare si deve creare un file con estensione .py (file python).
+Poi si deve importare il modulo "client" della libreria con la seguente riga:
+\begin{lstlisting}[language=bash]
+	import paho.mqtt.client as mqtt
+\end{lstlisting}
+Alla libreria viene associato il nome mqtt per facilità.
+
+\subsubsection{Istanza}
+\label{subsubsec:client-creazione-connesione-istanza}
+Si procede con la creazione dell'istanza del client per la connessione, che viene associata a una variabile:
+\begin{lstlisting}[language=python]
+	istanza_client = mqtt.Client(client_id=None, clean_session=True)
+\end{lstlisting}
+Alla funzione sono stati passati 2 parametri che sono necessari.
+Il parametro client\_id è posto a None, dato che non ci interessa avere un id univoco per questa istanza,
+quindi la libreria alla connessione ne genera uno casuale.
+Inoltre è necessario anche il parametro clean\_session posto a True per dire al broker che al termine della connessione
+deve rimuovere le informazioni collegate all'id client generato casualmente.
+È stata applicata questa impostazione perché viene usato il protocollo MQTT versione 3,
+che si può specificare con il parametro protocol=mqtt.MQTTv311; mentre se si usa la versione 5 il parametro clean\_session non è accettato 
+e bisogna usarne un altro quando si avvia la connessione (vedere la documentazione per i dettagli).
+Ci sono altri parametri opzionali tra cui:
+\begin{itemize}
+	\item userdata, per passare informazioni alle callbacks dell'istanza
+	\item transport, per indicare il meccanismo di trasporto (di default è TCP)
+\end{itemize}
+
+\subsubsection{Callbacks}
+\label{subsubsec:client-creazione-connesione-callbacks}
+Successivamente si possono impostare le callbacks sull'istanza, cioè le funzioni che vengono eseguite in base a un evento.
+Queste permettono di chiamare una funzione chiamabile e passare le informazioni necessarie per gestire quell'evento.
+Ne esistono numerose, ma quelle rilevanti sono le seguenti:
+\begin{lstlisting}[language=Python]
+	istanza_client.on_connect = funzione_alla_connessione
+	istanza_client.on_subscribe = funzione_alla_iscrizione
+	istanza_client.on_message = funzione_alla_ricezione
+	istanza_client.on_publish = funzione_alla_pubblicazione
+	istanza_client.on_log = funzione_per_i_log
+\end{lstlisting}
+In questo modo ad ogni evento è stata associata la rispettiva funzione chiamabile.
+A queste funzioni possono essere passati dei paramenti (si consiglia di consultare la documentazione per la lista completa dato che cambiano in base alla versione del protocollo MQTT).
+Ogni funzione deve essere definita precedentemente con i parametri che si vogliono usare all'interno.
+Di seguito viene mostrato come si possono implementare le funzioni con il protocollo versione 3 senza spiegare i parametri.\newline
+Funzione alla connessione:
+\begin{lstlisting}[language=python]
+	def funzione_alla_connessione(client, userdata, flags, rc):
+		print(client, userdata, flags, rc)
+\end{lstlisting}
+Permette di sapere se il broker ha risposto alla richiesta in modo positivo o se ci sono problemi.\newline
+Funzione all'iscrizione:
+\begin{lstlisting}[language=python]
+	def funzione_alla_iscrizione(client, userdata, mid, granted_qos):
+		print(client, userdata, mid, granted_qos)
+\end{lstlisting}
+Viene eseguita dopo che il broker ha risposto a una richiesta di iscrizione,
+quindi è possibile sapere se ci sono problemi.\newline
+Funzione alla ricezione:
+\begin{lstlisting}[language=python]
+	def funzione_alla_ricezione(client, userdata, message):
+		print(client, userdata, message)
+\end{lstlisting}
+Con questa funzione all'arrivo del messaggio si possono eseguire delle elaborazioni e poi pubblicare un messaggio con i risultati.\newline
+Funzione alla pubblicazione:
+\begin{lstlisting}[language=python]
+	def funzione_alla_connessione(client, userdata, mid):
+		print(client, userdata, mid)
+\end{lstlisting}
+Viene eseguita dopo che viene trasmesso un messaggio al broker.
+In base al livello di QoS impostato nel messaggio, questa funzione può essere chiamata subito all'invio o dopo l'hand-shakes.\newline
+La funzione per i log:
+\begin{lstlisting}[language=python]
+	def funzione_per_i_log(client, userdata, level, buf):
+		print(client, userdata, level, buf)
+\end{lstlisting}
+Viene usata per il parametro buf che contiene informazioni utili in fase di debug
+e permette di vedere tutto quello che l'istanza sta facendo.\newline
+Come detto in precedenza, esistono molti tipi di callbacks in modo tale da gestire minuziosamente errori o eventi.
+
+\subsubsection{Connessione}
+\label{subsubsec:client-creazione-connesione-connessione}
+Una volta definite tutte le callbacks necessarie si può procedere con l'avvio della connessione.
+Si esegue la funzione connect sull'istanza.
+\begin{lstlisting}[language=python]
+	istanza_client.connect(host=localhost, port=1883, keepalive=60)
+\end{lstlisting}
+La funzione richiede come parametro obbligatorio l'host, cioè l'indirizzo ip o il dominio a cui deve collegarsi.
+Se non si specifica altro la connessione viene aperta con la porta 1883, che è quella di default.
+Gli ulteriori parametri con il protocollo versione 3 sono port, per indicare una porta differente,
+e keepalive, per indicare l'intervallo massimo di secondi in assenza di comunicazioni.
+Il risultato della connessione viene gestito dalla callback on\_connect vista precedentemente.
+
+\subsubsection{Mantenimento della connessione}
+\label{subsubsec:client-creazione-connesione-mantenimento}
+Dopo che la connessione è stata avviata con successo è necessario dire all'istanza di rimanere attiva in un loop,
+altrimenti l'esecuzione del codice prosegue e quindi termina la connessione.
+Ci sono vari modi per mantenere la connessione, ma quello che viene usato frequentemente è il seguente:
+\begin{lstlisting}[language=python]
+	istanza_client.loop_forever()
+\end{lstlisting}
+Questa funzione permette di mandare l'esecuzione in un loop e può essere utile per attendere l'arrivo dei messaggi.
+Ha come parametri opzionali timeout, i secondi di attesa per il traffico della rete prima di terminare, e
+retry\_first\_connection, per ritentare la connessione in caso di disconnessione.
+Nelle callback ci può essere anche la funzione di disconnessione e se questa viene chiamata il loop termina.
+
+\subsubsection{Disconnessione}
+\label{subsubsec:client-creazione-connesione-disconnessione}
+Quando si vuole terminare la connessione si esegue la funzione disconnect.
+\begin{lstlisting}[language=python]
+	istanza_client.disconnect()
+\end{lstlisting}
+Ci si è quindi scollegati dal broker e per sapere il risultato si usa la callback on\_disconnect.
+
+\subsection{Invio di messaggi}
+\label{subsec:client-creazione-invio}
+L'invio di un messaggio si può avere solo dopo che la connessione è stata aperta.
+Si possono eseguire l'invio e la disconnessione separatamente oppure avviare l'istanza in un loop e in una callback eseguire l'invio.
+Si possono avere diversi invii su topic diversi con la stessa istanza client, tranne nei casi di particolari politiche di accesso del broker.
+La funzione di invio è la seguente:
+\begin{lstlisting}[language=python]
+	istanza_client.publish(topic=nome, payload=messaggio, retain=True)
+\end{lstlisting}
+I parametri topic e payload sono necessari per l'invio.
+Topic indica su quale canale deve essere inviato il messaggio.
+Payload è il messaggio stesso, se è vuoto o None viene inviato un messaggio con lunghezza 0.
+I parametri opzionali per il protocollo versione 3 sono:
+retain, per dire al broker di mantenere quel messaggio su quel topic fino ad uno nuovo,
+e qos, per indicare il livello da usare per quality of service.\newline
+Il risultato dell'invio si ha nella callback on\_publish.
+
+\subsection{Ricezione di messaggi}
+\label{subsec:client-creazione-ricezione}
+La ricezione di un messaggio si può avere solo dopo che la connessione è stata aperta.
+Si imposta il topic su cui si riceve, si avvia l'istanza in un loop e si riceve il messaggio nella callback on\_message.
+Ci si può iscrivere su topic diversi con la stessa istanza client, tranne nei casi di particolari politiche di accesso del broker.
+La funzione di ricezione è la seguente:
+\begin{lstlisting}[language=python]
+	istanza_client.subscribe(topic=nome)
+\end{lstlisting}
+Ha come parametro obbligatorio il nome del topic da cui si vogliono ricevere i messaggi.
+La funzione accetta il parametro topic in varie forme: stringa, tupla o lista di tuple. 
+Nel progetto è stata usata la forma stringa, più che sufficiente in base alle necessità.
+La forma tupla integra dentro il parametro qos, 
+mentre una lista di tuple serve principalmente per iscriversi con un solo comando a più topic.
+Come parametro opzionale c'è qos, che specifica il livello di qualità del servizio. Se non inizializzato viene posto a 0.
+
+
+\subsection{Autenticazione}
+\label{subsec:client-creazione-auth}
+Prima di avviare la connessione si può impostare l'autenticazione.
+In questo modo si fornisce al broker la username e la password.
+Il broker a cui ci si connette deve avere il protocollo MQTT versione 3.1 o superiore.
+L'impostazione si ha con:
+\begin{lstlisting}[language=python]
+	istanza_client.username_pw_set(username, password)
+\end{lstlisting}
+Ha come parametri 2 stringhe:
+\begin{itemize}
+	\item \textbf{username}: se è presente abilita l'autenticazione.
+	Il valore dell'username non è relazionato con il client\_id per la connessione.
+	\item \textbf{password}: può essere assente anche se l'username è presente.
+	La stringa viene codificata in UTF-8.
+\end{itemize}
+
+\subsection{Connessione con TLS}
+\label{subsec:client-creazione-tls}
+Prima di avviare la connessione si può abilitare il supporto SSL/TLS, 
+che permette di configurare la criptazione della comunicazione con il broker.
+Si deve aver configurato sul broker il certificato sulla porta su cui ci si connetterà.
+Per impostare la criptazione si usa la funzione:
+\begin{lstlisting}[language=python]
+	istanza_client.tls_set(ca_certs=path_to_cert)
+\end{lstlisting}
+Si deve specificare il parametro ca\_certs indicando il path al certificato della Certificate Authority.
+Se il file è nella stessa cartella dello script basta specificare il nome del file con l'estensione.
+In questo modo, quando si avvierà la connessione, il client verificherà il certificato del broker,
+allo stesso modo in cui il browser web verifica l'autenticità di un sito web.
+Altri parametri opzionali molto utili sono:
+\begin{itemize}
+	\item \textbf{cert\_reqs}: permette di specificare i requisiti che il client impone al broker.
+	Se non specificato, il valore di default è ssl.CERT\_REQUIRED, che impone al broker di fornire un certificato.
+	Nel progetto non è stato specificato, dato che serviva la funzionalità di default.
+	\item \textbf{tls\_version}: indica la versione del protocollo SSL/TLS da usare.
+	Se non specificato, il valore di default è 2, che corrisponde al TLS versione 1.2.
+	Nel progetto è stata esplicitata la versione anche se è quella di default.
+\end{itemize}
+Infine ci si deve ricordare che la porta di connessione con TLS del broker di default è la numero 8883, 
+ma potrebbe essere configurata diversamente.
+
+
+\section{Implementazione con altri script}
+\label{sec:client-implementazione}
+Completata la creazione dello skeleton del client si può procedere con l'integrazione con altri script.
+Nell'appendice~\ref{ch:client-appendix} viene fornito lo skeleton 
+con il client configurato per iscriversi e pubblicare.
+Nel progetto gli script avevano le seguenti necessità:
+\begin{itemize}
+	\item \textbf{Pubblicazione di dati a intervalli}\newline 
+	Lo script che veniva fornito leggeva un file in formato CSV, faceva il parsing di ogni riga 
+	e popolava un array con i messaggi da inviare in formato JSON.
+	Poi lo script doveva entrare in un loop infinito in cui mandava al broker un messaggio alla volta fino alla fine, per poi ricominciare.
+	I messaggi dovevano essere inviati a intervalli regolari, 
+	quindi si metteva in pausa l'esecuzione per poi inviare il messaggio successivo.
+	Questo è il punto in cui è stato inserito il client che pubblica verso il broker.
+	Viene chiamato passandogli il topic e il messaggio da inviare, quindi esegue la connessione, invia e si disconnette.
+	Terminato il client, si ritorna allo script iniziale e si attende l'intervallo di tempo.
+
+	\item \textbf{Ricezione di dati e pubblicazione dell'elaborazione}\newline
+	In questo caso lo script fornito veniva chiamato con un JSON in input, 
+	eseguiva l'elaborazione e terminava con un risultato in JSON.
+	Si è usato lo skeleton che iscrive e pubblica per ottenere e inviare i dati JSON.
+	Alla base c'è il client che, una volta configurato per iscriversi a un topic, rimane in attesa per un messaggio.
+	All'arrivo del messaggio in formato JSON si esegue la relativa callback, 
+	in cui il client chiama la funzione dello script da integrare e passa il messaggio.
+	Terminata l'elaborazione si ritorna alla callback con il messaggio JSON da inviare e il client esegue una publish su un topic.
+	A questo punto termina la callback e il client rimane in attesa. 
+
+\end{itemize}
+
+
+\section{Esecuzione automatica}
+\label{sec:client-supervisor}
+Finora per eseguire gli script creati si usava il terminale, quindi si lanciavano manualmente.
+Tuttavia se questi script devono essere sempre funzionanti è consigliabile farli eseguire in modo automatico.
+Per risolvere questo problema nel progetto si è deciso di usare Supervisor, 
+un programma per il monitoraggio e la gestione di processi in sistemi Linux.
+Si è preferito usare Supervisor al posto di Systemd in quanto 
+è più semplice e intuitivo aggiungere, modificare e gestire un processo.
+Ci si è basati sulla guida \cite{client-supervisor-guida} e sulla documentazione ufficiale \cite{client-supervisor-doc}.
+
+\subsection{Installazione}
+\label{subsec:client-supervisor-installazione}
+Supervisor può essere installato con più metodi: 
+tramite Pip di Python o direttamente da Python oppure con il gestore di pacchetti, disponibile solo in alcune distribuzioni Linux.
+Nel nostro caso il sistema Ubuntu ha la possibilità di installazione tramite pacchetto, ma si devono avere i diritti root.
+Si procede con il comando:
+\begin{lstlisting}[language=bash]
+	sudo apt install supervisor
+\end{lstlisting}
+Viene installato il programma e viene messo nella lista di programmi eseguiti automaticamente all'avvio del sistema operativo.
+In questo modo è sempre avviato e pronto a gestire la lista dei processi assegnati.
+
+
+\subsection{Configurazione di un processo}
+\label{subsec:client-supervisor-configurazione}
+Per aggiungere un processo alla lista di Supervisor, come prima cosa si deve creare un file con alcuni parametri.
+Si crea un file con il nome del processo e con estensione .conf.
+Un esempio di configurazione è la seguente:
+\begin{lstlisting}[language=text]
+	[program:example]
+	directory=/home/utente/cartella
+	command=python3
+	user=utente
+	autostart=true
+	autorestart=true
+	stopasgroup=true
+	killasgroup=true
+	stderr_logfile=/home/utente/cartella/stderr.log
+	stdout_logfile=/home/utente/cartella/stdout.log
+\end{lstlisting}
+Il file di configurazione può essere diviso in più sezioni, 
+che permettono di impostare finemente l'esecuzione (si veda la documentazione \cite{client-supervisor-config}).
+In questo esempio c'è solo una sezione, "program", che consente di impostare il programma da associare.
+Alcuni parametri riportati sono:
+\begin{itemize}
+	\item \textbf{[program:example]}\newline
+	Indica la sezione program ed è seguito dal nome del processo.
+	La sezione può eseguire un solo processo o più processi in base a come viene configurata. 
+	Il nome indicato sarà quello visualizzato da Supervisor ed è necessario. 
+	Per la lista completa dei parametri si veda la documentazione \cite{client-supervisor-program}.
+	\item \textbf{directory=}\newline
+	Imposta il path della cartella in cui verrà eseguito il comando, ovvero la cartella di lavoro.
+	Di solito viene indicato il path completo, cioè assoluto, fino alla cartella.
+	Non ha nessun valore di default, quindi se non impostato viene eseguito nella cartella di Supervisor.
+	\item \textbf{command=}\newline
+	Indica il comando che deve essere eseguito.
+	Il programma da eseguire può essere specificato con il path assoluto o relativo.
+	Di solito si ha dopo una sequenza di argomenti che vengono passati al programma.
+	Il comando che si scrive è identico a quello che si scriverebbe da linea di comando per eseguire il programma.
+	Non ha nessun valore di default ed è l'unico parametro che deve essere impostato obbligatoriamente.
+	\item \textbf{user=}\newline
+	Specifica con quale utente deve essere eseguito questo comando.
+	Questo è possibile solo se Supervisor viene eseguito come root, come nel nostro caso.
+	Non ha nessun valore di default, quindi se non impostato viene eseguito come root.
+	\item \textbf{autostart=}\newline
+	È un booleano che permette di impostare l'avvio automatico del programma dopo che Supervisor è stato avviato.
+	Il valore di default è True.
+	\item \textbf{autorestart=}\newline
+	Serve per impostare il tipo di riavvio del processo se quest'ultimo termina con un errore.
+	Può essere settato nei seguenti modi: false, per non riavviare; 
+	unexpected, se termina con un codice non definito; 
+	true, per riavviarlo a qualsiasi terminazione.
+	Il valore di default è unexpected.
+	\item \textbf{stopasgroup=}\newline
+	È un booleano che permette di impostare l'invio del segnale stop a tutto il gruppo di processi.
+	Se viene posto a True implica che il parametro killasgroup sia posto a True.
+	Il valore di default è False.
+	\item \textbf{killasgroup=}\newline
+	È un booleano che permette di impostare l'invio del segnale stop a tutto il gruppo di processi e ai figli.
+	Viene usato per terminare anche i processi figli del processo che si sta eseguendo.
+	È obbligatoriamente posto a True se lo è anche stopasgroup.
+	Il valore di default è False.
+	\item \textbf{stderr\_logfile=}\newline
+	Imposta il path del file in cui scrivere lo standard error.
+	Può essere impostato con: 
+	un path, per indicare un file specifico; 
+	AUTO, per far sì che Supervisor crei automaticamente un file;
+	NONE, per non creare nessun log.
+	Il valore di default è AUTO.
+	\item \textbf{stdout\_logfile=}\newline
+	Imposta il path del file in cui scrivere lo standard output.
+	Può essere impostato con: 
+	un path, per indicare un file specifico; 
+	AUTO, per far sì che Supervisor crei automaticamente un file;
+	NONE, per non creare nessun log.
+	Il valore di default è AUTO.
+\end{itemize}
+Una volta terminata l'impostazione, è necessario spostare la configurazione nella cartella delle configurazioni di Supervisor.
+\hypertarget{lst:client-supervisor-path}{Il path delle configurazioni è il seguente:} 
+\begin{lstlisting}[language=textnonum]
+    /etc/supervisor/conf.d/
+\end{lstlisting}
+Una volta posizionato qui il file si può procedere ad aggiungerlo alla lista di Supervisor.
+
+\subsection{Comandi della modalità interattiva}
+\label{subsec:client-supervisor-comandi}
+Per comandare Supervisor ci sono 2 modi:
+da linea di comando o tramite la modalità interattiva.
+In questo progetto è stata usata sempre la modalità interattiva, dato che l'esecuzione dei comandi è più intuitiva,
+mentre nella linea di comando è più facile commettere errori vista l'assenza dell'auto completamento.
+Per entrare nella modalità interattiva si esegue:
+\begin{lstlisting}[language=bash]
+	sudo supervisor
+\end{lstlisting}
+All'avvio viene mostrato lo stato di tutti i processi che gestisce Supervisor e a inizio riga si avrà "supervisor>".
+Da questo momento in poi si mandano solo comandi per Supervisor.
+Di seguito vengono spiegati i comandi usati durante il progetto  
+(per la lista completa vedere la documentazione \cite{client-supervisor-comandi}).
+
+\subsubsection{Rilettura configurazioni}
+\label{subsubsec:client-supervisor-rilettura}
+Il primo comando da eseguire quando sono state aggiunte delle configurazioni è il seguente:
+\begin{lstlisting}[language=bash]
+	reread
+\end{lstlisting}
+In questo modo vengono lette le configurazioni e si può verificare se sono corrette.
+Questo comando esegue solo una lettura senza aggiungere le configurazioni alla lista di Supervisor.
+
+\subsubsection{Aggiornamento configurazioni}
+\label{subsubsec:client-supervisor-aggiornamento}
+Per aggiungere una configurazione alla lista che gestisce Supervisor si esegue:
+\begin{lstlisting}[language=bash]
+	update
+\end{lstlisting}
+Le configurazioni vengono rilette e verificate, poi viene aggiornata la lista delle configurazioni.
+Successivamente vengono avviati i processi aggiunti e riavviati i processi modificati.
+
+\subsubsection{Stato}
+\label{subsubsec:client-supervisor-stato}
+Per vedere lo stato di tutti i processi che gestisce supervisor:
+\begin{lstlisting}[language=bash]
+	status
+\end{lstlisting}
+Mostra per ogni riga un processo e le relative informazioni.
+
+\subsubsection{Avvio}
+\label{subsubsec:client-supervisor-avvio}
+Per avviare un processo specifico si esegue il comando seguito dal nome:
+\begin{lstlisting}[language=bash]
+	start nome
+\end{lstlisting}
+Per avviare tutti i processi della lista:
+\begin{lstlisting}[language=bash]
+	start all
+\end{lstlisting}
+
+\subsubsection{Fermare}
+\label{subsubsec:client-supervisor-fermare}
+Per fermare un processo specifico si esegue il comando seguito dal nome:
+\begin{lstlisting}[language=bash]
+	stop nome
+\end{lstlisting}
+Per fermare tutti i processi della lista:
+\begin{lstlisting}[language=bash]
+	start all
+\end{lstlisting}
+
+\subsubsection{Uscita}
+\label{subsubsec:client-supervisor-uscita}
+Per uscire dalla modalità interattiva di Supervisor si lancia:
+\begin{lstlisting}[language=bash]
+  quit
+\end{lstlisting}
+Si ritorna alla linea di comando normale.\newline\newline
+Questi comandi possono essere eseguiti anche al di fuori della modalità interattiva.
+Prima di ogni comando basta aggiungere "sudo supervisor".\newline\newline
+Al termine di queste operazioni gli script sono configurati per l'esecuzione automatica 
+e l'implementazione dei client con gli script è completata.

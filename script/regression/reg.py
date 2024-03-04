@@ -1,11 +1,12 @@
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
-from stepwise_regression import step_reg
-from reg_class import RegressionModel
 import math
-from const import COLONNE_ORE, COLONNE_GIORNI, COLONNE_MESI
+from stepwise_regression import step_reg
+
+from reg_class import RegressionModel
 from utils import get_time
+from const import COLONNE_ORE, COLONNE_GIORNI, COLONNE_MESI
 
 def get_normalize(df):
     """return the the passsed Dataframe normalized

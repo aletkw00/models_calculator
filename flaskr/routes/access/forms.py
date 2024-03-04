@@ -10,11 +10,11 @@ class RegistrationForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     password = PasswordField(label='Password',
                              id='field_password',
-                             description='New password must contain a special character, an uppercase letter, an lowercase letter, a number and 8 charaters',
+                             description='New password must contain a special character, an uppercase letter, a lowercase letter, a number and 8 charaters',
                              validators=[DataRequired()])
     confirm_password = PasswordField(label='Confirm Password', 
                                      validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField(label='Sign Up',
+    submit = SubmitField(label='Register',
                          id='button_register')
 
     def validate_email(self, email):
@@ -45,5 +45,14 @@ class LoginForm(FlaskForm):
                              id='field_password',
                              validators=[DataRequired()])
     remember = BooleanField(label='Remember Me')
-    submit = SubmitField(label='Login',
+    submit = SubmitField(label='  Login  ',
                          id='button_login')
+    
+
+class RecoverPasswordForm(FlaskForm):
+    email = StringField(label='Email',
+                        id='field_email',
+                        description="Forgot your account's password? Enter your email address and we'll send you a recovery link.",
+                        validators=[DataRequired(), Email()])
+    submit = SubmitField(label='Send recovery email',
+                         id='button_send')

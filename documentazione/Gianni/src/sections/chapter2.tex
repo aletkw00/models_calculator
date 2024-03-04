@@ -1,0 +1,337 @@
+%! Author = Gianni
+%! Date = 17/10/2023
+
+\chapter{Broker MQTT Mosquitto}
+\label{ch:broker-mqtt}
+
+\section{Implementazione nel progetto}
+\label{sec:broker-introduzione}
+Alla base del progetto c'è il broker che permette la comunicazione tra le varie componenti.
+Si è scelto di usare come broker Eclipse Mosquitto perché è open source e implementa il protocollo MQTT fino alla versione 5.0.
+Di seguito viene spiegato come installare Mosquitto da terminale e come configurarlo per l'accesso locale e da remoto.
+La guida è stata pensata per sistemi Linux.
+
+\section{Installazione}
+\label{sec:broker-installazione}
+
+\subsection{Comandi per l'installazione}
+L'installazione si può eseguire in più modi, come spiegato nel sito ufficiale \cite{mosquitto-install}:
+
+\begin{itemize}
+    \item \textbf{Metodo 1} - tramite la repository ufficiale (consigliato).\\
+    In questo modo viene installata l'ultima versione disponibile delle release.
+    \begin{lstlisting}[language=bash]
+        sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+        sudo apt-get update
+        sudo apt-get install mosquitto
+    \end{lstlisting}
+    \item \textbf{Metodo 2} - tramite la repository di linux.\\
+    In questo modo viene installata l'ultima versione disponibile nel package manager.
+    \begin{lstlisting}[language=bash]
+        sudo apt-get install mosquitto
+    \end{lstlisting}
+\end{itemize}
+
+\subsection{Come controllare l'esecuzione del servizio}
+Il broker MQTT viene eseguito all'avvio della macchina tramite un servizio che viene aggiunto nell'installazione.
+Il servizio si trova in:
+\begin{lstlisting}[language=textnonum]
+    /etc/systemd/system/mosquitto.service
+\end{lstlisting}
+È possibile controllare il broker con i consueti comandi per la gestione di un servizio elencati di seguito.
+È necessario usare sudo, quindi si devono avere i diritti di root.
+\begin{itemize}
+    \item lo stato del servizio:
+    \newline Solo questa opzione ha la possibilità di essere eseguita senza il comando sudo.
+    \begin{lstlisting}[language=bash]
+        sudo service mosquitto status
+    \end{lstlisting}
+    \item fermare il servizio:
+    \begin{lstlisting}[language=bash]
+        sudo service mosquitto stop
+    \end{lstlisting}
+    \item avviare il servizio:
+    \begin{lstlisting}[language=bash]
+        sudo service mosquitto start
+    \end{lstlisting}
+    \item riavviare il servizio:
+    \begin{lstlisting}[language=bash]
+        sudo service mosquitto restart
+    \end{lstlisting}
+\end{itemize}
+Per vedere il log dettagliato di Mosquitto, si deve guardare nel file:
+\begin{lstlisting}[language=textnonum]
+    /var/log/mosquitto/mosquitto.log
+\end{lstlisting}
+
+
+\subsection{Problemi nell'installazione}
+Si potrebbero presentare principalmente 2 tipi di problemi:
+\begin{itemize}
+    \item Mancata creazione della configurazione.\newline
+    Vedere nella sezione~\ref{subsec:broker-esempi-configurazione} in cui si possono trovare esempi di configurazione.
+    \item Nel caso di una precedente installazione:
+    \begin{itemize}
+        \item Si potrebbe avere un errore di database.\newline
+        In questo caso si deve cancellare il database che si trova in:\\
+        \textbf{var/lib/mosquitto/mosquitto.db} \newline
+        Alla successiva esecuzione di Mosquitto questo database viene ricreato.
+        \item Si potrebbero avere file di configurazione sbagliati o corrotti.\newline
+        In questo caso si consiglia di creare un backup completo della cartella \textbf{/etc/mosquitto}.
+        Eliminare tutti i file nella sotto cartella conf.d, rieseguire Mosquitto e vedere se funziona.
+        Se il problema persiste eliminare anche il file con estensione .conf nella cartella mosquitto.
+    \end{itemize}
+\end{itemize}
+
+
+\section{Configurazione}
+\label{sub:broker-configurazione-del-broker}
+Viene riportata la struttura della cartella contenente le configurazioni.
+~\dirtree{%
+    .1 /                (/etc/mosquitto/).
+    .2 mosquitto.conf   (configurazione di default, da non modificare).
+    .2 conf.d           (cartella per la configurazione .conf).
+    .2 certs            (cartella per i certificati del server).
+    .2 ca\_certificates  (cartella per i certificati della C.A.).
+}
+
+\subsection{Configurazione iniziale}
+La configurazione del broker al momento dell'installazione è data dal file mosquitto.conf.
+\newline
+Se la cartella conf.d non contiene un file .conf viene caricata una configurazione di default
+propria del broker. È impostata come segue:
+\begin{lstlisting}[language=text]
+listener 1883  #abilita il broker in ascolto alla porta 1883
+allow_anonymous true #abilita l'accesso al broker a chiunque
+\end{lstlisting}
+Va sottolineato che con questa configurazione l'accesso al broker è abilitato a chiunque
+e non ci sono restrizioni, perciò deve essere usato solo come ambiente di sviluppo.
+
+\subsection{Configurazione parametri}
+\label{subsec:broker-esempi-configurazione}
+Può capitare che l'installazione non crei la struttura dei file e delle cartelle.
+Si deve procedere a creare nella cartella \textbf{/etc/mosquitto} almeno il file
+mosquitto.conf (si veda~\ref{sec:/mosquitto.conf}) e la cartella conf.d.\newline
+Alcuni esempi di configurazione sono presenti in:
+\begin{lstlisting}[language=textnonum]
+    /usr/share/doc/mosquitto/examples
+\end{lstlisting}
+Per configurare il server in base alle proprie necessità, si deve creare un file con estensione .conf
+all'interno della cartella conf.d. Questa sarà la configurazione che verrà caricata quando si eseguirà
+il riavvio di Mosquitto.\newline
+Di seguito vengono riportati alcuni parametri rilevanti che sono stati usati.
+Si può fare riferimento alla documentazione ufficiale per la lista completa \cite{mosquitto-par-conf}.
+\begin{itemize}
+    \item \textbf{per\_listener\_settings [ true|false ]} :\label{table:broker-per-listener}\newline
+    Abilita la gestione di autenticazione in modo differente per ogni listener.
+    In questo modo si può avere, ad esempio, localhost senza password, mentre per l'accesso esterno serve
+    l'autenticazione. Di default è False.
+    \item \textbf{listener (port-number) [ip address/host name/unix socket path]} :\newline
+    Dice a Mosquitto su quale porta mettersi in ascolto per le connessioni in entrata.
+    Si deve specificare il numero della porta (le porte consigliate sono 1883 senza SSL e 8883 con SSL).
+    Inoltre si deve associare il listener a un indirizzo ip o ad un host o ad un socket.
+    Si possono definire più listener, uno per ogni porta, ed è possibile avere impostazioni diverse per ogni listener.
+    Una volta definito un listener, le successive configurazioni sono associate a quel listener.
+    \item \textbf{allow\_anonymous [ true|false ]} :\newline
+    Determina se i client senza username sono abilitati alla connessione.
+    Se è false si devono aggiungere configurazioni per il sistema di autenticazione.
+    Viene associato ad un listener.
+    Di default è False.
+    \item \textbf{password\_file (file-path)} :\newline
+    Imposta il percorso del password file.
+    Il file contiene la coppia utente:password per ogni riga, con la password salvata come hash.
+    È un primo metodo di autenticazione e si associa ad un listener.
+    Per ulteriori dettagli si veda \ref{subsec:broker-password-file}.
+    \item \textbf{certfile (file-path)} :\newline
+    Imposta il percorso del certificato PEM del server.
+    Viene usato insieme al parametro keyfile per abilitare la crittografia su TLS.
+\end{itemize}
+Nell'appendice~\ref{sec:/conf.d/localhost-tls.config} viene riporta la configurazione applicata al broker Mosquitto.
+Sono presenti altri parametri che vengono spiegati successivamente.
+
+
+\subsection{Metodi di autenticazione}
+\label{sec:broker-autenticazione}
+Come descritto nella guida ufficiale \cite{mosquitto-auth}, esistono 3 tipi di autenticazione:
+\begin{itemize}
+    \item unauthorized/anonymous access: nessun controllo.
+    \item password files: gestione basilare.
+    \item authentication plugins: controllo più avanzato.
+\end{itemize}
+Inoltre si possono avere differenti metodi di autenticazione per ogni listener, configurando più parametri listener,
+\ref{table:broker-per-listener}.\newline
+Nel progetto è stata usata l'autenticazione tramite \textit{password files} dato l'esiguo numero di account richiesti.
+
+
+\subsubsection{Password file}
+\label{subsec:broker-password-file}
+Questo è un metodo semplice per gestire gli utenti in un singolo file,
+tuttavia non è scalabile perché non permette la gestione puntuale di ogni client.
+Inoltre richiede l'esecuzione di comandi dal terminale,
+quindi è applicabile per casi non complessi come questo progetto.\newline
+Questo metodo richiede le seguenti caratteristiche:
+\begin{itemize}
+    \item l'utente deve avere un nome univoco.
+    \item la password deve essere immessa da terminale o in un file in chiaro.
+    Una volta inserita viene salvato il suo hash.
+    \item nel file di configurazione si devono applicare queste modifiche:
+    \begin{itemize}
+        \item \textbf{allow\_anonymous false} \newline
+        Per disabilitare l'accesso anonimo e usare solo l'autenticazione utente e password.
+        \item \textbf{password\_file /etc/mosquitto/nomefile} \newline
+        Per dire al broker il percorso del file contente gli utenti e le password validi per quel listener.
+    \end{itemize}
+\end{itemize}
+Per la creazione del file e degli utenti si possono eseguire i seguenti comandi:
+\begin{itemize}
+    \item \textbf{mosquitto\_passwd -c nomefile nomeutente} \newline
+    Permette di creare nel percorso corrente un file con nome \textit{nomefile} e un utente con nome \textit{nomeutente}.
+    Viene richiesto l'inserimento della relativa password. Questo metodo può essere usato per aggiungere un utente senza
+    sovrascrivere il file se esiste già.
+    \item \textbf{mosquitto\_passwd -b nomefile nomeutente password} \newline
+    Permette l'aggiunta di un utente e della relativa password al file indicato.
+    \item \textbf{mosquitto\_passwd -D nomefile nomeutente} \newline
+    Permette l'eliminazione di un utente e della relativa password dal file indicato.
+    \item \textbf{mosquitto\_passwd -U nomefile} \newline
+    Dato un file in qualsiasi formato contenete utente e password in chiaro, uno per ogni riga,
+    esegue l'hash delle password. È un metodo più veloce per aggiungere utenti.
+\end{itemize}
+Terminate le modifiche si deve ricaricare la configurazione del broker.
+Per ricaricare la configurazione senza riavviare il servizio, si devono avere i diritti root:
+\begin{lstlisting}[language=bash]
+sudo pkill -HUP -x mosquitto
+\end{lstlisting}
+Per l'elenco completo dei comandi si guardi la documentazione di Mosquitto \cite{mosquitto-password}.
+La guida che spiega come implementare la connessione al broker da parte di un client con autenticazione
+è riportata nella sitografia finale \cite{mosquitto-password-1}.
+
+
+\subsection{Certificati SSL/TLS}
+\label{sec:broker-ssl-tls}
+Il broker Mosquitto supporta l'autenticazione e la connessione criptata tramite SSL.\newline
+È possibile generare dei certificati self signed, come spiegato nella documentazione \cite{mosquitto-ssl}.
+Tuttavia si possono incontrare programmi o script che non gradiscono questo tipo di certificati, quindi
+si deve optare per dei certificati di una vera CA, Certificate Authority.\newline
+Si è optato per la configurazione dei certificati tramite la CA LetsEncrypt. Di seguito vengono spiegati
+i vari passaggi di configurazione di \textit{certbot} per LetsEncrypt, per poi soffermarsi sul funzionamento
+con il broker e i relativi problemi.\newline
+Vengono riportate man mano varie fonti, dato che non è stato possibile trovare un'unica documentazione per risolvere
+i problemi \cite{mosquitto-ssl-1} \cite{mosquitto-ssl-2} \cite{mosquitto-ssl-3}.
+
+\subsubsection{Certbot}
+Certbot è un tool che permette di gestire i certificati, le richieste e i rinnovi.
+Per la creazione del certificato si deve avere l'accesso root alla macchina.
+Inoltre, è necessario avere l'accesso alle impostazioni DNS del dominio associato alla macchina,
+oppure, in alternativa, un web server sulla macchina in cui si installa Mosquitto.\newline
+Si consiglia di seguire la documentazione per la corretta configurazione ad ogni passaggio \cite{mosquitto-ssl-1}.\newline
+La procedura prevede:
+\begin{enumerate}
+    \item \textbf{Installazione Certbot}\newline
+    Si esegue il comando:
+    \begin{lstlisting}[language=bash]
+    sudo apt-get -y install certbot
+    \end{lstlisting}
+    \item \textbf{Creazione di un certificato tramite DNS}\newline
+    Il certificato che si crea è di tipo wildcard, quindi se il dominio è mydomain.it è valido anche per i sottodomini,
+    così da poterlo usare per altri servizi.
+    Il dominio DNS deve essere già associato alla macchina.
+    Si esegue il comando:
+    \begin{lstlisting}[language=bash]
+    certbot certonly --manual --preferred-challenge dns -d *.mydomain.it
+    \end{lstlisting}
+    Si seguono le istruzioni a schermo, che prevedono l'aggiunta di un record DNS al dominio per validarlo.
+    Al termine si ha generato dei certificati validi.
+    \item \textbf{Rinnovo dei certificati}\newline
+    Il rinnovo si può eseguire:
+    \begin{itemize}
+        \item \textbf{Manualmente}\newline
+        Si esegue il comando:
+        \begin{lstlisting}[language=bash]
+            sudo certbot renew
+        \end{lstlisting}
+        \item \textbf{Automaticamente}\newline
+        Si deve modificare il crontab per eseguire il comando di auto rinnovo periodicamente \cite{mosquitto-ssl-4}.
+        Si esegue:
+        \begin{lstlisting}[language=bash]
+            sudo crontab-e
+        \end{lstlisting}
+        Poi si aggiungono alla fine del file le seguenti righe:
+        \begin{lstlisting}[language=text]
+            # Auto-renew let's encrypt SSL certificates
+            0     *     *     *     *      sudo certbot renew
+        \end{lstlisting}
+    \end{itemize}
+    \item \textbf{Accesso ai certificati}\newline
+    Per accedere ai certificati si usano i symbolic link presenti nella cartella:
+    \begin{lstlisting}[language=textnonum]
+    /etc/letsencrypt/live/mydomain.it/
+    \end{lstlisting}
+    Non si accede direttamente ai certificati perché questi hanno una scadenza, di solito di alcuni mesi.
+    Questi link sono mantenuti da Certbot e puntano all'ultima versione dei certificati.
+\end{enumerate}
+
+\subsubsection{Funzionamento con Mosquitto}
+Mosquitto funziona sulla macchina con un utente che non ha i diritti root,
+quindi non ha accesso alle cartelle dei certificati.
+Tuttavia, seguendo le indicazioni fornite su Github dalla stessa Eclipse Mosquitto,
+si riesce a copiare i certificati permettendo l'accesso a Mosquitto \cite{mosquitto-ssl-2}.
+La procedura prevede:
+\begin{enumerate}
+    \item \textbf{Copia automatica dei certificati}\newline
+    Lo script presente nell'appendice~\ref{sec:script-rinnovo-certificati} permette la copia e il cambio proprietario
+    ad ogni rinnovo dei certificati.
+    Lo script deve essere modificato nella riga 16, per specificare il dominio dei certificati interessati,
+    e nella riga 18, per specificare la cartella di Mosquitto in cui si copieranno i certificati.
+    Successivamente si copia lo script nella cartella (servono i diritti root):
+    \begin{lstlisting}[language=textnonum]
+    /etc/letsencrypt/renewal-hooks/deploy/
+    \end{lstlisting}
+    Si rende eseguibile lo script:
+    \begin{lstlisting}[language=bash]
+        sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/mosquitto-copy.sh
+    \end{lstlisting}
+    Con questa procedura Mosquitto ha ad ogni rinnovo dei certificati l'ultima versione.
+    \item \textbf{Copia manuale dei certificati}\newline
+    Probabilmente la prima volta si devono copiare manualmente i certificati.
+    Si devono eseguire i seguenti comandi che fanno gli stessi passaggi dello script:
+    \begin{lstlisting}[language=bash]
+        # copia dei file
+        sudo cp  /etc/letsencrypt/live/mydomain.it/fullchain.pem /etc/mosquitto/certs/fullchain.pem
+        sudo cp  /etc/letsencrypt/live/mydomain.it/privkey.pem /etc/mosquitto/certs/privkey.pem
+        # imposta l'owner a Mosquitto
+        sudo chown mosquitto: /etc/mosquitto/certs/fullchain.pem /etc/mosquitto/certs/privkey.pem
+        # imposta i diritti solo per Mosquitto
+        sudo chmod 0600 /etc/mosquitto/certs/fullchain.pem /etc/mosquitto/certs/privkey.pem
+        # dice a Mosquitto di ricaricare certificati e configurazione
+        sudo pkill -HUP -x mosquitto
+    \end{lstlisting}
+    \item \textbf{Modifica configurazione Mosquitto}\newline
+    Nella configurazione .conf di mosquitto si devono modificare 2 parametri impostando il path dei certificati:
+    \begin{lstlisting}[language=bash]
+        certfile /etc/mosquitto/certs/fullchain.pem
+        keyfile /etc/mosquitto/certs/privkey.pem
+    \end{lstlisting}
+\end{enumerate}
+Terminate queste modifiche Mosquitto può ricevere connessioni con TSL sul listener configurato.
+I client che si connettono devono abilitare la connessione con TSL e opzionalmente la validazione del certificato.
+
+\section{Disinstallazione}
+\label{sub:broker-disinstallazione-del-broker}
+
+\subsection{Eliminazione della configurazione}
+\label{subsec:broker-eliminazione-configurazione}
+Prima di procedere con la disinstallazione si consiglia di fare il backup delle configurazioni
+e dei certificati presenti nelle rispettive cartelle.
+Successivamente si consiglia di eliminare la cartella \textbf{/etc/mosquitto} per evitare futuri problemi.
+Nel caso in cui siano stati configurati listener con TLS,
+si deve eliminare lo script di copia automatica dei certificati.
+
+\subsection{Rimozione del broker}
+\label{subsec:broker-disinstallazione}
+Per rimuovere la repository e l'installazione di Mosquitto si eseguono i seguenti comandi:
+\begin{lstlisting}[language=bash]
+sudo apt-add-repository --remove ppa:mosquitto-dev/mosquitto-ppa
+sudo apt-get update
+sudo apt-get remove mosquitto
+sudo apt-get autoremove
+\end{lstlisting}

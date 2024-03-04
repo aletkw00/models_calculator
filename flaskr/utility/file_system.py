@@ -189,14 +189,24 @@ class FileSystem:
             if file.startswith(start_filename):
                 shutil.move(os.path.join(path_tmp, file),
                             os.path.join(path_model, file))
-        return 
+        return
     
     
-    def rename_file_dir(self, id: int, dir: str, newName: str) -> (str, str):        
+    def rename_a_dir(self, id: int, dir: str, newName: str) -> (str, str):        
         path = self.get_path_user(id)
         path = os.path.join(path, dir)
         parent = os.path.dirname(path)
-        newPath = parent + newName
+        newPath = os.path.join(parent, newName)
+        shutil.move(path, newPath)
+        return(newPath)
+    
+
+    def rename_a_file(self, id: int, dir: str, newName: str) -> (str, str):        
+        path = self.get_path_user(id)
+        path = os.path.join(path, dir)
+        extension = '.' + dir.split('.').pop()
+        parent = os.path.dirname(path)
+        newPath = os.path.join(parent, newName + extension)
         os.rename(path, newPath)
         return(newPath)
 
@@ -207,6 +217,7 @@ class FileSystem:
         path = os.path.join(self.root_run_dir, path)
         file_name = os.path.basename(path)
         return (path, file_name)
+    
     
     def download_a_dir(self, id: int, dir: str) -> (str, str):        
         path = self.get_path_user(id)

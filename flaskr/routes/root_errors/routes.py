@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request, jsonify
 
 # Defining a blueprint
 root_errors_bp = Blueprint(
@@ -31,14 +31,20 @@ def favicon():
 
 @root_errors_bp.app_errorhandler(404)
 def not_found(e):
+  if request.path.startswith('/api'):
+     return jsonify({'error': 404})
   return render_template('pages/general.html', e=e), 404
 
 @root_errors_bp.app_errorhandler(403)
 def not_found(e):
+  if request.path.startswith('/api'):
+     return jsonify({'error': 403})
   return render_template('pages/general.html', e=e), 403
 
 @root_errors_bp.app_errorhandler(500)
 def not_found(e):
+  if request.path.startswith('/api'):
+     return jsonify({'error': 500})
   return render_template('pages/general.html', e=e), 500
 
 """

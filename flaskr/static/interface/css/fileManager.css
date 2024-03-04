@@ -19,3 +19,8 @@
 .right-top-text{
     display: flex;
 }
+
+.confirmation_body{
+    display: flex;
+    flex-direction: column;
+}

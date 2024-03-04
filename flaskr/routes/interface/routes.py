@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 
 from flaskr.routes.interface.forms import AccountForm, ModelForm
 from flaskr.utility.file_system import FileSystem
-from flaskr.utility.run_scripts import GenerateRegressionModel
+#from flaskr.utility.run_scripts import GenerateRegressionModel
 from flaskr.models import User
 from flaskr import db, bcrypt
 
@@ -27,12 +27,6 @@ def dashboard():
     return render_template('pages/dashboard.html')
 
 
-@interface_bp.route('/file_manager')
-@login_required
-def file_manager():
-    return render_template('pages/file_manager.html')
-
-
 @interface_bp.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
@@ -52,12 +46,20 @@ def account():
     return render_template('pages/account.html', form=form)
 
 
+@interface_bp.route('/file_manager')
+@login_required
+def file_manager():
+    return render_template('pages/file_manager.html')
+
+
 @interface_bp.route('/regression_calculator', methods=['GET', 'POST'])
 @login_required
 def regression_calculator():
     form = ModelForm()
     vis_dir = filesystem.get_visible_directory(current_user.id)
-    generated_string = ''
+    phase = 0
+    window = ''
+    test = False
     session['runned'] = False
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -72,39 +74,28 @@ def regression_calculator():
             check_result = filesystem.check_files_extension(file1, files)
             if check_result != None:
                 flash(check_result, 'danger')
-                return render_template('pages/regressionCalculator.html', model_dirs=vis_dir, form=form)
+                phase = 1 # show error on phase 1, do not start running
+                return render_template('pages/regressionCalculator.html', model_dirs=vis_dir, form=form, phase=phase)
 
             # Iterate for each file in the files List, and Save them
             filesystem.save_a_uploaded_input(file1,current_user.id)
 
             filesystem.save_all_uploaded_output(files,current_user.id)
 
-            path_tmp_models_dir = filesystem.get_path_tmp_models(current_user.id)
-
-            # Command to execute as command line
-            command_run_regression = GenerateRegressionModel(filesystem.get_path_upload(current_user.id),
-                path_tmp_models_dir)
-            
-            window = str(request.form.get('window'))
             session['filename'] = filesystem.get_time_secure_filename(request.form.get('modelname')) # type: ignore
-
-            # Adding flags to the command
-            if window != '':
-                command_run_regression.flag_window(window=window)
-            if session['filename'] != '':
-                command_run_regression.flag_filename(session['filename'])
-            if request.form.get('test') == True:
-                command_run_regression.flag_test()
-            # Run the script
-            try:
-                generated_string = command_run_regression.run_script()
-                
-            finally:
-                filesystem.delete_all_uploaded_files(current_user.id)
-                session['runned'] = True
-                # File will be saved or deleted with an action button
-                generated_string = generated_string.strip()
+            window = str(request.form.get('window'))
+            test = bool(request.form.get('test'))
+            phase = 2 # start running
 
             #return redirect(url_for('interface_bp.regression_calculator'))
+        else:
+            phase = 1 # show error on phase 1, do not start running
+            return render_template('pages/regressionCalculator.html', model_dirs=vis_dir, form=form, phase=phase)
 
-    return render_template('pages/regressionCalculator.html', model_dirs=vis_dir, form=form, string=generated_string)
+    return render_template('pages/regressionCalculator.html', model_dirs=vis_dir, form=form, phase=phase, data_window=window, data_test=test)
+
+
+@interface_bp.route('/about')
+@login_required
+def about():
+    return render_template('pages/about.html')

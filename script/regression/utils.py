@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
-from const import COLONNE_ORE, COLONNE_GIORNI, COLONNE_MESI
 import datetime
+import re
+
+from const import COLONNE_ORE, COLONNE_GIORNI, COLONNE_MESI
 
 def process_dataframe(df):
     """Take a DataFrame, then remove columns that have 
@@ -13,11 +15,35 @@ def process_dataframe(df):
         df (DataFrame)
     """
     df.rename(columns={df.columns[0]: "timestamps"}, inplace=True)
+
+    primo_timestamps_colonna0 = df[df.columns[0]][0]
+    if re.match("\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}:\d{2}", primo_timestamps_colonna0):
+        #18/12/2000 20:00:00
+        #print(primo_timestamps_colonna0)
+        df[df.columns[0]] = pd.to_datetime(df[df.columns[0]], dayfirst=True, errors='coerce')
+    elif re.match("\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}", primo_timestamps_colonna0):
+        #2000-12-20 20:00:00
+        #print(primo_timestamps_colonna0)
+        df[df.columns[0]] = pd.to_datetime(df[df.columns[0]], yearfirst=True, errors='coerce')
+    elif re.match("\d{4}_\d{1,2}_\d{1,2}_\d{1,2}_\d{1}", primo_timestamps_colonna0):
+        #2021_8_26_12_0 (ultima cifra sono i 15 min, 1=15, 2=30, 3=45, 0=00)
+        #print(primo_timestamps_colonna0)
+        i = 0
+        for riga in df[df.columns[0]]:
+            df.iat[i, 0] = riga[:-1] + str(int(riga[-1]) * 15)
+            #print(df.iat[i, 0])
+            i = i + 1
+        df[df.columns[0]] = pd.to_datetime(df[df.columns[0]], format='%Y_%m_%d_%H_%M', errors='coerce')
+        # df['timestamps'] = df['timestamps'].str[:-1] + str(int(df['timestamps'].str[-1])*15)
+        # df['timestamps'] = pd.to_datetime(df['timestamps'], format='%Y_%m_%d_%H_%M',errors='coerce')
+
+    else:
+        raise ValueError("Timestamps do not corresponds to known patterns.") 
     
-    df[df.columns[0]] = pd.to_datetime(df[df.columns[0]], infer_datetime_format=True, errors='coerce')
+    #df[df.columns[0]] = pd.to_datetime(df[df.columns[0]], infer_datetime_format=True, errors='coerce')
 
     df.drop([col for col in df.columns if col != df.columns[0] and \
-                (not df[col].dtype == float and not df[col].dtype == int)], \
+                not ( df[col].dtype == float or df[col].dtype == int or df[col].dtype == np.int64 )], \
             axis=1, inplace=True)
     
     df.dropna(inplace=True)

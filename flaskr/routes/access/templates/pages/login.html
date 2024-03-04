@@ -54,7 +54,10 @@
                 </div>
                 <div class="modal-footer form-footer">
                     <div class="text-muted">
-                        Need An Account? <a class="btn btn-info" href="{{ url_for('access_bp.register') }}">Sign Up Now</a>
+                        <a class="btn btn-info" href="{{ url_for('access_bp.register') }}">Create an account</a>
+                        <!--
+                        <a class="btn btn-warning" href="{{ url_for('access_bp.recover_password') }}">Forgot password ?</a>
+                        -->
                     </div>
                     <div>
                         {{ form.submit(class="btn btn-success") }}

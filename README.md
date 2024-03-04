@@ -1,33 +1,21 @@
-# Simple Guide to use the library
+# Progetto
 
-## Dependencies:
-- ipaddress
-- shutil
-- Flask
-- paho-mqtt
-- pandas
-- numpy
-- statsmodels
-- stepwise-regression
+## Struttura e contenuto delle cartelle:
+- broker (cartella con le configurazioni per il broker mosquitto)
+- deploy (cartella con le configurazioni per Supervisor, Gunicorn, NGINX)
+- documentazione (cartelle con la documentazione di Alessio e Gianni)
+- flaskr (cartella contenente tutto il web server Flask)
+- home_assistant (cartella con una copia della configurazione Home Assistant)
+- script (cartella contenete tutti gli script)
+    - oidio (script per elaborazione oidio)
+    - prediction_rl (script predizione RL)
+    - prediction_rnn (script predizione RNN)
+    - regression (script calcolo della regressione)
+    - replay_publisher (script che pubblica 2)
+    - replay_publisher_istance2 (script che pubblica 2)
+    - skeleton_pub_sub (skeleton client MQTT)
+- requirements-base.txt (per python 3.11)
+- requirements-python36.txt
+- run_flask.py (per avviare Flask)
 
-
-## Input files formatting
-
-- file must be a csv file and has to be separeted by ",".
-- file must have a header
-- first column has to be the timestamps column
-
-## Usage
->Run `run.py`, which launches the server application. A user can connect to the server by using an IP address and create their own models by providing those parameters:
-
-    - The name of directory to models to create (if not already existent then will be created)
-    - An input file of csv type
-    - At least one output file of csv type
-    - An integer value for the window
-    - A name for the model to create
-    - A flag to split data in 80% test and 20% test. (if true then will be showed some check of the created model)
-
-The server will create the same number of models as the number of output files passed to it.
-Once the model is created, the user can decide to save or delete it. All saved models will be stored in the user's directory. Users can also associate a custom broker with the models by defining it in the appropriate section.
-
-
+Per l'accesso a tutti i file scrivere a giannidndn97@gmail.com

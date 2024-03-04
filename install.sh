@@ -3,7 +3,7 @@ python -m venv venv
 ./venv/Script/activate
 echo install requirements depends on python version
 echo -----------
-echo form python 3.11
+echo for python 3.11
 echo python -m pip install -r requirements-base.txt
 echo -----------
 echo for python 3.6 

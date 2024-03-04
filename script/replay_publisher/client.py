@@ -111,10 +111,12 @@ if __name__ == "__main__":
         # SEZIONE DI SINCRONIZZAZIONE CON L'ORA E I MINUTI CORRENTI
         #
         # salta le righe per mandare il messaggio precedente
+        """
         if mess.sincronizza_ora():
             testo = "si saltano troppe righe rispetto al file iniziale"
             logs.errore(testo)
             sys.exit(1)
+        """
 
         # SEZIONE D'INVIO DI MESSAGGI OGNI TOT TEMPO
         #

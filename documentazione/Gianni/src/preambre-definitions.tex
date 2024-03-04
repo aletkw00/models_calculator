@@ -1,0 +1,107 @@
+%! Author = Gianni
+%! Date = 12/12/2023
+
+% Config package listings
+\lstdefinelanguage{bash}{
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{gray!10},
+    tabsize=3,
+    keywordstyle=\color{blue},
+    morestring=[b],
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    autogobble=true
+}
+\lstdefinelanguage{python}{
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{yellow!10},
+    tabsize=3,
+    keywordstyle=\color{blue},
+    morestring=[b],
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    autogobble=true
+}
+\lstdefinelanguage{html}{
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{green!10},
+    tabsize=3,
+    keywordstyle=\color{blue},
+    morestring=[b],
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    autogobble=true
+}
+\lstdefinelanguage{text}{
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{cyan!10},
+    tabsize=3,
+    keywordstyle=\color{blue},
+    morestring=[b],
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    autogobble=true
+}
+\lstdefinelanguage{textnonum}{
+    basicstyle=\small\ttfamily,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{white},
+    tabsize=3,
+    keywordstyle=\color{blue},
+    morestring=[b],
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    autogobble=true
+}
+
+
+\lstset{
+    literate={{°}{\textdegree}1}
+    }
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    filecolor=blue,
+    urlcolor=blue
+}
+
+\newcommand{\reportitle}[1]{\renewcommand{\reportitle}{#1}}
+
+\newcommand{\mytoc}{
+    \tableofcontents
+    \newpage
+    \listoffigures
+    \newpage
+}

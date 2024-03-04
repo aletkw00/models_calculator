@@ -1,1 +1,0 @@
-MODEL_DIR = 'dir_of_models'
